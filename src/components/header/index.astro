@@ -1,23 +1,9 @@
 ---
   import Nav from './nav.astro'
+  import { getSanityContact } from '../../utils/getSanityContact'
 
-  const personal_urls = [
-    {
-      title: 'Github',
-      url: 'https://github.com/yhoungdev'
-    },
-    {
-      title: 'LinkedIn',
-      url: 'https://www.linkedin.com/in/emmanuel-obiabo'
-    },
-    {
-      title: 'X (Formerly Twitter)',
-      url: 'https://x.com/obiabo_immanuel'
-    },
-
-
-
-  ]
+  const contact = await getSanityContact()
+  const personal_urls = contact?.links?.filter((item) => item.showInHeader) ?? []
 
 ---
 
@@ -41,7 +27,7 @@
       {
         personal_urls.map ( items => (
           <a class="text-default text-xs underline"
-             href={items.url} target="_blank">{items.title}</a>
+             href={items.url} target="_blank" rel="noreferrer">{items.headerTitle ?? items.title}</a>
         ))
       }
     </div>

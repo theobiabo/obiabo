@@ -1,40 +1,12 @@
 ---
 import Header from '../../components/header/index.astro';
 import '../../style/index.css';
-import { Content as ReachNote } from '../../data/contact.md';
+import { getSanityContact } from '../../utils/getSanityContact';
+import { renderMarkdown } from '../../utils/markdownRenderer';
 
-const personal_urls = [
-  {
-    title: 'Github',
-    url: 'https://github.com/yhoungdev',
-    description: 'Selected code, open-source work, and technical experiments.',
-  },
-  {
-    title: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/',
-    description: 'Professional background, experience, and work updates.',
-  },
-  {
-    title: 'Twitter',
-    url: 'https://x.com/obiabo_immanuel',
-    description: 'Short notes, technical links, and occasional updates.',
-  },
-  {
-    title: 'Email',
-    url: 'mailto:theobiabo@gmail.com', 
-    description: 'The best option for work, collaboration, and direct messages.'
-},
-  {
-    title: 'Nostr',
-    url: 'https://snort.social/nprofile1qqs2c3g85ck4qwpakm9nxzlhfved8yykqylcwdu34ge8whkcxeqx4dqka3xww',
-    description: 'Decentralized social notes and experiments.',
-  },
-  {
-    title: 'Farcaster',
-    url: 'https://warpcast.com/obiabo',
-    description: 'Social updates and conversations around technology and internet culture.',
-  },
-];
+const contact = await getSanityContact();
+const contactHtml = renderMarkdown(contact?.introMarkdown ?? '');
+const personal_urls = contact?.links ?? [];
 ---
 
 <html lang="en">
@@ -49,9 +21,9 @@ const personal_urls = [
     <div class="max-w-2xl mx-auto px-4 py-8 font-serif">
         <div>
      
-            <p>
-                <ReachNote/>
-            </p>
+            <article>
+                <Fragment set:html={contactHtml} />
+            </article>
             
             
         </div>
@@ -62,7 +34,7 @@ const personal_urls = [
             <ul>
                 {personal_urls.map((item) => (
                     <li class="my-2">
-                        <a href={item.url} target="_blank" class="text-default underline ">
+                        <a href={item.url} target="_blank" rel="noreferrer" class="text-default underline ">
                             {item.title}
                         </a>: {item.description}
                     </li>

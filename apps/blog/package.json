@@ -9,17 +9,18 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
+    "migrate:contact": "sanity exec scripts/migrate-contact.ts --with-user-token",
     "deploy-graphql": "sanity graphql deploy"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^5.30.0",
+    "@sanity/vision": "^5.31.1",
     "easymde": "2",
     "react": "^19.1",
     "react-dom": "^19.1",
-    "sanity": "^5.30.0",
+    "sanity": "^5.31.1",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

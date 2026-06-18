@@ -5,14 +5,12 @@ interface Props {
   description?: string;
 }
 
-const { title, url, description } = Astro.props;
+const { title, url } = Astro.props;
 
-// Encode for URL sharing
+
 const encodedTitle = encodeURIComponent(title);
 const encodedUrl = encodeURIComponent(url);
-const encodedDesc = encodeURIComponent(description || title);
 
-// Social share URLs
 const shareLinks = {
   twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
@@ -54,26 +52,31 @@ const shareLinks = {
     <button 
       class="share-btn copy"
       title="Copy link"
-      onclick="copyToClipboard()"
+      data-copy-url={url}
     >
       ✓
     </button>
   </div>
 </div>
 
-<script define:vars={{ url }}>
-  function copyToClipboard() {
-    navigator.clipboard.writeText(url).then(() => {
-      const btn = event.target;
-      const original = btn.textContent;
-      btn.textContent = 'copied!';
-      btn.style.color = '#4ade80';
-      setTimeout(() => {
-        btn.textContent = original;
-        btn.style.color = '#c8ccda';
-      }, 2000);
+<script is:inline>
+  document.querySelectorAll('[data-copy-url]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const btn = button;
+      const url = btn.dataset.copyUrl;
+      if (!url) return;
+
+      navigator.clipboard.writeText(url).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'copied!';
+        btn.style.color = '#4ade80';
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.color = '#c8ccda';
+        }, 2000);
+      });
     });
-  }
+  });
 </script>
 
 <style>

@@ -10,13 +10,15 @@ const { postId } = Astro.props;
   <div class="webmentions-loading">loading mentions...</div>
 </div>
 
-<script define:vars={{ postId }}>
-  async function loadWebmentions() {
-    const container = document.querySelector('[data-post-id="' + postId + '"]');
-    if (!container) return;
+<script is:inline>
+  async function loadWebmentions(container) {
+    const postId = container.dataset.postId;
+    if (!postId) return;
+
+    const loading = container.querySelector('.webmentions-loading');
 
     try {
-      const response = await fetch(`/api/webmentions?postId=${postId}`);
+      const response = await fetch(`/api/webmentions?postId=${encodeURIComponent(postId)}`);
       const data = await response.json();
       const mentions = data.webmentions || [];
 
@@ -51,12 +53,13 @@ const { postId } = Astro.props;
       container.innerHTML = html;
     } catch (error) {
       console.error('Error loading webmentions:', error);
-      container.innerHTML = '';
+      if (loading) loading.remove();
     }
   }
 
-  // Load webmentions when page loads
-  loadWebmentions();
+  document.querySelectorAll('.webmentions-container[data-post-id]').forEach((container) => {
+    loadWebmentions(container);
+  });
 </script>
 
 <style>

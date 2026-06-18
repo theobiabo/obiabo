@@ -91,7 +91,7 @@ const { title, description: desc, tags, publishedAt, body, mainImage } = post;
 
       <BlogReactions client:load postId={post._id} />
       
-      <Webmentions client:load postId={post._id} />
+      <Webmentions postId={post._id} />
       
       <BlogComments client:load postId={post._id} />
       

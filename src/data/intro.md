@@ -1,13 +1,7 @@
-I'm a software engineer working mostly with Linux, Rust, backend systems, and developer tools.
+I'm a software engineer based in West Africa, currently embracing a nomadic lifestyle while building software and exploring new interests.
 
-<br/>
+Recently, I've been focused on writing, researching, and shipping software, with a particular interest in **Rust** and **TypeScript**.
 
-Recently, I worked on the <a class='text-default' href="https://crates.io/crates/plunk">Plunk Rust SDK</a>, a community SDK for Plunk.
+I previously worked on the [Plunk Rust SDK](https://docs.useplunk.com/guides/rust-sdk), a community SDK for Plunk.
 
-<br/>
-
-I'm writing, researching, and building amazing things.
-
-<br/>
-
-*Open to work and collaborations. If you'd like to connect or work together, feel free to <a href="https://x.com/obiabo_immanuel" class='text-default'>reach out</a>.*
+*Open to new roles and collaborations. If you'd like to connect or work together, feel free to reach out on X: [@obiabo_immanuel](https://x.com/obiabo_immanuel).*

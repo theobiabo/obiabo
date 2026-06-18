@@ -1,23 +1,25 @@
-I’m a software engineer passionate about Linux, open-source ecosystems, and systems engineering. I build software ranging from developer tools to real-world applications and enjoy exploring systems that run close to the metal.
+I'm a software engineer based in West Africa, currently embracing a nomadic lifestyle while building software and exploring new interests.
 
-<br/>
+## What I'm Working On
 
-I have solid experience with Linux and its various distributions, including Ubuntu, Kali Linux, Tails OS, Parrot OS, and Kubuntu. A few years ago, I experimented with running a Bitcoin node and personal server on a Raspberry Pi 4, but it didn’t go as planned due to hardware limitations, something I’d love to revisit in the future with better hardware.
+Recently, I've been focused on writing, researching, and shipping software, with a particular interest in **Rust** and **TypeScript**. I previously worked on the [Plunk Rust SDK](https://docs.useplunk.com/guides/rust-sdk), a community SDK for Plunk.
 
-<br/>
+**Research interests:**
 
-I was a Solana Summer Fellow '24 and continue to work on decentralized applications and blockchain systems.
+- Distributed systems
+- Electric vehicles (EVs) and autonomous vehicles
+- Pets and animal behavior
+- Brain-computer interfaces (BCIs)
+- Cryptocurrencies
 
-<br/>
+## Open Source
 
-Recent projects include the <a class='text-default font-semibold' href="https://docs.useplunk.com/guides/rust-sdk">Plunk Rust SDK</a>, now the official community SDK, and an unofficial SDK for <a class='text-default font-semibold' href="https://polar.sh/">Polar.sh</a>.
+I'm passionate about open source, building and contributing to software in the open. You can explore my work on GitHub: [TheObiabo](https://github.com/theobiabo).
 
-<br/>
+## Life & Travel
 
-Currently, I'm building <a class="text-default font-semibold" href="https://www.ourpocket.xyz/">OurPocket</a> - an infrastructure API that enables B2B platforms to manage wallets across multiple payment and crypto providers through a single, secure integration.
+I live life based on flow and go where it leads me. I enjoy exploring obscure places, experiencing cultural shocks, and meeting people from different countries and regions. Lately, I've had the chance to meet people of different ethnicities and languages, and it's made life feel very rich.
 
-<br/>
+## Let's Connect
 
-Outside of development, I play drums and enjoy diving into technical reads. Over time, I’ve curated an awesome reading list from some amazing corners of the web, think of it as a gold mine of knowledge you can explore <a class="text-default font-semibold underline" href="https://sudowhoami.notion.site/Some-Good-Reads-in-no-particular-order-25a13d4f6e9a80c88637e0b72955c0d8?pvs=74"> here </a>
-. I’ve also got a few titles lined up on my personal reading list, including Mastering Bitcoin, <a  href="https://en.wikipedia.org/wiki/The_Garden_of_Forking_Paths"> The Garden of Forking Paths  </a> , <a href="https://en.wikipedia.org/wiki/Many-worlds_interpretation" class="text-default">Many worlds interpretation</a>, <a class="text-default" href="https://craftinginterpreters.com/">Crafting Interpreters</a>, and <a class="text-default" href="https://archive.org/details/cu31924028741175"> The Dual Mandate in British Tropical Africa (1922) by Lord Frederick Lugard </a>.
-
+I'm open to new roles and collaborations. If you'd like to connect or work together, feel free to reach out on X: [@obiabo_immanuel](https://x.com/obiabo_immanuel).

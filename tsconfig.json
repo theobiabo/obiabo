@@ -6,5 +6,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "exclude": ["dist", "apps/**/dist", "apps/**/.sanity"]
+  "include": ["src/**/*", "db/**/*", "global.d.ts", "astro.config.mjs"],
+  "exclude": ["dist", "apps/**"]
 }

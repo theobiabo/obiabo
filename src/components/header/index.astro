@@ -1,13 +1,81 @@
 ---
   import Nav from './nav.astro'
   import { getSanityContact } from '../../utils/getSanityContact'
+  import { defaultTheme, getSanityTheme } from '../../utils/getSanityTheme'
 
   const contact = await getSanityContact()
+  const sanityTheme = await getSanityTheme()
   const personal_urls = contact?.links?.filter((item) => item.showInHeader) ?? []
+
+  const isSafeFontUrl = (value?: string) =>
+    Boolean(value && /^https:\/\/fonts\.googleapis\.com\/css2\?/.test(value))
+
+  const isSafeFontFamily = (value?: string) => Boolean(value && /^[\w\s"',-]+$/.test(value))
+  const isSafeColor = (value?: string) =>
+    Boolean(value && /^#[0-9a-f]{6}$/i.test(value))
+
+  const theme = {
+    fontStylesheetUrl: isSafeFontUrl(sanityTheme?.fontStylesheetUrl)
+      ? sanityTheme?.fontStylesheetUrl
+      : defaultTheme.fontStylesheetUrl,
+    monoFontFamily: isSafeFontFamily(sanityTheme?.monoFontFamily)
+      ? sanityTheme?.monoFontFamily
+      : defaultTheme.monoFontFamily,
+    serifFontFamily: isSafeFontFamily(sanityTheme?.serifFontFamily)
+      ? sanityTheme?.serifFontFamily
+      : defaultTheme.serifFontFamily,
+    primaryBackgroundColor: isSafeColor(sanityTheme?.primaryBackgroundColor)
+      ? sanityTheme?.primaryBackgroundColor
+      : defaultTheme.primaryBackgroundColor,
+    secondaryBackgroundColor: isSafeColor(sanityTheme?.secondaryBackgroundColor)
+      ? sanityTheme?.secondaryBackgroundColor
+      : defaultTheme.secondaryBackgroundColor,
+    primaryTextColor: isSafeColor(sanityTheme?.primaryTextColor)
+      ? sanityTheme?.primaryTextColor
+      : defaultTheme.primaryTextColor,
+    mutedTextColor: isSafeColor(sanityTheme?.mutedTextColor)
+      ? sanityTheme?.mutedTextColor
+      : defaultTheme.mutedTextColor,
+    borderColor: isSafeColor(sanityTheme?.borderColor)
+      ? sanityTheme?.borderColor
+      : defaultTheme.borderColor,
+    accentColor: isSafeColor(sanityTheme?.accentColor)
+      ? sanityTheme?.accentColor
+      : defaultTheme.accentColor,
+  }
 
 ---
 
 <div>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href={theme.fontStylesheetUrl} />
+  <style
+    define:vars={{
+      fontMono: theme.monoFontFamily,
+      fontSerif: theme.serifFontFamily,
+      bgPrimary: theme.primaryBackgroundColor,
+      bgSecondary: theme.secondaryBackgroundColor,
+      textColor: theme.primaryTextColor,
+      textMuted: theme.mutedTextColor,
+      borderColor: theme.borderColor,
+      accentColor: theme.accentColor,
+    }}
+  >
+    :root {
+      --font-mono: var(--fontMono);
+      --font-serif: var(--fontSerif);
+      --bg-primary: var(--bgPrimary);
+      --bg-secondary: var(--bgSecondary);
+      --bg-tertiary: var(--bgPrimary);
+      --hover-bg: var(--bgSecondary);
+      --text-color: var(--textColor);
+      --text-muted: var(--textMuted);
+      --text-dim: var(--textMuted);
+      --border-color: var(--borderColor);
+      --accent: var(--accentColor);
+    }
+  </style>
  
   <Nav/>
 

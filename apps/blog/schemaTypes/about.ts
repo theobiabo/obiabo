@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {MarkdownEditorInput} from '../components/MarkdownEditorInput'
 
 export default defineType({
   name: 'about',
@@ -17,6 +18,9 @@ export default defineType({
       title: 'Homepage intro',
       type: 'text',
       rows: 8,
+      components: {
+        input: MarkdownEditorInput,
+      },
       description: 'Short about section shown on the homepage. Supports Markdown and inline HTML.',
       validation: (rule) => rule.required(),
     }),
@@ -25,6 +29,9 @@ export default defineType({
       title: 'Full about page',
       type: 'text',
       rows: 16,
+      components: {
+        input: MarkdownEditorInput,
+      },
       description: 'Long-form about content shown on /about. Supports Markdown and inline HTML.',
       validation: (rule) => rule.required(),
     }),

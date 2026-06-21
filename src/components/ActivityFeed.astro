@@ -23,6 +23,8 @@ type Activity = CommentActivity | ReactionActivity;
 const posts = await getSanityPosts();
 const postMap = Object.fromEntries(posts.map((p: any) => [p._id, p]));
 
+const getFirstName = (name: string) => name.trim().split(/\s+/)[0] || name;
+
 
 const recentComments = (await db.select().from(comments))
   .filter(c => c.approved)
@@ -38,7 +40,7 @@ const recentReactions = (await db.select().from(reactions))
 const activities: Activity[] = [
   ...recentComments.map(c => ({
     type: 'comment' as const,
-    name: c.name,
+    name: getFirstName(c.name),
     postId: c.postId,
     date: c.createdAt,
     preview: c.content.substring(0, 50) + (c.content.length > 50 ? '...' : '')

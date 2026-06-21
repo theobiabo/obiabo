@@ -29,7 +29,9 @@ export default function BlogComments({ postId }: BlogCommentsProps) {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`/api/comments?postId=${postId}`);
+      const response = await fetch(`/api/comments?postId=${encodeURIComponent(postId)}`, {
+        cache: 'no-store',
+      });
       const data = await response.json();
       setComments(data.comments || []);
     } catch (error) {
@@ -54,13 +56,17 @@ export default function BlogComments({ postId }: BlogCommentsProps) {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage({ 
-          type: 'success', 
-          text: 'Comment submitted! It will appear after approval.' 
+        if (data.comment) {
+          setComments((currentComments) => [data.comment, ...currentComments]);
+        }
+
+        setMessage({
+          type: 'success',
+          text: 'Comment posted.'
         });
         setFormData({ name: '', email: '', content: '' });
         setShowForm(false);
-       
+        fetchComments();
       } else {
         setMessage({ type: 'error', text: data.error || 'Failed to submit comment' });
       }
@@ -79,6 +85,8 @@ export default function BlogComments({ postId }: BlogCommentsProps) {
       day: 'numeric' 
     });
   };
+
+  const getFirstName = (name: string) => name.trim().split(/\s+/)[0] || name;
 
   return (
     <div className="mt-12 border-t border-gray-700 pt-8">
@@ -206,7 +214,9 @@ export default function BlogComments({ postId }: BlogCommentsProps) {
               className="p-6 border border-gray-700 rounded-lg hover:border-gray-600 transition-colors "
             >
               <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold bg-transparent text-lg text-gray-100">{comment.name}</h4>
+                <h4 className="font-semibold bg-transparent text-lg text-gray-100">
+                  {getFirstName(comment.name)}
+                </h4>
                 <time className="text-sm text-gray-500">
                   {formatDate(comment.createdAt)}
                 </time>

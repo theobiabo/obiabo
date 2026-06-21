@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { db, eq, comments } from 'astro:db';
+import { db, comments } from 'astro:db';
 import { sendTelegramNotification } from '../../utils/telegram';
 
 
@@ -24,6 +24,10 @@ function sanitizeContent(content: string): string {
   return content.trim().replace(/<[^>]*>/g, '');
 }
 
+function getFirstName(name: string): string {
+  return name.trim().split(/\s+/)[0] || name;
+}
+
 export const GET: APIRoute = async ({ url }) => {
   const postId = url.searchParams.get('postId');
   
@@ -42,7 +46,7 @@ export const GET: APIRoute = async ({ url }) => {
       .filter(c => c.approved)
       .map(c => ({
         _id: c.id,
-        name: c.name,
+        name: getFirstName(c.name),
         content: c.content,
         createdAt: c.createdAt,
       }))
@@ -50,7 +54,10 @@ export const GET: APIRoute = async ({ url }) => {
 
     return new Response(JSON.stringify({ comments: approvedComments }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store',
+      },
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -112,6 +119,7 @@ export const POST: APIRoute = async ({ request }) => {
     const sanitizedContent = sanitizeContent(content);
     const sanitizedName = sanitizeContent(name);
     const commentId = `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const createdAt = new Date();
 
     
     await db.insert(comments).values({
@@ -120,9 +128,9 @@ export const POST: APIRoute = async ({ request }) => {
       name: sanitizedName,
       email: email || undefined,
       content: sanitizedContent,
-      approved: false,
+      approved: true,
       sessionId,
-      createdAt: new Date(),
+      createdAt,
     });
 
     
@@ -148,11 +156,19 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
+    const publishedComment = {
+      _id: commentId,
+      name: getFirstName(sanitizedName),
+      content: sanitizedContent,
+      createdAt: createdAt.toISOString(),
+    };
+
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Comment submitted for approval',
-        commentId
+        message: 'Comment published',
+        commentId,
+        comment: publishedComment,
       }),
       {
         status: 201,

@@ -1,7 +1,9 @@
 import type { APIRoute } from 'astro';
 import { db, eq, comments } from 'astro:db';
 import { Telegraf } from 'telegraf';
+import { escapeMarkdown } from '../../../utils/telegram';
 
+type CommentAction = 'approve' | 'reject' | 'delete';
 
 function getEnv(key: string): string | undefined {
   
@@ -9,6 +11,39 @@ function getEnv(key: string): string | undefined {
     return process.env[key];
   }
   return import.meta.env[key] as string | undefined;
+}
+
+function isAllowedChat(chatId: number | string | undefined): boolean {
+  const configuredChatId = getEnv('TELEGRAM_CHAT_ID');
+
+  if (!configuredChatId || chatId === undefined) {
+    return false;
+  }
+
+  return String(chatId) === configuredChatId;
+}
+
+async function runCommentAction(action: CommentAction, commentId: string): Promise<string> {
+  switch (action) {
+    case 'approve':
+      console.log('[Telegram Webhook] Approving comment:', commentId);
+      await db.update(comments)
+        .set({ approved: true })
+        .where(eq(comments.id, commentId));
+      return 'Comment approved';
+
+    case 'reject':
+      console.log('[Telegram Webhook] Moving comment to pending:', commentId);
+      await db.update(comments)
+        .set({ approved: false })
+        .where(eq(comments.id, commentId));
+      return 'Comment moved to pending';
+
+    case 'delete':
+      console.log('[Telegram Webhook] Deleting comment:', commentId);
+      await db.delete(comments).where(eq(comments.id, commentId));
+      return 'Comment deleted';
+  }
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -29,12 +64,12 @@ export const POST: APIRoute = async ({ request }) => {
     const update = await request.json();
     console.log('[Telegram Webhook] Update received:', JSON.stringify(update, null, 2));
     
-    
     if (update.callback_query) {
       const callbackQuery = update.callback_query;
       const data = callbackQuery.data;
       const chatId = callbackQuery.message?.chat?.id;
       const messageId = callbackQuery.message?.message_id;
+      const bot = new Telegraf(botToken);
       
       if (!data || !chatId || !messageId) {
         return new Response(JSON.stringify({ ok: true }), {
@@ -43,45 +78,33 @@ export const POST: APIRoute = async ({ request }) => {
         });
       }
 
-      const [action, commentId] = data.split(':');
-      const bot = new Telegraf(botToken);
+      if (!isAllowedChat(chatId)) {
+        await bot.telegram.answerCbQuery(callbackQuery.id, 'Unauthorized chat');
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      const [action, commentId] = data.split(':') as [CommentAction, string | undefined];
+
+      if (!['approve', 'reject', 'delete'].includes(action) || !commentId) {
+        await bot.telegram.answerCbQuery(callbackQuery.id, 'Unknown action');
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
 
       try {
-        let responseText = '';
-        
-        switch (action) {
-          case 'approve':
-            console.log('[Telegram Webhook] Approving comment:', commentId);
-            await db.update(comments)
-              .set({ approved: true })
-              .where(eq(comments.id, commentId));
-            responseText = '✅ Comment approved!';
-            break;
-            
-          case 'reject':
-            console.log('[Telegram Webhook] Rejecting comment:', commentId);
-            await db.update(comments)
-              .set({ approved: false })
-              .where(eq(comments.id, commentId));
-            responseText = '❌ Comment rejected!';
-            break;
-            
-          case 'delete':
-            console.log('[Telegram Webhook] Deleting comment:', commentId);
-            await db.delete(comments).where(eq(comments.id, commentId));
-            responseText = '🗑️ Comment deleted!';
-            break;
-            
-          default:
-            responseText = '❓ Unknown action';
-        }
-
-        
+        const responseText = await runCommentAction(action, commentId);
         await bot.telegram.answerCbQuery(callbackQuery.id, responseText);
 
-        
         const originalText = callbackQuery.message?.text || '';
-        const updatedText = originalText.replace('⏳ _Awaiting approval_', `${responseText}`);
+        const updatedText = originalText.replace(
+          /(⏳ _Awaiting approval_|✅ _Published automatically_)/,
+          `✅ _${escapeMarkdown(responseText)}_`
+        );
         
         await bot.telegram.editMessageText(
           chatId,
@@ -98,7 +121,39 @@ export const POST: APIRoute = async ({ request }) => {
 
       } catch (dbError) {
         console.error('Database operation failed:', dbError);
-        await bot.telegram.answerCbQuery(callbackQuery.id, '❌ Operation failed!');
+        await bot.telegram.answerCbQuery(callbackQuery.id, 'Operation failed');
+      }
+    }
+
+    if (update.message?.text) {
+      const chatId = update.message.chat?.id;
+      const messageText = String(update.message.text).trim();
+      const bot = new Telegraf(botToken);
+
+      if (!isAllowedChat(chatId)) {
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      const match = messageText.match(/^\/(approve|reject|delete)(?:@\w+)?\s+(\S+)/i);
+
+      if (match) {
+        const action = match[1].toLowerCase() as CommentAction;
+        const commentId = match[2];
+
+        try {
+          const responseText = await runCommentAction(action, commentId);
+          await bot.telegram.sendMessage(
+            chatId,
+            `✅ ${escapeMarkdown(responseText)}\n\nID: \`${escapeMarkdown(commentId)}\``,
+            { parse_mode: 'MarkdownV2' }
+          );
+        } catch (dbError) {
+          console.error('Database operation failed:', dbError);
+          await bot.telegram.sendMessage(chatId, 'Operation failed');
+        }
       }
     }
 

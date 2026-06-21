@@ -1,627 +1,780 @@
-
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Comments</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'IBM Plex Mono', monospace;
-      background: #141414;
-      color: #c8ccda;
-      line-height: 1.8;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem;
-    }
-    
-    h1 {
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: #c8ccda;
-      margin-bottom: 2rem;
-      letter-spacing: -0.02em;
-    }
-    
-    h1 span {
-      color: #666;
-    }
-    
-    /* Login */
-    .login-form {
-      max-width: 360px;
-      margin: 6rem auto;
-    }
-    
-    .login-form h2 {
-      font-size: 1rem;
-      font-weight: 400;
-      color: #c8ccda;
-      margin-bottom: 1.5rem;
-    }
-    
-    .login-form input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 6px;
-      color: #c8ccda;
-      font-family: inherit;
-      font-size: 0.875rem;
-      margin-bottom: 1rem;
-      transition: border-color 0.2s;
-    }
-    
-    .login-form input:focus {
-      outline: none;
-      border-color: #444;
-    }
-    
-    .login-form input::placeholder {
-      color: #555;
-    }
-    
-    .login-form button {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: #c8ccda;
-      color: #141414;
-      border: none;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    
-    .login-form button:hover {
-      opacity: 0.9;
-    }
-    
-    .login-error {
-      color: #e57373;
-      font-size: 0.8rem;
-      margin-top: 1rem;
-    }
-    
-    /* Stats */
-    .stats {
-      display: flex;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid #222;
-    }
-    
-    .stat {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-    }
-    
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #c8ccda;
-    }
-    
-    .stat-label {
-      font-size: 0.75rem;
-      color: #666;
-      text-transform: lowercase;
-    }
-    
-    /* Filters */
-    .filter-tabs {
-      display: flex;
-      gap: 0.25rem;
-      margin-bottom: 2rem;
-    }
-    
-    .filter-tab {
-      padding: 0.5rem 1rem;
-      background: transparent;
-      border: none;
-      color: #666;
-      font-family: inherit;
-      font-size: 0.8rem;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.2s;
-    }
-    
-    .filter-tab:hover {
-      color: #888;
-    }
-    
-    .filter-tab.active {
-      background: #222;
-      color: #c8ccda;
-    }
-    
-    /* Comment Cards */
-    .comment-card {
-      background: #1a1a1a;
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 0.75rem;
-      border-left: 2px solid transparent;
-      transition: border-color 0.2s;
-    }
-    
-    .comment-card.pending {
-      border-left-color: #f59e0b;
-    }
-    
-    .comment-card.approved {
-      border-left-color: #4ade80;
-    }
-    
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.75rem;
-    }
-    
-    .comment-author {
-      display: flex;
-      flex-direction: column;
-      gap: 0.125rem;
-    }
-    
-    .comment-name {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #c8ccda;
-    }
-    
-    .comment-email {
-      font-size: 0.7rem;
-      color: #555;
-    }
-    
-    .status-badge {
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .status-badge.pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-    }
-    
-    .status-badge.approved {
-      background: rgba(74, 222, 128, 0.15);
-      color: #4ade80;
-    }
-    
-    .comment-post {
-      font-size: 0.7rem;
-      color: #555;
-      margin-bottom: 0.75rem;
-    }
-    
-    .comment-content {
-      font-size: 0.875rem;
-      color: #999;
-      margin-bottom: 0.75rem;
-      line-height: 1.7;
-    }
-    
-    .comment-meta {
-      font-size: 0.7rem;
-      color: #444;
-    }
-    
-    .actions {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #222;
-    }
-    
-    .btn {
-      padding: 0.65rem 1.5rem;
-      border: none;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      white-space: nowrap;
-    }
-    
-    .btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-    }
-    
-    .btn:active:not(:disabled) {
-      transform: translateY(0);
-    }
-    
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
-    .btn-approve {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    }
-    
-    .btn-approve:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-    }
-    
-    .btn-reject {
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-    
-    .btn-reject:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-    }
-    
-    .btn-delete {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-    }
-    
-    .btn-delete:hover:not(:disabled) {
-      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-    }
-    
-    /* Empty & Loading States */
-    .empty, .loading {
-      text-align: center;
-      color: #555;
-      padding: 4rem 2rem;
-      font-size: 0.875rem;
-    }
-    
-    .error {
-      background: rgba(229, 115, 115, 0.1);
-      color: #e57373;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      font-size: 0.8rem;
-    }
-    
-    /* Logout */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    
-    .btn-logout {
-      padding: 0.4rem 0.75rem;
-      background: transparent;
-      border: 1px solid #333;
-      color: #666;
-      font-family: inherit;
-      font-size: 0.7rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .btn-logout:hover {
-      border-color: #555;
-      color: #999;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div id="app">
-      <!-- Login form shown initially -->
-      <div id="login-section" class="login-form">
-        <h2>admin / comments</h2>
-        <input type="password" id="admin-secret" placeholder="enter admin secret" />
-        <button onclick="login()">login</button>
-        <p id="login-error" class="login-error" style="display: none;"></p>
-      </div>
-
-      <!-- Admin panel (hidden initially) -->
-      <div id="admin-section" style="display: none;">
-        <div class="header">
-          <h1>comments <span>/ admin</span></h1>
-          <button class="btn-logout" onclick="logout()">logout</button>
-        </div>
-        
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-value" id="total-count">0</div>
-            <div class="stat-label">total</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" id="pending-count">0</div>
-            <div class="stat-label">pending</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value" id="approved-count">0</div>
-            <div class="stat-label">approved</div>
-          </div>
-        </div>
-
-        <div class="filter-tabs">
-          <button class="filter-tab active" onclick="setFilter('all')">all</button>
-          <button class="filter-tab" onclick="setFilter('pending')">pending</button>
-          <button class="filter-tab" onclick="setFilter('approved')">approved</button>
-        </div>
-
-        <div id="comments-list">
-          <div class="loading">loading comments...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script is:inline>
-    let adminSecret = '';
-    let allComments = [];
-    let currentFilter = 'all';
-
-    function logout() {
-      adminSecret = '';
-      document.getElementById('login-section').style.display = 'block';
-      document.getElementById('admin-section').style.display = 'none';
-      document.getElementById('admin-secret').value = '';
-    }
-
-    function login() {
-      const secretInput = document.getElementById('admin-secret');
-      adminSecret = secretInput.value;
-      
-      if (!adminSecret) {
-        showLoginError('Please enter the admin secret');
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comment Admin</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7f9;
+        --panel: #ffffff;
+        --panel-muted: #f1f3f5;
+        --text: #15171a;
+        --muted: #667085;
+        --line: #d9dee5;
+        --line-strong: #c7ced8;
+        --accent: #2563eb;
+        --accent-strong: #1d4ed8;
+        --success: #047857;
+        --success-bg: #e6f4ef;
+        --warning: #b45309;
+        --warning-bg: #fff4df;
+        --danger: #b42318;
+        --danger-bg: #fee4e2;
+        --shadow: 0 18px 45px rgba(21, 23, 26, 0.08);
       }
-      
-      // Test the credentials by fetching comments
-      fetchComments()
-        .then(() => {
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 48px;
+      }
+
+      .login-wrap {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .login-panel {
+        width: min(100%, 420px);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        padding: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      .login-panel h1 {
+        font-size: 1.7rem;
+        line-height: 1.15;
+      }
+
+      .login-copy {
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .field label {
+        color: #344054;
+        font-size: 0.86rem;
+        font-weight: 650;
+      }
+
+      .input,
+      .search-input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 0.16s ease,
+          box-shadow 0.16s ease;
+      }
+
+      .input {
+        padding: 12px 13px;
+      }
+
+      .search-input {
+        min-width: 260px;
+        padding: 10px 12px;
+      }
+
+      .input:focus,
+      .search-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.13);
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .title-group h1 {
+        font-size: clamp(1.8rem, 3vw, 2.55rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .actions-row,
+      .toolbar,
+      .card-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition:
+          background 0.16s ease,
+          border-color 0.16s ease,
+          color 0.16s ease,
+          transform 0.16s ease;
+      }
+
+      .button:hover:not(:disabled) {
+        transform: translateY(-1px);
+      }
+
+      .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+      }
+
+      .button.primary {
+        width: 100%;
+        margin-top: 18px;
+        background: var(--text);
+        color: #fff;
+      }
+
+      .button.blue {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .button.blue:hover:not(:disabled) {
+        background: var(--accent-strong);
+      }
+
+      .button.ghost {
+        border-color: var(--line);
+        background: #fff;
+        color: #344054;
+      }
+
+      .button.success {
+        background: var(--success);
+        color: #fff;
+      }
+
+      .button.warning {
+        background: #f59e0b;
+        color: #111827;
+      }
+
+      .button.danger {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      .button.small {
+        min-height: 36px;
+        padding: 7px 12px;
+        font-size: 0.84rem;
+      }
+
+      .error,
+      .notice {
+        display: none;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 0.88rem;
+        line-height: 1.45;
+      }
+
+      .error {
+        margin-top: 14px;
+        background: var(--danger-bg);
+        color: var(--danger);
+      }
+
+      .notice {
+        margin-bottom: 16px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--muted);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .stat-label {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 650;
+      }
+
+      .toolbar {
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .tabs {
+        display: inline-flex;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 4px;
+      }
+
+      .filter-tab {
+        min-height: 34px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--muted);
+        padding: 6px 12px;
+        font-size: 0.86rem;
+        font-weight: 700;
+      }
+
+      .filter-tab.active {
+        background: var(--text);
+        color: #fff;
+      }
+
+      .comments-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .comment-card {
+        border: 1px solid var(--line);
+        border-left-width: 4px;
+        border-radius: 8px;
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .comment-card.pending {
+        border-left-color: #f59e0b;
+      }
+
+      .comment-card.approved {
+        border-left-color: var(--success);
+      }
+
+      .comment-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .comment-name {
+        font-weight: 800;
+      }
+
+      .comment-email,
+      .comment-meta,
+      .comment-id {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .comment-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .comment-content {
+        margin-top: 14px;
+        color: #344054;
+        line-height: 1.6;
+        white-space: pre-wrap;
+      }
+
+      .badge {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .badge.pending {
+        background: var(--warning-bg);
+        color: var(--warning);
+      }
+
+      .badge.approved {
+        background: var(--success-bg);
+        color: var(--success);
+      }
+
+      .card-actions {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .empty,
+      .loading {
+        border: 1px dashed var(--line-strong);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.55);
+        color: var(--muted);
+        padding: 44px 20px;
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100% - 24px, 1180px);
+          padding-top: 20px;
+        }
+
+        .topbar,
+        .toolbar {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .actions-row,
+        .search-input,
+        .tabs {
+          width: 100%;
+        }
+
+        .tabs {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .comment-head {
+          flex-direction: column;
+        }
+
+        .card-actions .button {
+          flex: 1 1 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="login-section" class="login-wrap">
+      <section class="login-panel" aria-labelledby="login-title">
+        <p class="eyebrow">Comment admin</p>
+        <h1 id="login-title">Moderation console</h1>
+        <p class="login-copy">Review pending comments and manage published replies.</p>
+
+        <div class="field">
+          <label for="admin-secret">Admin secret</label>
+          <input
+            id="admin-secret"
+            class="input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter admin secret"
+          />
+        </div>
+
+        <button id="login-button" class="button primary" type="button">
+          Sign in
+        </button>
+        <p id="login-error" class="error"></p>
+      </section>
+    </main>
+
+    <main id="admin-section" class="shell" style="display: none;">
+      <header class="topbar">
+        <div class="title-group">
+          <p class="eyebrow">Comment admin</p>
+          <h1>Moderation</h1>
+          <p class="subtitle" id="last-updated">Not synced yet</p>
+        </div>
+        <div class="actions-row">
+          <button id="refresh-button" class="button ghost" type="button">Refresh</button>
+          <button id="logout-button" class="button ghost" type="button">Sign out</button>
+        </div>
+      </header>
+
+      <p id="notice" class="notice"></p>
+
+      <section class="stats" aria-label="Comment summary">
+        <div class="stat">
+          <div class="stat-value" id="total-count">0</div>
+          <div class="stat-label">Total comments</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="pending-count">0</div>
+          <div class="stat-label">Pending review</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="approved-count">0</div>
+          <div class="stat-label">Approved</div>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Comment filters">
+        <div class="tabs">
+          <button class="filter-tab active" type="button" data-filter="all">
+            All
+          </button>
+          <button class="filter-tab" type="button" data-filter="pending">
+            Pending
+          </button>
+          <button class="filter-tab" type="button" data-filter="approved">
+            Approved
+          </button>
+        </div>
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          placeholder="Search name, email, post, or comment"
+        />
+      </section>
+
+      <section id="comments-list" class="comments-list" aria-live="polite">
+        <div class="loading">Loading comments...</div>
+      </section>
+    </main>
+
+    <script is:inline>
+      let adminSecret = '';
+      let allComments = [];
+      let currentFilter = 'all';
+
+      function logout() {
+        adminSecret = '';
+        allComments = [];
+        document.getElementById('login-section').style.display = 'grid';
+        document.getElementById('admin-section').style.display = 'none';
+        document.getElementById('admin-secret').value = '';
+        document.getElementById('search-input').value = '';
+        hideNotice();
+      }
+
+      async function login() {
+        const secretInput = document.getElementById('admin-secret');
+        const loginButton = document.getElementById('login-button');
+        adminSecret = secretInput.value.trim();
+
+        if (!adminSecret) {
+          showLoginError('Enter the admin secret.');
+          return;
+        }
+
+        loginButton.disabled = true;
+        loginButton.textContent = 'Signing in...';
+
+        try {
+          await fetchComments();
           document.getElementById('login-section').style.display = 'none';
           document.getElementById('admin-section').style.display = 'block';
-        })
-        .catch(err => {
-          showLoginError('Invalid admin secret');
+          showNotice('Signed in. Comments are up to date.');
+        } catch (error) {
+          showLoginError('Invalid admin secret.');
+        } finally {
+          loginButton.disabled = false;
+          loginButton.textContent = 'Sign in';
+        }
+      }
+
+      function showLoginError(message) {
+        const errorEl = document.getElementById('login-error');
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+
+      function showNotice(message) {
+        const notice = document.getElementById('notice');
+        notice.textContent = message;
+        notice.style.display = 'block';
+      }
+
+      function hideNotice() {
+        const notice = document.getElementById('notice');
+        notice.textContent = '';
+        notice.style.display = 'none';
+      }
+
+      async function fetchComments(showStatus = false) {
+        if (showStatus) {
+          showNotice('Refreshing comments...');
+        }
+
+        const response = await fetch('/api/admin/comments', {
+          headers: {
+            Authorization: `Bearer ${adminSecret}`,
+          },
         });
-    }
 
-    function showLoginError(msg) {
-      const errorEl = document.getElementById('login-error');
-      errorEl.textContent = msg;
-      errorEl.style.display = 'block';
-    }
+        if (!response.ok) {
+          throw new Error('Unauthorized');
+        }
 
-    async function fetchComments() {
-      const response = await fetch('/api/admin/comments', {
-        headers: {
-          'Authorization': `Bearer ${adminSecret}`
+        const data = await response.json();
+        allComments = data.comments || [];
+        updateStats();
+        renderComments();
+        document.getElementById('last-updated').textContent =
+          `Last synced ${new Date().toLocaleString()}`;
+
+        if (showStatus) {
+          showNotice('Comments refreshed.');
+        }
+      }
+
+      function updateStats() {
+        const total = allComments.length;
+        const approved = allComments.filter((comment) => comment.approved).length;
+        const pending = total - approved;
+
+        document.getElementById('total-count').textContent = total;
+        document.getElementById('pending-count').textContent = pending;
+        document.getElementById('approved-count').textContent = approved;
+      }
+
+      function setFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-tab').forEach((tab) => {
+          tab.classList.toggle('active', tab.dataset.filter === filter);
+        });
+        renderComments();
+      }
+
+      function renderComments() {
+        const container = document.getElementById('comments-list');
+        const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+
+        let filtered = allComments;
+        if (currentFilter === 'pending') {
+          filtered = allComments.filter((comment) => !comment.approved);
+        } else if (currentFilter === 'approved') {
+          filtered = allComments.filter((comment) => comment.approved);
+        }
+
+        if (searchTerm) {
+          filtered = filtered.filter((comment) => {
+            return [comment.name, comment.email, comment.postId, comment.content, comment.id]
+              .filter(Boolean)
+              .some((value) => String(value).toLowerCase().includes(searchTerm));
+          });
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<div class="empty">No comments match this view.</div>';
+          return;
+        }
+
+        container.innerHTML = filtered.map(renderCommentCard).join('');
+      }
+
+      function renderCommentCard(comment) {
+        const status = comment.approved ? 'approved' : 'pending';
+        const createdAt = new Date(comment.createdAt).toLocaleString();
+        const email = comment.email
+          ? `<div class="comment-email">${escapeHtml(comment.email)}</div>`
+          : '';
+
+        return `
+          <article class="comment-card ${status}">
+            <div class="comment-head">
+              <div>
+                <div class="comment-name">${escapeHtml(comment.name)}</div>
+                ${email}
+              </div>
+              <span class="badge ${status}">${status}</span>
+            </div>
+
+            <div class="comment-meta">
+              <span>Post: <strong>${escapeHtml(comment.postId)}</strong></span>
+              <span>${createdAt}</span>
+              <span class="comment-id">ID: ${escapeHtml(comment.id)}</span>
+            </div>
+
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+
+            <div class="card-actions">
+              ${comment.approved
+                ? `<button class="button warning small" type="button" data-action="unapprove" data-comment-id="${escapeHtml(comment.id)}">Unapprove</button>`
+                : `<button class="button success small" type="button" data-action="approve" data-comment-id="${escapeHtml(comment.id)}">Approve</button>`}
+              <button class="button danger small" type="button" data-action="delete" data-comment-id="${escapeHtml(comment.id)}">Delete</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text || '';
+        return div.innerHTML;
+      }
+
+      async function setApproval(commentId, approved) {
+        try {
+          const response = await fetch('/api/admin/comments', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${adminSecret}`,
+            },
+            body: JSON.stringify({ commentId, approved }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Update failed');
+          }
+
+          await fetchComments();
+          showNotice(approved ? 'Comment approved.' : 'Comment moved back to pending.');
+        } catch (error) {
+          showNotice('Comment update failed.');
+          console.error('Failed to update comment:', error);
+        }
+      }
+
+      async function deleteComment(commentId) {
+        if (!confirm('Delete this comment permanently?')) {
+          return;
+        }
+
+        try {
+          const response = await fetch('/api/admin/comments', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${adminSecret}`,
+            },
+            body: JSON.stringify({ commentId }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Delete failed');
+          }
+
+          await fetchComments();
+          showNotice('Comment deleted.');
+        } catch (error) {
+          showNotice('Comment delete failed.');
+          console.error('Failed to delete comment:', error);
+        }
+      }
+
+      document.getElementById('admin-secret').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          login();
         }
       });
-      
-      if (!response.ok) {
-        throw new Error('Unauthorized');
-      }
-      
-      const data = await response.json();
-      allComments = data.comments || [];
-      updateStats();
-      renderComments();
-    }
 
-    function updateStats() {
-      const total = allComments.length;
-      const approved = allComments.filter(c => c.approved).length;
-      const pending = total - approved;
-      
-      document.getElementById('total-count').textContent = total;
-      document.getElementById('pending-count').textContent = pending;
-      document.getElementById('approved-count').textContent = approved;
-    }
+      document.getElementById('login-button').addEventListener('click', () => login());
+      document.getElementById('refresh-button').addEventListener('click', () => fetchComments(true));
+      document.getElementById('logout-button').addEventListener('click', () => logout());
+      document.getElementById('search-input').addEventListener('input', () => renderComments());
 
-    function setFilter(filter) {
-      currentFilter = filter;
-      document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.textContent.toLowerCase() === filter);
+      document.querySelectorAll('.filter-tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          setFilter(tab.dataset.filter);
+        });
       });
-      renderComments();
-    }
 
-    function renderComments() {
-      const container = document.getElementById('comments-list');
-      
-      let filtered = allComments;
-      if (currentFilter === 'pending') {
-        filtered = allComments.filter(c => !c.approved);
-      } else if (currentFilter === 'approved') {
-        filtered = allComments.filter(c => c.approved);
-      }
-      
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty">no comments found</div>';
-        return;
-      }
-      
-     container.innerHTML = filtered.map(comment => `
-  <div class=" border-[1px] border-gray-600 rounded-lg p-4 mb-4 shadow-sm">
-    
-    <!-- Header -->
-    <div class="flex items-start justify-between mb-2">
-      <div>
-        <div class="font-semibold text-white">
-          ${escapeHtml(comment.name)}
-        </div>
-        ${comment.email ? `
-          <div class="text-sm text-gray-500">
-            ${escapeHtml(comment.email)}
-          </div>
-        ` : ''}
-      </div>
-
-      <span class="
-        text-xs font-medium px-2 py-1 rounded-full
-        ${comment.approved
-          ? 'bg-green-100 text-green-700'
-          : 'bg-yellow-100 text-yellow-700'}
-      ">
-        ${comment.approved ? 'approved' : 'pending'}
-      </span>
-    </div>
-
-    <!-- Post -->
-    <div class="text-sm text-gray-500 mb-2">
-      on: <span class="font-medium">${escapeHtml(comment.postId)}</span>
-    </div>
-
-    <!-- Content -->
-    <div class="text-gray mb-3">
-      ${escapeHtml(comment.content)}
-    </div>
-
-    <!-- Meta -->
-    <div class="text-xs text-gray-400 mb-3">
-      ${new Date(comment.createdAt).toLocaleString()}
-    </div>
-
-    <!-- Actions -->
-    <div class="flex gap-2">
-      ${!comment.approved ? `
-        <button
-          class="px-3 py-1 text-sm rounded-md bg-green-600 text-white hover:bg-green-700 transition"
-          onclick="approveComment('${comment.id}')"
-        >
-          ✓ approve
-        </button>
-      ` : `
-        <button
-          class="px-3 py-1 text-sm rounded-md bg-yellow-500 text-white hover:bg-yellow-600 transition"
-          onclick="rejectComment('${comment.id}')"
-        >
-          ↩ unapprove
-        </button>
-      `}
-
-      <button
-        class="px-3 py-1 text-sm rounded-md bg-red-600 text-white hover:bg-red-700 transition"
-        onclick="deleteComment('${comment.id}')"
-      >
-        ✕ delete
-      </button>
-    </div>
-  </div>
-`).join('');
-
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    async function approveComment(commentId) {
-      try {
-        const response = await fetch('/api/admin/comments', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${adminSecret}`
-          },
-          body: JSON.stringify({ commentId, approved: true })
-        });
-        
-        if (response.ok) {
-          await fetchComments();
+      document.getElementById('comments-list').addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) {
+          return;
         }
-      } catch (error) {
-        console.error('Failed to approve comment:', error);
-      }
-    }
 
-    async function rejectComment(commentId) {
-      try {
-        const response = await fetch('/api/admin/comments', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${adminSecret}`
-          },
-          body: JSON.stringify({ commentId, approved: false })
-        });
-        
-        if (response.ok) {
-          await fetchComments();
+        const commentId = button.dataset.commentId;
+        if (!commentId) {
+          return;
         }
-      } catch (error) {
-        console.error('Failed to reject comment:', error);
-      }
-    }
 
-    async function deleteComment(commentId) {
-      if (!confirm('Are you sure you want to delete this comment?')) {
-        return;
-      }
-      
-      try {
-        const response = await fetch('/api/admin/comments', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${adminSecret}`
-          },
-          body: JSON.stringify({ commentId })
-        });
-        
-        if (response.ok) {
-          await fetchComments();
+        if (button.dataset.action === 'approve') {
+          setApproval(commentId, true);
+        } else if (button.dataset.action === 'unapprove') {
+          setApproval(commentId, false);
+        } else if (button.dataset.action === 'delete') {
+          deleteComment(commentId);
         }
-      } catch (error) {
-        console.error('Failed to delete comment:', error);
-      }
-    }
-
-    // Allow Enter key to login
-    document.getElementById('admin-secret').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        login();
-      }
-    });
-  </script>
-</body>
+      });
+    </script>
+  </body>
 </html>

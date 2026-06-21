@@ -9,8 +9,8 @@ interface TelegramMessage {
   email?: string;
 }
 
-// Escape special characters for MarkdownV2
-function escapeMarkdown(text: string): string {
+// Escape special characters for MarkdownV2.
+export function escapeMarkdown(text: string): string {
   return text.replace(/[_*[\]()~`>#+=|{}.!-]/g, '\\$&');
 }
 
@@ -44,19 +44,19 @@ export async function sendTelegramNotification(message: TelegramMessage): Promis
 
 📝 *Post:* ${escapeMarkdown(message.postId)}
 👤 *From:* ${escapeMarkdown(message.name)}${message.email ? ` \\(${escapeMarkdown(message.email)}\\)` : ''}
+🆔 *ID:* \`${escapeMarkdown(message.commentId)}\`
 
 💬 *Comment:*
 ${escapeMarkdown(message.content)}
 
-⏳ _Awaiting approval_`;
+✅ _Published automatically_`;
 
     await bot.telegram.sendMessage(chatId, text, {
       parse_mode: 'MarkdownV2',
       reply_markup: {
         inline_keyboard: [
           [
-            { text: '✅ Approve', callback_data: `approve:${message.commentId}` },
-            { text: '❌ Reject', callback_data: `reject:${message.commentId}` },
+            { text: '↩️ Unapprove', callback_data: `reject:${message.commentId}` },
           ],
           [
             { text: '🗑️ Delete', callback_data: `delete:${message.commentId}` },

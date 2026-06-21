@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import Header from '../../components/header/index.astro';
+import SEO from '../../components/seo/index.astro';
 import '../../style/index.css';
 import PortableTextRenderer from '../../utils/PortableTextRenderer';
 import BlogReactions from '../../components/BlogReactions';
@@ -32,6 +33,9 @@ if (!post) {
 }
 
 const { title, description: desc, tags, firstPublishedAt, publishedAt, _createdAt, body, mainImage } = post;
+const description = desc || "Personal notes and thoughts.";
+const fallbackOgImage = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
+const ogImage = mainImage?.asset?.url || fallbackOgImage;
 const publishedDate = firstPublishedAt || publishedAt || _createdAt;
 const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(publishedDate).getTime())
   ? new Date(publishedDate).toLocaleDateString("en-US", { dateStyle: "long" })
@@ -43,18 +47,10 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content={desc || "Personal notes and thoughts"} />
-  <meta name="author" content="Obiabo" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={desc || "Personal notes and thoughts"} />
-  <meta property="og:type" content="article" />
+  <SEO title={title} description={description} type="article" image={ogImage} appendSiteName={false} />
   <meta property="article:published_time" content={publishedDate && !Number.isNaN(new Date(publishedDate).getTime()) ? new Date(publishedDate).toISOString() : ''} />
   <!-- @ts-ignore -->
   {tags && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={desc || "Personal notes and thoughts"} />
-  <title>{title} | Notes</title>
   <link rel="stylesheet" href="/src/style/index.css" />
 
 </head>

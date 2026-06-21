@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {PostContentPreview} from '../components/PostContentPreview'
 
 export default defineType({
   name: 'post',
@@ -66,6 +67,16 @@ export default defineType({
       name: 'body',
       title: 'Body',
       type: 'blockContent',
+    }),
+    defineField({
+      name: 'preview',
+      title: 'Preview',
+      type: 'string',
+      description: 'Preview of the draft title, description, and body content.',
+      readOnly: true,
+      components: {
+        input: PostContentPreview,
+      },
     }),
     defineField({
       name: 'markdown',

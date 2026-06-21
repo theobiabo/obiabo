@@ -1,5 +1,6 @@
 ---
 import Header from '../../components/header/index.astro'
+import SEO from '../../components/seo/index.astro'
 import '../../style/index.css'
 import { getSanityOpenSourceContributions } from '../../utils/getSanityOpenSourceContributions'
 
@@ -16,8 +17,7 @@ const contributionGroups = page?.groups ?? []
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content={overviewText || 'Open source contributions'}>
-    <title>{title}</title>
+    <SEO title={title} description={overviewText || 'Open source contributions by Emmanuel Obiabo.'} />
 </head>
 <body>
     <Header title={title} />

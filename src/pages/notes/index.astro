@@ -4,6 +4,7 @@
 export const prerender = false;
 
 import Header from '../../components/header/index.astro';
+import SEO from '../../components/seo/index.astro';
 import '../../style/index.css';
 import { getSanityPosts } from '../../utils/getSanityPosts';
 import { db, views } from 'astro:db';
@@ -77,15 +78,7 @@ allViews.forEach(v => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Personal notes and thoughts on technology, programming, and life" />
-  <meta name="author" content="Obiabo" />
-  <meta property="og:title" content="Notes" />
-  <meta property="og:description" content="Personal notes and thoughts on technology, programming, and life" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes" />
-  <meta name="twitter:description" content="Personal notes and thoughts on technology, programming, and life" />
-  <title>Notes</title>
+  <SEO title="Notes" description="Personal notes and thoughts on technology, programming, and life." />
   <link rel="stylesheet" href="/src/style/index.css" />
 </head>
 <body>

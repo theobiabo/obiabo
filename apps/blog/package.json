@@ -19,6 +19,7 @@
     "sanity"
   ],
   "dependencies": {
+    "@portabletext/react": "^6.0.2",
     "@sanity/vision": "^5.31.1",
     "easymde": "2",
     "react": "^19.1",

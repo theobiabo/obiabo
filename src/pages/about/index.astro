@@ -1,5 +1,6 @@
 ---
 import Header from '../../components/header/index.astro'
+import SEO from '../../components/seo/index.astro'
 import '../../style/index.css'
 import { getSanityAbout } from '../../utils/getSanityAbout'
 import { renderMarkdown } from '../../utils/markdownRenderer'
@@ -13,10 +14,10 @@ const aboutHtml = renderMarkdown(about?.fullMarkdown ?? '')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>👋🏾 Howdy</title>
+    <SEO title="About" description="Learn more about Emmanuel Obiabo, his work, projects, and interests." />
 </head>
 <body>
-    <section id="about" 
+    <section id="about"
         class="max-w-2xl mx-auto px-4 py-8 font-serif">
         <Header/>
         <article class="markdown-content ibm-plex-mono-medium text-sm">

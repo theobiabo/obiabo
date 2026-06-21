@@ -4,6 +4,7 @@ import Project from '../components/project.astro'
 import About from '../components/sections/about.astro'
 import RecentPosts from '../components/RecentPosts.astro'
 import ActivityFeed from '../components/ActivityFeed.astro'
+import SEO from '../components/seo/index.astro'
 import { getSanityProjects } from '../utils/getSanityProjects'
 import '../../src/style/index.css'
 
@@ -17,10 +18,8 @@ const projects = await getSanityProjects()
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <SEO />
 
-    
-    <title>Emmanuel Obiabo</title>
-    
     <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-GSQTWFBD18"></script>
     <script is:inline>
       import { initializeAnalytics } from '../utils/analytics';
@@ -30,17 +29,17 @@ const projects = await getSanityProjects()
 
   </head>
   <body>
-   
+
 	<Header/>
     <div class="max-w-2xl mx-auto px-4 py-8 font-serif">
-     
+
 
      <About more={true}/>
      <Project projects={projects}/>
      <RecentPosts />
      <ActivityFeed />
 
-    
+
     </div>
   </body>
 </html>

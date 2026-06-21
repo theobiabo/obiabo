@@ -1,5 +1,6 @@
 ---
 import Header from '../../components/header/index.astro';
+import SEO from '../../components/seo/index.astro';
 import '../../style/index.css';
 import { getSanityContact } from '../../utils/getSanityContact';
 import { renderMarkdown } from '../../utils/markdownRenderer';
@@ -13,21 +14,21 @@ const personal_urls = contact?.links ?? [];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reach Out</title>
+    <SEO title="Reach Out" description="Find Emmanuel Obiabo online and get in touch for work, collaboration, or direct messages." />
 </head>
 <body>
     <Header/>
 
     <div class="max-w-2xl mx-auto px-4 py-8 font-serif">
         <div>
-     
+
             <article>
                 <Fragment set:html={contactHtml} />
             </article>
-            
-            
+
+
         </div>
-        
+
 
         <section id="reach" class="mt-4">
             <h4 class="my-4">Find Me Online</h4>

@@ -1,0 +1,37 @@
+---
+type Props = {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  image?: string;
+  appendSiteName?: boolean;
+};
+
+const {
+  title = 'Emmanuel Obiabo',
+  description = 'Personal notes, open-source work, projects, and thoughts from Emmanuel Obiabo.',
+  type = 'website',
+  image = '/assets/photo.png',
+  appendSiteName = true,
+} = Astro.props;
+
+const siteTitle = appendSiteName && title !== 'Emmanuel Obiabo' ? `${title} | Emmanuel Obiabo` : title;
+const ogImage = new URL(image, Astro.url.origin).toString();
+const pageUrl = Astro.url.toString();
+---
+
+<meta name="description" content={description} />
+<meta name="author" content="Obiabo" />
+<meta property="og:title" content={siteTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={siteTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<title>{siteTitle}</title>

@@ -1,17 +1,18 @@
 ---
 import Header from '../components/header/index.astro';
+import SEO from '../components/seo/index.astro';
 import '../style/index.css';
 import { getSanityPosts } from '../utils/getSanityPosts';
 
 const posts = await getSanityPosts();
 const query = new URL(Astro.request.url).searchParams.get('q')?.toLowerCase() || '';
 
-const searchResults = query 
+const searchResults = query
   ? posts.filter((post: any) =>
       post.title.toLowerCase().includes(query) ||
-      post.body?.some((block: any) => 
-        block._type === 'block' && 
-        block.children?.some((child: any) => 
+      post.body?.some((block: any) =>
+        block._type === 'block' &&
+        block.children?.some((child: any) =>
           child.text?.toLowerCase().includes(query)
         )
       )
@@ -19,15 +20,24 @@ const searchResults = query
   : [];
 ---
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SEO title="Search" description="Search Emmanuel Obiabo's notes and thoughts." />
+</head>
+<body>
+
 <Header />
 
 <main class="search-container">
   <div class="search-header">
     <h1>search thoughts</h1>
     <form method="get" class="search-form">
-      <input 
-        type="text" 
-        name="q" 
+      <input
+        type="text"
+        name="q"
         placeholder="find a thought..."
         value={query}
         class="search-input"
@@ -52,8 +62,8 @@ const searchResults = query
             <div class="post-header">
               <h2 class="post-title">{post.title}</h2>
               <time class="post-date">
-                {new Date(post.publishedAt).toLocaleDateString('en-US', { 
-                  month: 'short', 
+                {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                  month: 'short',
                   day: 'numeric',
                   year: 'numeric'
                 })}
@@ -249,3 +259,5 @@ const searchResults = query
     }
   }
 </style>
+</body>
+</html>

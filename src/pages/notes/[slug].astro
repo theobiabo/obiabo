@@ -57,22 +57,22 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 <body>
 
 <Header title={title} />
-<main class="container mx-auto px-4 py-8 max-w-4xl">
-  <div class="w-fit max-w-full flex items-start gap-2 mt-6 mx-auto">
-    <main class="container">
+<main class="page-shell note-page">
       <h1 class="text-xl md:text-2xl italic font-bold leading-tight tracking-normal text-default">{title}</h1>
       {desc && <p class="text-md mt-4 mb-6 italic">{desc}</p>}
       {mainImage?.asset?.url && (
         <img
           src={mainImage.asset.url}
           alt={mainImage.alt || title}
-          class="w-full rounded-lg shadow-lg mb-8 max-h-96 object-cover"
+          class="note-hero-image"
         />
       )}
-      <div class="flex items-center gap-4 mb-8 text-sm">
-        <span class="italic">Published on <b>{formattedPublishedDate}</b></span>
-        <span class="italic">• {calculateReadingTime(body)} min read</span>
-        <ViewCounter client:load postId={slug} />
+      <div class="post-meta">
+        <span class="post-meta-item italic">Published on <b>{formattedPublishedDate}</b></span>
+        <span class="post-meta-item italic">{calculateReadingTime(body)} min read</span>
+        <span class="post-meta-item">
+          <ViewCounter client:load postId={slug} />
+        </span>
       </div>
 
       {body && body.length > 0 && (
@@ -98,11 +98,63 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
       <div class="mt-12 pt-8 ">
         <a href="/notes" class="text-default hover:underline">← Back to Notes</a>
       </div>
-    </main>
-  </div>
 </main>
 
 <style>
+  .note-page {
+    margin-top: 1.5rem;
+  }
+
+  .note-hero-image {
+    width: 100%;
+    height: auto;
+    max-height: 24rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+  }
+
+  .post-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .post-meta-item + .post-meta-item::before {
+    content: "•";
+    margin-right: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .note-hero-image {
+      max-height: none;
+      object-fit: contain;
+      box-shadow: none;
+    }
+
+    .post-meta {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .post-meta-item + .post-meta-item::before {
+      content: none;
+    }
+  }
+
   .portableText {
     font-family: inherit;
     color: inherit;

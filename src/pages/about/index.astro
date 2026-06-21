@@ -17,8 +17,7 @@ const aboutHtml = renderMarkdown(about?.fullMarkdown ?? '')
     <SEO title="About" description="Learn more about Emmanuel Obiabo, his work, projects, and interests." />
 </head>
 <body>
-    <section id="about"
-        class="max-w-2xl mx-auto px-4 py-8 font-serif">
+    <section id="about" class="page-shell">
         <Header/>
         <article class="markdown-content ibm-plex-mono-medium text-sm">
             <Fragment set:html={aboutHtml} />

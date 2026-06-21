@@ -8,6 +8,7 @@ import project from './project'
 import about from './about'
 import contact from './contact'
 import theme from './theme'
+import openSourceContributionsPage from './openSourceContributionsPage'
 
 export const schemaTypes = [
   post,
@@ -20,4 +21,5 @@ export const schemaTypes = [
   about,
   contact,
   theme,
+  openSourceContributionsPage,
 ]

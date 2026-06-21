@@ -1,30 +1,71 @@
 
 <!-- ts-nocheck -->
 ---
-export const prerender = false; 
+export const prerender = false;
 
 import Header from '../../components/header/index.astro';
 import '../../style/index.css';
 import { getSanityPosts } from '../../utils/getSanityPosts';
-import { db, reactions, comments, views } from 'astro:db';
+import { db, views } from 'astro:db';
 
-const posts = await getSanityPosts();
+type Post = {
+  _id?: string;
+  _createdAt?: string | null;
+  slug: { current: string };
+  title: string;
+  description?: string;
+  firstPublishedAt?: string | null;
+  publishedAt?: string | null;
+};
 
-const allReactions = await db.select().from(reactions);
-const allComments = await db.select().from(comments);
+const posts = await getSanityPosts() as Post[];
+
+const getPostDateValue = (post: Post) => {
+  const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
+  const time = date ? new Date(date).getTime() : 0;
+
+  return Number.isNaN(time) ? 0 : time;
+};
+
+const formatPostDate = (post: Post) => {
+  const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
+  const parsedDate = date ? new Date(date) : null;
+
+  return parsedDate && !Number.isNaN(parsedDate.getTime())
+    ? parsedDate.toLocaleDateString("en-US", { dateStyle: "long" })
+    : "Unknown";
+};
+
+const sort = Astro.url.searchParams.get("sort") === "oldest" ? "oldest" : "latest";
+const pageSize = 5;
+const requestedPage = Number(Astro.url.searchParams.get("page") || "1");
+const sortedPosts = [...posts].sort((a, b) => {
+  return sort === "oldest"
+    ? getPostDateValue(a) - getPostDateValue(b)
+    : getPostDateValue(b) - getPostDateValue(a);
+});
+const totalPages = Math.max(1, Math.ceil(sortedPosts.length / pageSize));
+const currentPage = Math.min(Math.max(Number.isNaN(requestedPage) ? 1 : requestedPage, 1), totalPages);
+const paginatedPosts = sortedPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+const getPageHref = (page: number) => {
+  const params = new URLSearchParams();
+
+  if (sort !== "latest") {
+    params.set("sort", sort);
+  }
+
+  if (page > 1) {
+    params.set("page", String(page));
+  }
+
+  const query = params.toString();
+  return query ? `/notes?${query}` : "/notes";
+};
+
 const allViews = await db.select().from(views);
 
-const reactionCounts: Record<string, number> = {};
-const commentCounts: Record<string, number> = {};
 const viewCounts: Record<string, number> = {};
-
-allReactions.forEach(r => {
-  reactionCounts[r.postId] = (reactionCounts[r.postId] || 0) + 1;
-});
-
-allComments.filter(c => c.approved).forEach(c => {
-  commentCounts[c.postId] = (commentCounts[c.postId] || 0) + 1;
-});
 
 allViews.forEach(v => {
   viewCounts[v.postId] = (viewCounts[v.postId] || 0) + 1;
@@ -64,18 +105,25 @@ allViews.forEach(v => {
   </header>
 
   <section class="mb-12">
+    <form method="get" class="mb-8 flex flex-wrap items-center gap-3 text-sm">
+      <label for="sort" class="text-gray-500">Sort notes</label>
+      <select id="sort" name="sort" class="rounded bg-transparent px-3 py-2" value={sort}>
+        <option value="latest" selected={sort === "latest"}>Latest first</option>
+        <option value="oldest" selected={sort === "oldest"}>Oldest first</option>
+      </select>
+      <button type="submit" class="text-default hover:underline">Apply</button>
+    </form>
+
     <div class="space-y-6 ">
-      {posts.map((post: {slug: {current: string}, title: string, description: string, firstPublishedAt?: string, publishedAt: string}) => {
+      {paginatedPosts.map((post) => {
         const postId = post.slug.current;
-        const reactionsCount = reactionCounts[postId] || 0;
-        const commentsCount = commentCounts[postId] || 0;
         const viewsCount = viewCounts[postId] || 0;
-        const dateAdded = post.firstPublishedAt || post.publishedAt;
-        
+        const formattedDate = formatPostDate(post);
+
         return (
           <div class="mt-4">
             <div>
-              
+
               <h3 class="text-md italic font-medium mb-3">
                 <a href={`/notes/${post.slug.current}`} class="text-default hover:underline">
                   {post.title}
@@ -84,10 +132,10 @@ allViews.forEach(v => {
               {post.description && (
                 <p class="mb-4 text-sm italic">{post.description}</p>
               )}
-              
+
               <div class="flex items-center gap-4 text-sm text-gray-500">
                 <span class="italic">
-                  {dateAdded ? new Date(dateAdded).toLocaleDateString("en-US", { dateStyle: "long" }) : 'Unknown'}
+                  {formattedDate}
                 </span>
                 <span class="flex items-center gap-1">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -97,7 +145,7 @@ allViews.forEach(v => {
                   <span>{viewsCount}</span>
                 </span>
               </div>
-              
+
               {/* <div class="flex items-center gap-3">
                   <span class="flex items-center gap-1">
                   <span>
@@ -117,6 +165,40 @@ allViews.forEach(v => {
         );
       })}
     </div>
+
+    {totalPages > 1 && (
+      <nav class="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Notes pagination">
+        <div class="text-gray-500">
+          Page {currentPage} of {totalPages}
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          {currentPage > 1 ? (
+            <a href={getPageHref(currentPage - 1)} class="rounded px-3 py-1.5 text-default hover:underline">← Previous</a>
+          ) : (
+            <span class="rounded px-3 py-1.5 text-gray-400">← Previous</span>
+          )}
+
+          {pageNumbers.map((page) => (
+            page === currentPage ? (
+              <span class="rounded bg-default px-3 py-1.5 text-white" aria-current="page">
+                {page}
+              </span>
+            ) : (
+              <a href={getPageHref(page)} class="rounded px-3 py-1.5 text-default hover:underline">
+                {page}
+              </a>
+            )
+          ))}
+
+          {currentPage < totalPages ? (
+            <a href={getPageHref(currentPage + 1)} class="rounded px-3 py-1.5 text-default hover:underline">Next →</a>
+          ) : (
+            <span class="rounded px-3 py-1.5 text-gray-400">Next →</span>
+          )}
+        </div>
+      </nav>
+    )}
   </section>
 
 

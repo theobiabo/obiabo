@@ -1,5 +1,5 @@
 ---
-export const prerender = false; 
+export const prerender = false;
 
 import Header from '../../components/header/index.astro';
 import '../../style/index.css';
@@ -31,7 +31,11 @@ if (!post) {
   });
 }
 
-const { title, description: desc, tags, publishedAt, body, mainImage } = post;
+const { title, description: desc, tags, firstPublishedAt, publishedAt, _createdAt, body, mainImage } = post;
+const publishedDate = firstPublishedAt || publishedAt || _createdAt;
+const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(publishedDate).getTime())
+  ? new Date(publishedDate).toLocaleDateString("en-US", { dateStyle: "long" })
+  : 'Unknown';
 ---
 
 <!DOCTYPE html>
@@ -44,7 +48,7 @@ const { title, description: desc, tags, publishedAt, body, mainImage } = post;
   <meta property="og:title" content={title} />
   <meta property="og:description" content={desc || "Personal notes and thoughts"} />
   <meta property="og:type" content="article" />
-  <meta property="article:published_time" content={publishedAt ? new Date(publishedAt).toISOString() : ''} />
+  <meta property="article:published_time" content={publishedDate && !Number.isNaN(new Date(publishedDate).getTime()) ? new Date(publishedDate).toISOString() : ''} />
   <!-- @ts-ignore -->
   {tags && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
   <meta name="twitter:card" content="summary" />
@@ -52,7 +56,7 @@ const { title, description: desc, tags, publishedAt, body, mainImage } = post;
   <meta name="twitter:description" content={desc || "Personal notes and thoughts"} />
   <title>{title} | Notes</title>
   <link rel="stylesheet" href="/src/style/index.css" />
- 
+
 </head>
 <body>
 
@@ -63,14 +67,14 @@ const { title, description: desc, tags, publishedAt, body, mainImage } = post;
       <h1 class="text-xl md:text-2xl italic font-bold leading-tight tracking-normal text-default">{title}</h1>
       {desc && <p class="text-md mt-4 mb-6 italic">{desc}</p>}
       {mainImage?.asset?.url && (
-        <img 
-          src={mainImage.asset.url} 
+        <img
+          src={mainImage.asset.url}
           alt={mainImage.alt || title}
           class="w-full rounded-lg shadow-lg mb-8 max-h-96 object-cover"
         />
       )}
       <div class="flex items-center gap-4 mb-8 text-sm">
-        <span class="italic">Published on <b>{publishedAt ? new Date(publishedAt).toLocaleDateString("en-US", { dateStyle: "long" }) : 'Unknown'}</b></span>
+        <span class="italic">Published on <b>{formattedPublishedDate}</b></span>
         <span class="italic">• {calculateReadingTime(body)} min read</span>
         <ViewCounter client:load postId={slug} />
       </div>
@@ -83,18 +87,18 @@ const { title, description: desc, tags, publishedAt, body, mainImage } = post;
         <PortableTextRenderer client:load value={body} />
       </article>
 
-      <ShareButtons 
-        title={title} 
+      <ShareButtons
+        title={title}
         url={`${Astro.url.origin}/notes/${slug}`}
         description={desc}
       />
 
       <BlogReactions client:load postId={post._id} />
-      
+
       <Webmentions postId={post._id} />
-      
+
       <BlogComments client:load postId={post._id} />
-      
+
       <div class="mt-12 pt-8 ">
         <a href="/notes" class="text-default hover:underline">← Back to Notes</a>
       </div>

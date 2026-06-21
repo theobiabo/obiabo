@@ -1,8 +1,9 @@
-import { sanity } from './sanityClient';
+import { sanity } from "./sanityClient";
 
 export async function getSanityPosts() {
-  const query = `*[_type == "post"]|order(coalesce(firstPublishedAt, publishedAt) desc){
+  const query = `*[_type == "post"]|order(coalesce(firstPublishedAt, publishedAt, _createdAt) desc){
     _id,
+    _createdAt,
     title,
     description,
     firstPublishedAt,

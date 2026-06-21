@@ -12,6 +12,7 @@
     "migrate:about": "sanity exec scripts/migrate-about.ts --with-user-token",
     "migrate:contact": "sanity exec scripts/migrate-contact.ts --with-user-token",
     "migrate:theme": "sanity exec scripts/migrate-theme.ts --with-user-token",
+    "migrate:open-source-contributions": "sanity exec scripts/migrate-open-source-contributions.ts --with-user-token",
     "deploy-graphql": "sanity graphql deploy"
   },
   "keywords": [

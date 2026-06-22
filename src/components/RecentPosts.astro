@@ -2,22 +2,37 @@
 import { getSanityPosts } from '../utils/getSanityPosts';
 
 const allPosts = await getSanityPosts();
-const recentPosts = allPosts.slice(0, 5); // Get 5 most recent posts
+const recentPosts = allPosts
+  .filter((post: any) => post?.slug?.current)
+  .slice(0, 5)
+  .map((post: any) => ({
+    ...post,
+    postUrl: `/notes/${post.slug.current}`,
+  }));
+
+const formatPostDate = (post: any) => {
+  const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
+  const parsedDate = date ? new Date(date) : null;
+
+  return parsedDate && !Number.isNaN(parsedDate.getTime())
+    ? parsedDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    : 'Unknown';
+};
 ---
 
 <div class="recent-posts">
   <h3>recent thoughts</h3>
   <div class="posts-list">
     {recentPosts.map((post: any) => (
-      <a href={`/notes/${post.slug.current}`} class="post-link">
+      <a href={post.postUrl} class="post-link">
         <div class="post-item">
           <div class="post-title">{post.title}</div>
           <div class="post-date">
-            {new Date(post.firstPublishedAt || post.publishedAt).toLocaleDateString('en-US', {
-              month: 'short', 
-              day: 'numeric',
-              year: 'numeric'
-            })}
+            {formatPostDate(post)}
           </div>
         </div>
       </a>

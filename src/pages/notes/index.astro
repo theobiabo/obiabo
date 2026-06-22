@@ -12,14 +12,14 @@ import { db, views } from 'astro:db';
 type Post = {
   _id?: string;
   _createdAt?: string | null;
-  slug: { current: string };
+  slug?: { current?: string };
   title: string;
   description?: string;
   firstPublishedAt?: string | null;
   publishedAt?: string | null;
 };
 
-const posts = await getSanityPosts() as Post[];
+const posts = ((await getSanityPosts()) as Post[]).filter((post) => post?.slug?.current);
 
 const getPostDateValue = (post: Post) => {
   const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
@@ -109,7 +109,7 @@ allViews.forEach(v => {
 
     <div class="space-y-6 ">
       {paginatedPosts.map((post) => {
-        const postId = post.slug.current;
+        const postId = post.slug?.current || '';
         const viewsCount = viewCounts[postId] || 0;
         const formattedDate = formatPostDate(post);
 
@@ -118,7 +118,7 @@ allViews.forEach(v => {
             <div>
 
               <h3 class="text-md italic font-medium mb-3">
-                <a href={`/notes/${post.slug.current}`} class="text-default hover:underline">
+                <a href={`/notes/${postId}`} class="text-default hover:underline">
                   {post.title}
                 </a>
               </h3>

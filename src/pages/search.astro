@@ -4,7 +4,7 @@ import SEO from '../components/seo/index.astro';
 import '../style/index.css';
 import { getSanityPosts } from '../utils/getSanityPosts';
 
-const posts = await getSanityPosts();
+const posts = (await getSanityPosts()).filter((post: any) => post?.slug?.current);
 const query = new URL(Astro.request.url).searchParams.get('q')?.toLowerCase() || '';
 
 const searchResults = query
@@ -62,11 +62,18 @@ const searchResults = query
             <div class="post-header">
               <h2 class="post-title">{post.title}</h2>
               <time class="post-date">
-                {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                {(() => {
+                  const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
+                  const parsedDate = date ? new Date(date) : null;
+
+                  return parsedDate && !Number.isNaN(parsedDate.getTime())
+                    ? parsedDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })
+                    : 'Unknown';
+                })()}
               </time>
             </div>
             {post.body && post.body[0] && (

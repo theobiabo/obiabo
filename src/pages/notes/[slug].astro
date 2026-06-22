@@ -11,6 +11,7 @@ import ViewCounter from '../../components/ViewCounter';
 import ShareButtons from '../../components/ShareButtons.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Webmentions from '../../components/Webmentions.astro';
+import { codeToHtml } from 'shiki';
 import { calculateReadingTime } from '../../utils/readingTime';
 import { getSanityPostBySlug } from '../../utils/getSanityPostBySlug';
 
@@ -32,7 +33,135 @@ if (!post) {
   });
 }
 
+type PortableBlock = Record<string, any>;
+
+const SHIKI_THEME = 'github-dark';
+
+const isCodeMarkedBlock = (block: PortableBlock) => {
+  if (block?._type !== 'block' || !Array.isArray(block.children)) {
+    return false;
+  }
+
+  const textChildren = block.children.filter((child: PortableBlock) => child?.text?.trim());
+
+  return textChildren.length > 0 && textChildren.every((child: PortableBlock) => {
+    return Array.isArray(child.marks) && child.marks.includes('code');
+  });
+};
+
+const getBlockText = (block: PortableBlock) => {
+  if (block?._type === 'code') {
+    return block.code || '';
+  }
+
+  if (!Array.isArray(block.children)) {
+    return '';
+  }
+
+  return block.children.map((child: PortableBlock) => child?.text || '').join('');
+};
+
+const inferCodeLanguage = (code: string, title?: string) => {
+  const lowerTitle = title?.toLowerCase() || '';
+
+  if (lowerTitle.includes('rust') || /\b(fn|impl|trait|struct|enum|use)\b/.test(code) || code.includes('Box<dyn')) {
+    return 'rust';
+  }
+
+  if (/\b(import|export|const|let|function|=>)\b/.test(code)) {
+    return code.includes(': ') || code.includes('interface ') ? 'typescript' : 'javascript';
+  }
+
+  if (/^\s*(pnpm|npm|yarn|git|cd|mkdir|rm|curl)\b/m.test(code)) {
+    return 'bash';
+  }
+
+  if (/^\s*[\[{]/.test(code)) {
+    return 'json';
+  }
+
+  return 'text';
+};
+
+const normalizeCodeBlocks = (blocks: PortableBlock[] = [], title?: string) => {
+  const normalizedBlocks: PortableBlock[] = [];
+  let pendingCodeBlocks: PortableBlock[] = [];
+
+  const flushPendingCodeBlocks = () => {
+    if (pendingCodeBlocks.length === 0) {
+      return;
+    }
+
+    const code = pendingCodeBlocks
+      .map((block) => getBlockText(block).trimEnd())
+      .filter(Boolean)
+      .join('\n\n');
+
+    if (code.trim()) {
+      normalizedBlocks.push({
+        _key: pendingCodeBlocks.map((block) => block._key).filter(Boolean).join('-') || `code-${normalizedBlocks.length}`,
+        _type: 'code',
+        code,
+        language: pendingCodeBlocks[0]?.language || inferCodeLanguage(code, title),
+      });
+    }
+
+    pendingCodeBlocks = [];
+  };
+
+  for (const block of blocks) {
+    if (block?._type === 'code' || isCodeMarkedBlock(block)) {
+      pendingCodeBlocks.push(block);
+      continue;
+    }
+
+    flushPendingCodeBlocks();
+    normalizedBlocks.push(block);
+  }
+
+  flushPendingCodeBlocks();
+
+  return normalizedBlocks;
+};
+
+const highlightCodeBlocks = async (blocks: PortableBlock[] = [], title?: string) => {
+  const normalizedBlocks = normalizeCodeBlocks(blocks, title);
+
+  return await Promise.all(normalizedBlocks.map(async (block: PortableBlock) => {
+    if (block?._type !== 'code' || !block.code) {
+      return block;
+    }
+
+    const lang = block.language || inferCodeLanguage(block.code, title);
+
+    try {
+      const highlightedHtml = await codeToHtml(block.code, {
+        lang,
+        theme: SHIKI_THEME,
+      });
+
+      return {
+        ...block,
+        language: lang,
+        highlightedHtml,
+      };
+    } catch {
+      const highlightedHtml = await codeToHtml(block.code, {
+        lang: 'text',
+        theme: SHIKI_THEME,
+      });
+
+      return {
+        ...block,
+        language: 'text',
+        highlightedHtml,
+      };
+    }
+  }));
+};
+
 const { title, description: desc, tags, firstPublishedAt, publishedAt, _createdAt, body, mainImage } = post;
+const highlightedBody = await highlightCodeBlocks(body || [], title);
 const description = desc || "Personal notes and thoughts.";
 const fallbackOgImage = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
 const ogImage = mainImage?.asset?.url || fallbackOgImage;
@@ -75,12 +204,12 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
         </span>
       </div>
 
-      {body && body.length > 0 && (
-        <TableOfContents blocks={body} />
+      {highlightedBody && highlightedBody.length > 0 && (
+        <TableOfContents blocks={highlightedBody} />
       )}
 
       <article class="prose prose-md max-w-none">
-        <PortableTextRenderer client:load value={body} />
+        <PortableTextRenderer client:load value={highlightedBody} />
       </article>
 
       <ShareButtons

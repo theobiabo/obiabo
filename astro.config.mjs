@@ -8,21 +8,18 @@ import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 import vercel from "@astrojs/vercel";
 
-
-import sanity from "@sanity/astro";
-
 import db from "@astrojs/db";
 
 export default defineConfig({
-  output: 'server',
-  integrations: [tailwind({
-    applyBaseStyles: false,
-  }), react(), mdx(), sanity({
-    projectId: '6jsm7r00',
-    dataset: 'production',
-   
-    useCdn: false,
-  }), db()],
+  output: "server",
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+    react(),
+    mdx(),
+    db(),
+  ],
 
   adapter: vercel({
     webAnalytics: {

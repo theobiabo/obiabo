@@ -95,6 +95,7 @@ export default defineType({
             list: [
               {title: 'JavaScript', value: 'javascript'},
               {title: 'TypeScript', value: 'typescript'},
+              {title: 'Rust', value: 'rust'},
               {title: 'Python', value: 'python'},
               {title: 'HTML', value: 'html'},
               {title: 'CSS', value: 'css'},

@@ -1,10 +1,10 @@
 //@ts-nocheck
-import React from 'react'
-import { PortableText } from '@portabletext/react'
-import styles from '../style/portable-text.module.css'
+import React from "react";
+import { PortableText } from "@portabletext/react";
+import styles from "../style/portable-text.module.css";
 
 const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
-  if (!value) return null
+  if (!value) return null;
 
   const components = {
     /* =====================
@@ -12,21 +12,15 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
      * ===================== */
     types: {
       image: ({ value }) => {
-        const url = value?.asset?.url
-        if (!url) return null
+        const url = value?.asset?.url;
+        if (!url) return null;
 
         return (
           <figure className="portable-image">
-            <img
-              src={url}
-              alt={value.alt || ''}
-              loading="lazy"
-            />
-            {value.caption && (
-              <figcaption>{value.caption}</figcaption>
-            )}
+            <img src={url} alt={value.alt || ""} loading="lazy" />
+            {value.caption && <figcaption>{value.caption}</figcaption>}
           </figure>
-        )
+        );
       },
 
       code: ({ value }) => (
@@ -34,17 +28,69 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
           {value.language && (
             <div className="language-badge">{value.language}</div>
           )}
-          <pre>
-            <code className={`language-${value.language || 'javascript'}`}>
-              {value.code}
-            </code>
-          </pre>
+          {value.highlightedHtml ? (
+            <div
+              className="shiki-code"
+              dangerouslySetInnerHTML={{ __html: value.highlightedHtml }}
+            />
+          ) : (
+            <pre>
+              <code className={`language-${value.language || "javascript"}`}>
+                {value.code}
+              </code>
+            </pre>
+          )}
+          <style>{`
+            .code-block {
+              margin: 1.5rem 0;
+              overflow: hidden;
+              border-radius: 0.75rem;
+              background: #0d1117;
+            }
+
+            .language-badge {
+              padding: 0.6rem 1rem 0;
+              color: #8b949e;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+              font-size: 0.75rem;
+              text-transform: uppercase;
+              letter-spacing: 0.08em;
+            }
+
+            .shiki-code .shiki,
+            .code-block > pre {
+              margin: 0;
+              padding: 1rem;
+              overflow-x: auto;
+              background: #0d1117 !important;
+              font-size: 0.9rem;
+              line-height: 1.7;
+            }
+
+            .shiki-code code,
+            .code-block code {
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+
+            .shiki-code code {
+              display: block;
+              background: transparent !important;
+              padding: 0 !important;
+              color: inherit;
+            }
+
+            .shiki-code .line {
+              min-height: 1.7em;
+            }
+          `}</style>
         </div>
       ),
 
       callout: ({ value }) => (
-        <div className={`callout callout-${value.type || 'info'}`}>
-          {value.title && <strong className="callout-title">{value.title}</strong>}
+        <div className={`callout callout-${value.type || "info"}`}>
+          {value.title && (
+            <strong className="callout-title">{value.title}</strong>
+          )}
           {value.message && <p className="callout-message">{value.message}</p>}
         </div>
       ),
@@ -52,8 +98,8 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
       divider: () => <hr className="portable-divider" />,
 
       videoEmbed: ({ value }) => {
-        const embedUrl = convertToEmbedUrl(value?.url)
-        if (!embedUrl) return null
+        const embedUrl = convertToEmbedUrl(value?.url);
+        if (!embedUrl) return null;
 
         return (
           <figure className="portable-video">
@@ -64,11 +110,11 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
               frameBorder="0"
               allowFullScreen
               loading="lazy"
-              title={value.caption || 'Embedded video'}
+              title={value.caption || "Embedded video"}
             />
             {value.caption && <figcaption>{value.caption}</figcaption>}
           </figure>
-        )
+        );
       },
 
       quoteBlock: ({ value }) => (
@@ -81,13 +127,13 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
       ),
 
       highlight: ({ value }) => (
-        <mark className={`highlight highlight-${value.color || 'yellow'}`}>
+        <mark className={`highlight highlight-${value.color || "yellow"}`}>
           {value.text}
         </mark>
       ),
 
       previewBlock: ({ value }) => (
-        <div className={`preview-block preview-${value.bgType || 'light'}`}>
+        <div className={`preview-block preview-${value.bgType || "light"}`}>
           {value.title && <h4 className="preview-title">{value.title}</h4>}
           {value.description && (
             <p className="preview-description">{value.description}</p>
@@ -117,12 +163,8 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
      * LISTS
      * ===================== */
     list: {
-      bullet: ({ children }) => (
-        <ul className="portable-ul">{children}</ul>
-      ),
-      number: ({ children }) => (
-        <ol className="portable-ol">{children}</ol>
-      ),
+      bullet: ({ children }) => <ul className="portable-ul">{children}</ul>,
+      number: ({ children }) => <ol className="portable-ol">{children}</ol>,
     },
 
     listItem: {
@@ -142,13 +184,11 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
         <strong className="portable-strong">{children}</strong>
       ),
       em: ({ children }) => <em className="portable-em">{children}</em>,
-      code: ({ children }) => (
-        <code className="portable-code">{children}</code>
-      ),
+      code: ({ children }) => <code className="portable-code">{children}</code>,
       underline: ({ children }) => (
         <u className="portable-underline">{children}</u>
       ),
-      'strike-through': ({ children }) => (
+      "strike-through": ({ children }) => (
         <s className="portable-strikethrough">{children}</s>
       ),
 
@@ -164,17 +204,17 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
       ),
 
       internalLink: ({ value, children }) => {
-        const slug = value?.reference?.slug?.current
-        if (!slug) return children
+        const slug = value?.reference?.slug?.current;
+        if (!slug) return children;
 
         return (
           <a href={`/notes/${slug}`} className="portable-internal-link">
             {children}
           </a>
-        )
+        );
       },
     },
-  }
+  };
 
   return (
     <>
@@ -182,25 +222,24 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
         <PortableText value={value} components={components} />
       </div>
     </>
-  )
-}
+  );
+};
 
 function convertToEmbedUrl(url?: string) {
-  if (!url) return null
+  if (!url) return null;
 
-  if (url.includes('youtu')) {
+  if (url.includes("youtu")) {
     const id =
-      url.match(/v=([^&]+)/)?.[1] ||
-      url.match(/youtu\.be\/([^?]+)/)?.[1]
-    return id ? `https://www.youtube.com/embed/${id}` : null
+      url.match(/v=([^&]+)/)?.[1] || url.match(/youtu\.be\/([^?]+)/)?.[1];
+    return id ? `https://www.youtube.com/embed/${id}` : null;
   }
 
-  if (url.includes('vimeo')) {
-    const id = url.match(/vimeo\.com\/(\d+)/)?.[1]
-    return id ? `https://player.vimeo.com/video/${id}` : null
+  if (url.includes("vimeo")) {
+    const id = url.match(/vimeo\.com\/(\d+)/)?.[1];
+    return id ? `https://player.vimeo.com/video/${id}` : null;
   }
 
-  return url
+  return url;
 }
 
-export default PortableTextRenderer
+export default PortableTextRenderer;

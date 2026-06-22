@@ -1,7 +1,7 @@
 import { sanity } from "./sanityClient";
 
 export async function getSanityPosts() {
-  const query = `*[_type == "post"]|order(coalesce(firstPublishedAt, publishedAt, _createdAt) desc){
+  const query = `*[_type == "post" && defined(slug.current)]|order(coalesce(firstPublishedAt, publishedAt, _createdAt) desc){
     _id,
     _createdAt,
     title,

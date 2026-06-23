@@ -7,7 +7,6 @@ interface Props {
 
 const { title, url } = Astro.props;
 
-
 const encodedTitle = encodeURIComponent(title);
 const encodedUrl = encodeURIComponent(url);
 
@@ -15,41 +14,43 @@ const shareLinks = {
   twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
   linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-  copy: 'copy' // Special case for copy to clipboard
 };
 ---
 
 <div class="share-buttons">
   <span class="share-label">share</span>
   <div class="share-links">
-    <a 
-      href={shareLinks.twitter} 
-      target="_blank" 
+    <a
+      href={shareLinks.twitter}
+      data-share-platform="twitter"
+      target="_blank"
       rel="noopener noreferrer"
       class="share-btn twitter"
       title="Share on Twitter"
     >
       𝕏
     </a>
-    <a 
-      href={shareLinks.linkedin} 
-      target="_blank" 
+    <a
+      href={shareLinks.linkedin}
+      data-share-platform="linkedin"
+      target="_blank"
       rel="noopener noreferrer"
       class="share-btn linkedin"
       title="Share on LinkedIn"
     >
       in
     </a>
-    <a 
-      href={shareLinks.facebook} 
-      target="_blank" 
+    <a
+      href={shareLinks.facebook}
+      data-share-platform="facebook"
+      target="_blank"
       rel="noopener noreferrer"
       class="share-btn facebook"
       title="Share on Facebook"
     >
       f
     </a>
-    <button 
+    <button
       class="share-btn copy"
       title="Copy link"
       data-copy-url={url}
@@ -60,11 +61,35 @@ const shareLinks = {
 </div>
 
 <script is:inline>
+  const getShareUrl = () => `${window.location.origin}${window.location.pathname}`;
+
+  const getPlatformUrl = (platform, shareUrl, title) => {
+    const encodedTitle = encodeURIComponent(title);
+    const encodedUrl = encodeURIComponent(shareUrl);
+
+    if (platform === 'twitter') {
+      return `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`;
+    }
+
+    if (platform === 'linkedin') {
+      return `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+    }
+
+    return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+  };
+
+  document.querySelectorAll('[data-share-platform]').forEach((link) => {
+    const platform = link.dataset.sharePlatform;
+    const shareUrl = getShareUrl();
+    const title = document.title;
+
+    link.href = getPlatformUrl(platform, shareUrl, title);
+  });
+
   document.querySelectorAll('[data-copy-url]').forEach((button) => {
     button.addEventListener('click', () => {
       const btn = button;
-      const url = btn.dataset.copyUrl;
-      if (!url) return;
+      const url = getShareUrl();
 
       navigator.clipboard.writeText(url).then(() => {
         const original = btn.textContent;

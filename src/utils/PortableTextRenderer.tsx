@@ -130,7 +130,7 @@ const CodeBlock = ({ value }) => {
         .shiki-code code,
         .code-block code {
           font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-          font-weight: 700;
+          font-weight: 500;
         }
 
         .shiki-code code {

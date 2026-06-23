@@ -187,8 +187,8 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
 <Header title={title} />
 <main class="page-shell note-page">
-      <h1 class="text-xl md:text-2xl italic font-bold leading-tight tracking-normal text-default">{title}</h1>
-      {desc && <p class="text-md mt-4 mb-6 italic">{desc}</p>}
+      <h1 class="text-xl md:text-2xl  font-bold leading-tight tracking-normal text-default">{title}</h1>
+      {desc && <p class="text-md mt-4 mb-6 ">{desc}</p>}
       {mainImage?.asset?.url && (
         <img
           src={mainImage.asset.url}
@@ -197,8 +197,8 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
         />
       )}
       <div class="post-meta">
-        <span class="post-meta-item italic">Published on <b>{formattedPublishedDate}</b></span>
-        <span class="post-meta-item italic">{calculateReadingTime(body)} min read</span>
+        <span class="post-meta-item ">Published on <b>{formattedPublishedDate}</b></span>
+        <span class="post-meta-item ">{calculateReadingTime(body)} min read</span>
         <span class="post-meta-item">
           <ViewCounter client:load postId={slug} />
         </span>
@@ -299,7 +299,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
   .portableText .portable-em,
   .portableText em {
-    font-style: italic;
+    font-style: ;
     color: inherit;
   }
 
@@ -405,7 +405,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     margin: 1.5em 0;
     padding: 1em 0 1em 1.5em;
     border-left: 4px solid #6a7ca8;
-    font-style: italic;
+    font-style: ;
     color: #a0a5b8;
     background-color: rgba(106, 124, 168, 0.05);
   }
@@ -468,7 +468,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     margin-top: 0.8em;
     font-size: 0.9em;
     color: #888;
-    font-style: italic;
+    font-style: ;
   }
 
   /* Callouts */
@@ -564,7 +564,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     background-color: rgba(106, 124, 168, 0.08);
     border-left: 4px solid #6a7ca8;
     border-radius: 4px;
-    font-style: italic;
+    font-style: ;
     color: #a0a5b8;
   }
 

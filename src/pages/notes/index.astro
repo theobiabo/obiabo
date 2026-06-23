@@ -89,7 +89,7 @@ allViews.forEach(v => {
     <h1 class="text-xl font-bold mb-4">
       <span class="text-default text-md">Welcome to my corner of the internet!</span>
     </h1>
-    <p class="text-sn italic mb-6">
+    <p class="text-sn  mb-6">
       This is where I share notes, thoughts, things I've tried and want to try, and personal experiences and learnings.
     </p>
     <p class="mb-8">
@@ -117,17 +117,17 @@ allViews.forEach(v => {
           <div class="mt-4">
             <div>
 
-              <h3 class="text-md italic font-medium mb-3">
+              <h3 class="text-md  font-medium mb-3">
                 <a href={`/notes/${postId}`} class="text-default hover:underline">
                   {post.title}
                 </a>
               </h3>
               {post.description && (
-                <p class="mb-4 text-sm italic">{post.description}</p>
+                <p class="mb-4 text-sm ">{post.description}</p>
               )}
 
               <div class="flex items-center gap-4 text-sm text-gray-500">
-                <span class="italic">
+                <span class="">
                   {formattedDate}
                 </span>
                 <span class="flex items-center gap-1">

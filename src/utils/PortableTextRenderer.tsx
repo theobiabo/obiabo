@@ -3,6 +3,174 @@ import React from "react";
 import { PortableText } from "@portabletext/react";
 import styles from "../style/portable-text.module.css";
 
+const formatLanguageLabel = (language?: string) => {
+  if (!language) return "TEXT";
+
+  const labels: Record<string, string> = {
+    js: "JAVASCRIPT",
+    javascript: "JAVASCRIPT",
+    ts: "TYPESCRIPT",
+    typescript: "TYPESCRIPT",
+    jsx: "JSX",
+    tsx: "TSX",
+    rust: "RUST",
+    rs: "RUST",
+    bash: "BASH",
+    sh: "SHELL",
+    shell: "SHELL",
+    json: "JSON",
+    html: "HTML",
+    css: "CSS",
+    sql: "SQL",
+    python: "PYTHON",
+    py: "PYTHON",
+  };
+
+  return labels[language.toLowerCase()] || language.toUpperCase();
+};
+
+const CodeBlock = ({ value }) => {
+  const [copied, setCopied] = React.useState(false);
+  const language = value.language || "text";
+  const languageLabel = formatLanguageLabel(language);
+  const code = value.code || "";
+
+  const copyCode = async () => {
+    if (!code) return;
+
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div className="code-block">
+      <div className="code-block-header">
+        <div className="language-badge">{languageLabel}</div>
+        <button type="button" className="copy-code-button" onClick={copyCode}>
+          {copied ? "COPIED" : "COPY"}
+        </button>
+      </div>
+      {value.highlightedHtml ? (
+        <div
+          className="shiki-code"
+          dangerouslySetInnerHTML={{ __html: value.highlightedHtml }}
+        />
+      ) : (
+        <pre>
+          <code className={`language-${language}`}>{code}</code>
+        </pre>
+      )}
+      <style>{`
+        .code-block {
+          position: relative;
+          margin: 2.5rem 0;
+          overflow: visible;
+          border-radius: 0;
+          background: #0d1117;
+          box-shadow: 8px 8px 0 #2f3742;
+        }
+
+        .code-block-header {
+          display: flex;
+          align-items: stretch;
+          justify-content: space-between;
+          min-height: 4.5rem;
+          background: #202428;
+        }
+
+        .language-badge {
+          display: flex;
+          align-items: center;
+          padding: 0 1.75rem;
+          color: #f2f5fa;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          font-size: 0.9rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        .copy-code-button {
+          appearance: none;
+          border: 0;
+          border-radius: 0;
+          background: #eaf4fc;
+          color: #202428;
+          cursor: pointer;
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          font-size: 0.9rem;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          padding: 0 1.75rem;
+          text-transform: uppercase;
+          transition: background 160ms ease, color 160ms ease;
+        }
+
+        .copy-code-button:hover,
+        .copy-code-button:focus-visible {
+          background: #ffffff;
+          color: #0d1117;
+        }
+
+        .shiki-code .shiki,
+        .code-block > pre {
+          margin: 0;
+          padding: 2rem;
+          overflow-x: auto;
+          background: #0d1117 !important;
+          font-size: 1rem;
+          line-height: 1.75;
+        }
+
+        .shiki-code code,
+        .code-block code {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+          font-weight: 700;
+        }
+
+        .shiki-code code {
+          display: block;
+          background: transparent !important;
+          padding: 0 !important;
+          color: inherit;
+        }
+
+        .shiki-code .line {
+          min-height: 1.75em;
+        }
+
+        @media (max-width: 640px) {
+          .code-block {
+            margin: 2rem 0;
+            box-shadow: 5px 5px 0 #2f3742;
+          }
+
+          .code-block-header {
+            min-height: 3.5rem;
+          }
+
+          .language-badge,
+          .copy-code-button {
+            padding: 0 1rem;
+            font-size: 0.75rem;
+          }
+
+          .shiki-code .shiki,
+          .code-block > pre {
+            padding: 1.25rem;
+            font-size: 0.9rem;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
   if (!value) return null;
 
@@ -23,68 +191,7 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
         );
       },
 
-      code: ({ value }) => (
-        <div className="code-block">
-          {value.language && (
-            <div className="language-badge">{value.language}</div>
-          )}
-          {value.highlightedHtml ? (
-            <div
-              className="shiki-code"
-              dangerouslySetInnerHTML={{ __html: value.highlightedHtml }}
-            />
-          ) : (
-            <pre>
-              <code className={`language-${value.language || "javascript"}`}>
-                {value.code}
-              </code>
-            </pre>
-          )}
-          <style>{`
-            .code-block {
-              margin: 1.5rem 0;
-              overflow: hidden;
-              border-radius: 0.75rem;
-              background: #0d1117;
-            }
-
-            .language-badge {
-              padding: 0.6rem 1rem 0;
-              color: #8b949e;
-              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-              font-size: 0.75rem;
-              text-transform: uppercase;
-              letter-spacing: 0.08em;
-            }
-
-            .shiki-code .shiki,
-            .code-block > pre {
-              margin: 0;
-              padding: 1rem;
-              overflow-x: auto;
-              background: #0d1117 !important;
-              font-size: 0.9rem;
-              line-height: 1.7;
-            }
-
-            .shiki-code code,
-            .code-block code {
-              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            }
-
-            .shiki-code code {
-              display: block;
-              background: transparent !important;
-              padding: 0 !important;
-              color: inherit;
-            }
-
-            .shiki-code .line {
-              min-height: 1.7em;
-            }
-          `}</style>
-        </div>
-      ),
+      code: ({ value }) => <CodeBlock value={value} />,
 
       callout: ({ value }) => (
         <div className={`callout callout-${value.type || "info"}`}>

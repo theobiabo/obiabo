@@ -53,33 +53,28 @@ const { stories } = Astro.props
   </span>
 )}
 
-<script>
-  type Story = {
-    title: string
-    alt: string
-    note?: string
-    imageUrl: string
-  }
-
-  document.querySelectorAll<HTMLElement>('.story-viewer').forEach((viewer) => {
-    const trigger = viewer.querySelector<HTMLButtonElement>('.story-trigger')
-    const dialog = viewer.querySelector<HTMLDialogElement>('.story-dialog')
-    const close = viewer.querySelector<HTMLButtonElement>('.story-close')
-    const previous = viewer.querySelector<HTMLButtonElement>('.story-previous')
-    const next = viewer.querySelector<HTMLButtonElement>('.story-next')
-    const image = viewer.querySelector<HTMLImageElement>('.story-image')
-    const captionTitle = viewer.querySelector<HTMLElement>('.story-caption strong')
-    const captionNote = viewer.querySelector<HTMLElement>('.story-caption span')
-    const loading = viewer.querySelector<HTMLElement>('.story-loading')
-    const data = viewer.querySelector<HTMLScriptElement>('.story-data')
-    const progress = Array.from(viewer.querySelectorAll<HTMLElement>('.story-progress i'))
+<script is:inline>
+  document.querySelectorAll('.story-viewer:not([data-ready])').forEach((viewer) => {
+    viewer.dataset.ready = 'true'
+    const trigger = viewer.querySelector('.story-trigger')
+    const dialog = viewer.querySelector('.story-dialog')
+    const close = viewer.querySelector('.story-close')
+    const previous = viewer.querySelector('.story-previous')
+    const next = viewer.querySelector('.story-next')
+    const image = viewer.querySelector('.story-image')
+    const captionTitle = viewer.querySelector('.story-caption strong')
+    const captionNote = viewer.querySelector('.story-caption span')
+    const loading = viewer.querySelector('.story-loading')
+    const backdrop = viewer.querySelector('.story-backdrop')
+    const data = viewer.querySelector('.story-data')
+    const progress = Array.from(viewer.querySelectorAll('.story-progress i'))
 
     if (!trigger || !dialog || !close || !previous || !next || !image || !captionTitle || !captionNote || !loading || !data) return
 
-    const stories = JSON.parse(data.textContent || '[]') as Story[]
+    const stories = JSON.parse(data.textContent || '[]')
     let index = 0
     let timer = 0
-    let lastFocused: HTMLElement | null = null
+    let lastFocused = null
 
     const stopTimer = () => window.clearTimeout(timer)
 
@@ -103,7 +98,7 @@ const { stories } = Astro.props
       }, 5000)
     }
 
-    const showStory = (nextIndex: number) => {
+    const showStory = (nextIndex) => {
       index = (nextIndex + stories.length) % stories.length
       const story = stories[index]
       loading.classList.add('is-visible')
@@ -118,7 +113,7 @@ const { stories } = Astro.props
       captionNote.textContent = story.note || ''
       setProgress()
       startTimer()
-      if (image.complete) image.onload?.(new Event('load'))
+      if (image.complete) image.onload()
     }
 
     const openStories = () => {
@@ -135,13 +130,13 @@ const { stories } = Astro.props
     next.addEventListener('click', () => showStory(index + 1))
 
     dialog.addEventListener('click', (event) => {
-      if (event.target === dialog || event.target === viewer.querySelector('.story-backdrop')) dialog.close()
+      if (event.target === dialog || event.target === backdrop) dialog.close()
     })
 
     dialog.addEventListener('close', () => {
       stopTimer()
       document.body.classList.remove('story-open')
-      lastFocused?.focus()
+      if (lastFocused) lastFocused.focus()
     })
 
     dialog.addEventListener('keydown', (event) => {

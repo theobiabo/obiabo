@@ -1,0 +1,399 @@
+---
+import type { SanityGalleryItem } from '../utils/getSanityGallery'
+
+type Props = {
+  stories: SanityGalleryItem[]
+}
+
+const { stories } = Astro.props
+---
+
+{stories.length > 0 ? (
+  <div class="story-viewer">
+    <button class="story-trigger" type="button" aria-label="View gallery stories">
+      <span class="story-ring">
+        <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="" width="52" height="52" />
+      </span>
+    </button>
+
+    <dialog class="story-dialog" aria-label="Gallery stories">
+      <div class="story-backdrop"></div>
+      <section class="story-panel">
+        <div class="story-progress" aria-hidden="true">
+          {stories.map(() => <span><i></i></span>)}
+        </div>
+
+        <div class="story-topbar">
+          <div class="story-owner">
+            <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="" width="30" height="30" />
+            <span>Emmanuel Obiabo</span>
+          </div>
+          <button class="story-close" type="button" aria-label="Close stories">×</button>
+        </div>
+
+        <div class="story-media">
+          <img class="story-image" src={stories[0].imageUrl} alt={stories[0].alt} />
+          <button class="story-previous" type="button" aria-label="Previous story"></button>
+          <button class="story-next" type="button" aria-label="Next story"></button>
+          <div class="story-loading" aria-hidden="true"><span></span></div>
+        </div>
+
+        <div class="story-caption" aria-live="polite">
+          <strong>{stories[0].title}</strong>
+          <span>{stories[0].note}</span>
+        </div>
+      </section>
+    </dialog>
+
+    <script is:inline type="application/json" class="story-data" set:text={JSON.stringify(stories)}></script>
+  </div>
+) : (
+  <span class="story-ring story-ring-empty">
+    <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="Emmanuel Obiabo" width="52" height="52" />
+  </span>
+)}
+
+<script>
+  type Story = {
+    title: string
+    alt: string
+    note?: string
+    imageUrl: string
+  }
+
+  document.querySelectorAll<HTMLElement>('.story-viewer').forEach((viewer) => {
+    const trigger = viewer.querySelector<HTMLButtonElement>('.story-trigger')
+    const dialog = viewer.querySelector<HTMLDialogElement>('.story-dialog')
+    const close = viewer.querySelector<HTMLButtonElement>('.story-close')
+    const previous = viewer.querySelector<HTMLButtonElement>('.story-previous')
+    const next = viewer.querySelector<HTMLButtonElement>('.story-next')
+    const image = viewer.querySelector<HTMLImageElement>('.story-image')
+    const captionTitle = viewer.querySelector<HTMLElement>('.story-caption strong')
+    const captionNote = viewer.querySelector<HTMLElement>('.story-caption span')
+    const loading = viewer.querySelector<HTMLElement>('.story-loading')
+    const data = viewer.querySelector<HTMLScriptElement>('.story-data')
+    const progress = Array.from(viewer.querySelectorAll<HTMLElement>('.story-progress i'))
+
+    if (!trigger || !dialog || !close || !previous || !next || !image || !captionTitle || !captionNote || !loading || !data) return
+
+    const stories = JSON.parse(data.textContent || '[]') as Story[]
+    let index = 0
+    let timer = 0
+    let lastFocused: HTMLElement | null = null
+
+    const stopTimer = () => window.clearTimeout(timer)
+
+    const setProgress = () => {
+      progress.forEach((bar, position) => {
+        bar.classList.remove('is-complete', 'is-playing')
+        void bar.offsetWidth
+        if (position < index) bar.classList.add('is-complete')
+        if (position === index) bar.classList.add('is-playing')
+      })
+    }
+
+    const startTimer = () => {
+      stopTimer()
+      timer = window.setTimeout(() => {
+        if (index === stories.length - 1) {
+          dialog.close()
+          return
+        }
+        showStory(index + 1)
+      }, 5000)
+    }
+
+    const showStory = (nextIndex: number) => {
+      index = (nextIndex + stories.length) % stories.length
+      const story = stories[index]
+      loading.classList.add('is-visible')
+      image.classList.remove('is-visible')
+      image.onload = () => {
+        loading.classList.remove('is-visible')
+        image.classList.add('is-visible')
+      }
+      image.src = story.imageUrl
+      image.alt = story.alt
+      captionTitle.textContent = story.title
+      captionNote.textContent = story.note || ''
+      setProgress()
+      startTimer()
+      if (image.complete) image.onload?.(new Event('load'))
+    }
+
+    const openStories = () => {
+      lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null
+      dialog.showModal()
+      document.body.classList.add('story-open')
+      showStory(0)
+      close.focus()
+    }
+
+    trigger.addEventListener('click', openStories)
+    close.addEventListener('click', () => dialog.close())
+    previous.addEventListener('click', () => showStory(index - 1))
+    next.addEventListener('click', () => showStory(index + 1))
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog || event.target === viewer.querySelector('.story-backdrop')) dialog.close()
+    })
+
+    dialog.addEventListener('close', () => {
+      stopTimer()
+      document.body.classList.remove('story-open')
+      lastFocused?.focus()
+    })
+
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') showStory(index - 1)
+      if (event.key === 'ArrowRight') showStory(index + 1)
+    })
+  })
+</script>
+
+<style>
+  .story-trigger {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+  }
+
+  .story-trigger:focus-visible {
+    border-radius: 50%;
+    outline: 1px solid var(--accent);
+    outline-offset: 0.25rem;
+  }
+
+  .story-ring {
+    background: linear-gradient(135deg, #f9ce34, #ee2a7b 52%, #6228d7);
+    border-radius: 50%;
+    display: block;
+    padding: 2px;
+  }
+
+  .story-ring img {
+    border: 2px solid var(--bg-primary);
+    border-radius: 50%;
+    display: block;
+    height: 52px;
+    object-fit: cover;
+    width: 52px;
+  }
+
+  .story-ring-empty {
+    background: var(--border-color);
+  }
+
+  .story-dialog {
+    background: transparent;
+    border: 0;
+    height: 100dvh;
+    inset: 0;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  .story-dialog::backdrop {
+    background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .story-backdrop {
+    inset: 0;
+    position: fixed;
+  }
+
+  .story-panel {
+    background: var(--bg-tertiary);
+    box-shadow: 0 1.5rem 5rem color-mix(in srgb, var(--bg-primary) 75%, transparent);
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    height: min(90dvh, 48rem);
+    left: 50%;
+    max-width: min(92vw, 27rem);
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+
+  .story-progress {
+    display: grid;
+    gap: 0.25rem;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    padding: 0.65rem 0.75rem 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .story-progress span {
+    background: color-mix(in srgb, var(--text-color) 25%, transparent);
+    height: 2px;
+    overflow: hidden;
+  }
+
+  .story-progress i {
+    background: var(--text-color);
+    display: block;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .story-progress i.is-complete {
+    transform: scaleX(1);
+  }
+
+  .story-progress i.is-playing {
+    animation: story-progress 5s linear forwards;
+  }
+
+  .story-topbar {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0.75rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .story-owner {
+    align-items: center;
+    display: flex;
+    gap: 0.55rem;
+  }
+
+  .story-owner img {
+    border-radius: 50%;
+  }
+
+  .story-owner span {
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .story-close {
+    background: transparent;
+    border: 0;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+    height: 2rem;
+    line-height: 1;
+    padding: 0;
+    width: 2rem;
+  }
+
+  .story-media {
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .story-image {
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    width: 100%;
+  }
+
+  .story-image.is-visible {
+    opacity: 1;
+  }
+
+  .story-previous,
+  .story-next {
+    background: transparent;
+    border: 0;
+    bottom: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    width: 50%;
+  }
+
+  .story-previous {
+    left: 0;
+  }
+
+  .story-next {
+    right: 0;
+  }
+
+  .story-loading {
+    display: none;
+    inset: 0;
+    place-items: center;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .story-loading.is-visible {
+    display: grid;
+  }
+
+  .story-loading span {
+    animation: story-pulse 900ms ease-in-out infinite alternate;
+    background: var(--text-muted);
+    border-radius: 50%;
+    height: 0.45rem;
+    width: 0.45rem;
+  }
+
+  .story-caption {
+    display: grid;
+    gap: 0.2rem;
+    min-height: 4.5rem;
+    padding: 0.85rem 1rem 1rem;
+  }
+
+  .story-caption strong {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .story-caption span {
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    line-height: 1.55;
+  }
+
+  :global(body.story-open) {
+    overflow: hidden;
+  }
+
+  @keyframes story-progress {
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes story-pulse {
+    to { opacity: 0.25; transform: scale(0.7); }
+  }
+
+  @media (max-width: 32rem) {
+    .story-panel {
+      height: 100dvh;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .story-progress i.is-playing {
+      animation: none;
+      transform: scaleX(1);
+    }
+
+    .story-image {
+      transition: none;
+    }
+  }
+</style>

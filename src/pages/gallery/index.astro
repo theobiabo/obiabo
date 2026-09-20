@@ -1,0 +1,137 @@
+---
+import Header from '../../components/header/index.astro'
+import SEO from '../../components/seo/index.astro'
+import { getSanityGallery } from '../../utils/getSanityGallery'
+import '../../style/index.css'
+
+const galleryItems = await getSanityGallery()
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title="Gallery" description="A visual gallery of moments and places photographed by Emmanuel Obiabo." />
+  </head>
+  <body>
+    <Header />
+    <main class="gallery-shell">
+      <header class="gallery-heading">
+        <h1>Gallery</h1>
+        <p>A collection of moments, places, and things worth keeping.</p>
+      </header>
+
+      {galleryItems.length > 0 ? (
+        <section class="gallery-grid" aria-label="Photo gallery">
+          {galleryItems.map((item) => (
+            <figure>
+              <img
+                src={item.imageUrl}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+              {(item.title || item.note) && (
+                <figcaption>
+                  <strong>{item.title}</strong>
+                  {item.note && <span>{item.note}</span>}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </section>
+      ) : (
+        <p class="empty-gallery">The gallery is being curated.</p>
+      )}
+    </main>
+  </body>
+</html>
+
+<style>
+  .gallery-shell {
+    margin: 0 auto;
+    max-width: 92rem;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .gallery-heading {
+    margin: 0 auto 2.5rem;
+    max-width: 42rem;
+  }
+
+  h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 0.4rem;
+  }
+
+  .gallery-heading p,
+  .empty-gallery {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .empty-gallery {
+    margin: 5rem auto;
+    max-width: 42rem;
+  }
+
+  .gallery-grid {
+    column-count: 3;
+    column-gap: 1.5rem;
+  }
+
+  figure {
+    break-inside: avoid;
+    display: inline-block;
+    margin: 0 0 1.75rem;
+    width: 100%;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  figcaption {
+    display: grid;
+    gap: 0.15rem;
+    padding-top: 0.6rem;
+  }
+
+  figcaption strong {
+    font-size: 0.68rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  figcaption span {
+    color: var(--text-muted);
+    font-size: 0.64rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 52rem) {
+    .gallery-grid {
+      column-count: 2;
+    }
+  }
+
+  @media (max-width: 34rem) {
+    .gallery-shell {
+      padding-inline: 1rem;
+    }
+
+    .gallery-grid {
+      column-count: 1;
+    }
+  }
+</style>

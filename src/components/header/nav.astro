@@ -2,6 +2,7 @@
 const navItems = [
   { title: 'Home', path: '/' },
   { title: 'Projects', path: '#projects' },
+  { title: 'Gallery', path: '/gallery' },
   { title: 'About', path: '/about' },
   { title: 'Notes', path: '/notes' },
   { title: 'Contributions', path: '/open-source-contributions' },
@@ -9,52 +10,126 @@ const navItems = [
 ]
 ---
 
-<nav aria-label="Primary navigation">
-  {navItems.map((item) => {
-    const isProjects = item.title === 'Projects'
-    const href = isProjects && Astro.url.pathname !== '/' ? `/${item.path}` : item.path
-    const isActive = Astro.url.pathname === item.path || (item.path === '/' && Astro.url.pathname === '/')
+<details class="navigation">
+  <summary aria-label="Open navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </summary>
+  <nav aria-label="Primary navigation">
+    {navItems.map((item) => {
+      const isProjects = item.title === 'Projects'
+      const href = isProjects && Astro.url.pathname !== '/' ? `/${item.path}` : item.path
+      const isActive = Astro.url.pathname === item.path || (item.path === '/' && Astro.url.pathname === '/')
 
-    return (
-      <a href={href} aria-current={isActive ? 'page' : undefined}>
-        {item.title}
-      </a>
-    )
-  })}
-</nav>
+      return (
+        <a href={href} aria-current={isActive ? 'page' : undefined}>
+          {item.title}
+        </a>
+      )
+    })}
+  </nav>
+</details>
+
+<script>
+  const menus = document.querySelectorAll<HTMLDetailsElement>('.navigation')
+
+  menus.forEach((menu) => {
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !menu.contains(event.target)) menu.removeAttribute('open')
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') menu.removeAttribute('open')
+    })
+  })
+</script>
 
 <style>
-  nav {
+  .navigation {
+    position: relative;
+  }
+
+  summary {
     align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1rem;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 0.22rem;
+    height: 2.25rem;
+    justify-content: center;
+    list-style: none;
+    transition: background-color 180ms ease, border-color 180ms ease;
+    width: 2.25rem;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary span {
+    background: var(--text-color);
+    display: block;
+    height: 1px;
+    transition: transform 180ms ease, opacity 180ms ease;
+    width: 0.85rem;
+  }
+
+  summary:hover,
+  summary:focus-visible,
+  details[open] summary {
+    background: var(--bg-secondary);
+    border-color: var(--text-muted);
+  }
+
+  summary:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 0.2rem;
+  }
+
+  details[open] summary span:nth-child(1) {
+    transform: translateY(0.28rem) rotate(45deg);
+  }
+
+  details[open] summary span:nth-child(2) {
+    opacity: 0;
+  }
+
+  details[open] summary span:nth-child(3) {
+    transform: translateY(-0.28rem) rotate(-45deg);
+  }
+
+  nav {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    display: grid;
+    min-width: 12rem;
+    padding: 0.45rem;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.6rem);
+    z-index: 10;
   }
 
   a {
     color: var(--text-muted);
     font-size: 0.72rem;
     line-height: 1.5;
+    padding: 0.5rem 0.65rem;
     text-decoration: none;
-    text-underline-offset: 0.25rem;
   }
 
   a:hover,
   a:focus-visible,
   a[aria-current='page'] {
+    background: var(--bg-primary) !important;
     color: var(--text-color);
-    text-decoration: underline;
   }
 
   a:focus-visible {
     outline: 1px solid var(--accent);
-    outline-offset: 0.25rem;
-  }
-
-  @media (max-width: 40rem) {
-    nav {
-      justify-content: flex-start;
-    }
+    outline-offset: -1px;
   }
 </style>

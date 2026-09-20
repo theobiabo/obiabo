@@ -1,0 +1,3 @@
+[  951373ms] TypeError: Cannot read properties of null (reading 'animate')
+    at a (https://www.shatermt.com/assets/index-CZMK9Kqt.js:11:30510)
+    at https://www.shatermt.com/assets/index-CZMK9Kqt.js:11:30712

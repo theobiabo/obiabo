@@ -9,6 +9,7 @@ import about from './about'
 import contact from './contact'
 import theme from './theme'
 import openSourceContributionsPage from './openSourceContributionsPage'
+import galleryItem from './galleryItem'
 
 export const schemaTypes = [
   post,
@@ -22,4 +23,5 @@ export const schemaTypes = [
   contact,
   theme,
   openSourceContributionsPage,
+  galleryItem,
 ]

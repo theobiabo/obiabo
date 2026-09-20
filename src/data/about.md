@@ -1,4 +1,4 @@
-I'm a software engineer based in West Africa, currently embracing a nomadic lifestyle while building software and exploring new interests.
+I'm a software engineer, currently embracing a nomadic lifestyle while building software and exploring new interests.
 
 ## What I'm Working On
 

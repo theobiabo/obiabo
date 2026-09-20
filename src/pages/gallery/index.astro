@@ -53,13 +53,12 @@ const galleryItems = await getSanityGallery()
 <style>
   .gallery-shell {
     margin: 0 auto;
-    max-width: 92rem;
-    padding: 3rem 1.5rem 5rem;
+    max-width: 42rem;
+    padding: 3rem 1rem 5rem;
   }
 
   .gallery-heading {
-    margin: 0 auto 2.5rem;
-    max-width: 42rem;
+    margin: 0 0 2.5rem;
   }
 
   h1 {
@@ -83,8 +82,8 @@ const galleryItems = await getSanityGallery()
   }
 
   .gallery-grid {
-    column-count: 3;
-    column-gap: 1.5rem;
+    column-count: 2;
+    column-gap: 1.25rem;
   }
 
   figure {
@@ -119,17 +118,7 @@ const galleryItems = await getSanityGallery()
     line-height: 1.55;
   }
 
-  @media (max-width: 52rem) {
-    .gallery-grid {
-      column-count: 2;
-    }
-  }
-
   @media (max-width: 34rem) {
-    .gallery-shell {
-      padding-inline: 1rem;
-    }
-
     .gallery-grid {
       column-count: 1;
     }

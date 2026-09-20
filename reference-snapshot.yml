@@ -1,0 +1,174 @@
+- generic [active] [ref=e1] [box=0,0,1200,1365]:
+  - generic [ref=e2] [box=0,0,1200,1365]:
+    - button "Disable audio" [ref=e3] [cursor=pointer] [box=1140,637,36,36]
+    - generic [ref=e9] [box=290,0,620,1365]:
+      - generic [ref=e10] [box=290,80,620,64]:
+        - navigation [ref=e11] [box=290,80,620,64]:
+          - generic [ref=e12] [box=290,80,420,64]:
+            - generic "View gallery" [ref=e13] [cursor=pointer] [box=290,81,62,62]
+            - img "Signature" [ref=e15] [box=358,80,64,64]
+          - generic [ref=e17] [box=720,101,190,22]:
+            - link "About me" [ref=e18] [cursor=pointer] [box=706,89,83,46]:
+              - /url: /about
+            - link "X" [ref=e19] [cursor=pointer] [box=777,89,36,46]:
+              - /url: https://x.com/Tsavsar_
+            - link "LinkedIn" [ref=e20] [cursor=pointer] [box=801,89,76,46]:
+              - /url: https://www.linkedin.com/in/tsavsar/
+            - link "Email" [ref=e21] [cursor=pointer] [box=865,89,59,46]:
+              - /url: mailto:Shatermt@gmail.com
+        - generic [ref=e22] [box=290,144,620,222]:
+          - generic [ref=e23] [cursor=pointer] [box=290,136,149,190]
+          - generic [ref=e24] [cursor=pointer] [box=447,136,149,190]
+          - generic [ref=e25] [cursor=pointer] [box=604,136,149,190]
+          - generic [ref=e26] [cursor=pointer] [box=761,136,149,190]
+          - generic [ref=e27] [cursor=pointer] [box=918,136,149,190]
+          - generic [ref=e28] [cursor=pointer] [box=1075,136,149,190]
+          - generic [ref=e29] [cursor=pointer] [box=1232,136,149,190]
+      - generic [ref=e31] [box=290,196,620,310]:
+        - paragraph [ref=e32] [box=290,196,620,22]: Shater Tsavsar, a designer.
+        - paragraph [ref=e33] [box=290,236,620,44]: The best way to describe myself is a "Systemic Native". Everything I do is grounded in some sort of system, and that shows up in the work whether I'm in Figma or in the codebase.
+        - paragraph [ref=e34] [box=290,298,620,46]:
+          - text: I design and build
+          - link "CostGraph.ai" [ref=e36] [cursor=pointer] [box=410,298,120,24]:
+            - /url: https://costgraph.ai
+          - text: . The design direction, the design system, and the frontend code those designs become.
+        - generic [ref=e39] [box=290,372,620,134]:
+          - paragraph [ref=e40] [box=290,372,620,22]: projects
+          - list [ref=e41] [box=290,408,620,98]:
+            - listitem [ref=e42] [box=290,408,620,22]
+            - listitem [ref=e50] [box=290,446,620,22]
+            - listitem [ref=e58] [box=290,484,620,22]
+      - generic [ref=e67] [box=290,558,620,441]:
+        - paragraph [ref=e68] [box=290,558,620,22]: my work
+        - generic [ref=e71] [box=290,598,2020,401]:
+          - link "Design explorations Experiments My past design experiments and components." [ref=e79] [box=290,916,320,46]:
+            - /url: /explorations
+            - generic [ref=e80] [box=290,916,320,22]
+            - paragraph [ref=e86] [box=290,944,320,18]: My past design experiments and components.
+          - link "CostGraph.ai Cloud cost optimisation Teams lose track of what they're spending on Kubernetes and VMs. CostGraph surfaces that spend and recommends exactly where to cut." [ref=e89] [box=630,916,320,83]:
+            - /url: /work/costgraph
+            - generic [ref=e90] [box=630,916,320,22]
+            - paragraph [ref=e96] [box=630,944,320,55]: Teams lose track of what they're spending on Kubernetes and VMs. CostGraph surfaces that spend and recommends exactly where to cut.
+          - link "Luotain Link & QR analytics Link shortening with QR code analytics. Every code tracks its own scans, and stays editable after it's printed." [ref=e99] [box=970,916,320,83]:
+            - /url: /work/luotain
+            - generic [ref=e100] [box=970,916,320,22]
+            - paragraph [ref=e106] [box=970,944,320,55]: Link shortening with QR code analytics. Every code tracks its own scans, and stays editable after it's printed.
+          - link "Lönar Invoice platform Chasing clients and tracking payments is a mess. Lönar keeps it all in one place. Manage clients, automate invoices and always know who owes you." [ref=e109] [box=1310,916,320,83]:
+            - /url: /work/lonar
+            - generic [ref=e110] [box=1310,916,320,22]
+            - paragraph [ref=e116] [box=1310,944,320,55]: Chasing clients and tracking payments is a mess. Lönar keeps it all in one place. Manage clients, automate invoices and always know who owes you.
+          - link "KernUI Design system library Starting from scratch on every project slows teams down. KernUI gives designers and devs a shared component library so they can build faster together." [ref=e119] [box=1650,916,320,83]:
+            - /url: /work/kernui
+            - generic [ref=e120] [box=1650,916,320,22]
+            - paragraph [ref=e126] [box=1650,944,320,55]: Starting from scratch on every project slows teams down. KernUI gives designers and devs a shared component library so they can build faster together.
+          - link "Fundify Fintech mobile app Saving money feels like punishment. Fundify flips that, rewarding every good financial move with FundCoins you can actually spend." [ref=e129] [box=1990,916,320,83]:
+            - /url: /work/fundify
+            - generic [ref=e130] [box=1990,916,320,22]
+            - paragraph [ref=e136] [box=1990,944,320,55]: Saving money feels like punishment. Fundify flips that, rewarding every good financial move with FundCoins you can actually spend.
+      - generic [ref=e138] [box=290,1051,620,100]:
+        - paragraph [ref=e139] [box=290,1051,620,22]: my articles
+        - link "Article thumbnail Vicariously living through the main character Why we emotionally attach ourselves to movie characters and the lives they live. 5 min 2026" [ref=e141] [cursor=pointer] [box=282,1083,636,76]:
+          - /url: /articles/vicariously
+          - img "Article thumbnail" [ref=e143] [box=290,1091,100,60]
+          - generic [ref=e144] [box=408,1091,502,60]:
+            - generic [ref=e145] [box=408,1091,502,18]: Vicariously living through the main character
+            - paragraph [ref=e150] [box=408,1112,502,18]: Why we emotionally attach ourselves to movie characters and the lives they live.
+            - generic [ref=e151] [box=408,1135,502,16]
+      - contentinfo [ref=e156] [box=290,1203,620,82]:
+        - button "Last played Wait for It by Leslie Odom Jr., Original Broadway Cast of Hamilton" [ref=e168] [cursor=pointer] [box=290,1203,438,40]:
+          - generic [ref=e160] [box=342,1208,386,31]:
+            - generic [ref=e161] [box=342,1208,386,14]: Last played
+            - generic [ref=e162] [box=342,1224,386,14]
+        - generic [ref=e165] [box=290,1263,620,22]:
+          - paragraph [ref=e166] [box=290,1263,150,22]: © 2026 Shater M. Tsavsar
+          - paragraph [ref=e167] [box=764,1263,146,22]: design closer to the user.
+  - generic [box=0,6,283,105]:
+    - generic [box=40,18,230,82]:
+      - generic [box=40,18,230,16]:
+        - link "costgraph.ai" [box=40,18,75,16]:
+          - /url: https://costgraph.ai
+      - paragraph [box=40,37,230,62]: AI-powered cloud cost analysis. Surface and understand spend across your infrastructure without the overhead.
+  - generic [box=6,1,102,18]: View explorations
+  - generic [box=6,1,102,18]: View explorations
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=4,1,75,18]: View project
+  - generic [box=7,1,118,18]: View recently played
+  - generic [box=0,0,1200,697]:
+    - button "Close" [box=1136,28,32,32]
+    - generic [box=423,306,354,133]:
+      - generic [box=555,306,91,22]: LAST PLAYED
+      - generic [box=554,330,93,29]: Wait for It
+      - generic [box=423,361,354,22]: Leslie Odom Jr., Original Broadway Cast of Hamilton
+      - link "Open in Spotify" [box=526,397,149,42]:
+        - /url: https://open.spotify.com/track/7EqpEBPOohgk7NnKvBGFWo
+    - generic [box=410,479,380,252]:
+      - paragraph [box=410,479,380,22]: Recently played
+      - generic [box=410,511,380,220]:
+        - link "Wait for It Leslie Odom Jr., Original Broadway Cast of Hamilton 10m ago" [box=410,511,380,48]:
+          - /url: https://open.spotify.com/track/7EqpEBPOohgk7NnKvBGFWo
+          - generic [box=464,519,264,32]:
+            - generic [box=464,519,264,16]: Wait for It
+            - generic [box=464,536,264,14]: Leslie Odom Jr., Original Broadway Cast of Hamilton
+          - generic [box=738,524,44,22]: 10m ago
+        - link "Alexander Hamilton Leslie Odom Jr., Daveed Diggs, Okieriete Onaodowan, Lin-Manuel Miranda, Phillipa Soo, Christopher Jackson, Original Broadway Cast of Hamilton 18m ago" [box=410,561,380,48]:
+          - /url: https://open.spotify.com/track/4TTV7EcfroSLWzXRY6gLv6
+          - generic [box=464,569,264,32]:
+            - generic [box=464,569,264,16]: Alexander Hamilton
+            - generic [box=464,586,264,14]: Leslie Odom Jr., Daveed Diggs, Okieriete Onaodowan, Lin-Manuel Miranda, Phillipa Soo, Christopher Jackson, Original Broadway Cast of Hamilton
+          - generic [box=738,574,44,22]: 18m ago
+        - link "I Don't Want to Miss a Thing - From \"Armageddon\" Soundtrack Aerosmith 23m ago" [box=410,611,380,48]:
+          - /url: https://open.spotify.com/track/225xvV8r1yKMHErSWivnow
+          - generic [box=464,619,262,32]:
+            - generic [box=464,619,262,16]: I Don't Want to Miss a Thing - From "Armageddon" Soundtrack
+            - generic [box=464,636,262,14]: Aerosmith
+          - generic [box=736,624,46,22]: 23m ago
+        - link "Faaji Jackson Toyé, Cruel Santino 10h ago" [box=410,661,380,48]:
+          - /url: https://open.spotify.com/track/2Y37tCzJtqZfQ6kikUwOHY
+          - generic [box=464,669,267,32]:
+            - generic [box=464,669,267,16]: Faaji Jackson
+            - generic [box=464,686,267,14]: Toyé, Cruel Santino
+          - generic [box=741,674,41,22]: 10h ago
+        - link "Guide Pass Zaylevelten 10h ago" [box=410,711,380,48]:
+          - /url: https://open.spotify.com/track/43V22qtwgz0eWrJueeaiHW
+          - generic [box=464,719,267,32]:
+            - generic [box=464,719,267,16]: Guide Pass
+            - generic [box=464,736,267,14]: Zaylevelten
+          - generic [box=741,724,41,22]: 10h ago
+        - link "Gimme Dat Ting (with NO11) Davido, NO11 10h ago" [box=410,761,380,48]:
+          - /url: https://open.spotify.com/track/5RVZ1kfkbUkZ2s3BsRss18
+          - generic [box=464,769,267,32]:
+            - generic [box=464,769,267,16]: Gimme Dat Ting (with NO11)
+            - generic [box=464,786,267,14]: Davido, NO11
+          - generic [box=741,774,41,22]: 10h ago
+        - link "Eja Meja (feat. Asake) BNXN, Asake 10h ago" [box=410,811,380,48]:
+          - /url: https://open.spotify.com/track/5Ca1fyuX04EKHCc8Cnb791
+          - generic [box=464,819,267,32]:
+            - generic [box=464,819,267,16]: Eja Meja (feat. Asake)
+            - generic [box=464,836,267,14]: BNXN, Asake
+          - generic [box=741,824,41,22]: 10h ago
+        - link "Oba Asake 11h ago" [box=410,861,380,48]:
+          - /url: https://open.spotify.com/track/59zlaPDhvE414BZ82AFjH5
+          - generic [box=464,869,269,32]:
+            - generic [box=464,869,269,16]: Oba
+            - generic [box=464,886,269,14]: Asake
+          - generic [box=743,874,39,22]: 11h ago
+        - link "Back Outside BNXN, Sarz 11h ago" [box=410,911,380,48]:
+          - /url: https://open.spotify.com/track/5WTj1jVzufTuSzFMyjy60M
+          - generic [box=464,919,269,32]:
+            - generic [box=464,919,269,16]: Back Outside
+            - generic [box=464,936,269,14]: BNXN, Sarz
+          - generic [box=743,924,39,22]: 11h ago
+        - link "Wa Asake 11h ago" [box=410,961,380,48]:
+          - /url: https://open.spotify.com/track/5KX0YeCNKaOc3XhhDHi3mI
+          - generic [box=464,969,269,32]:
+            - generic [box=464,969,269,16]: Wa
+            - generic [box=464,986,269,14]: Asake
+          - generic [box=743,974,39,22]: 11h ago

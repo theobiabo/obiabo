@@ -1,218 +1,152 @@
 ---
-
-import { db, comments, reactions } from 'astro:db';
-import { getSanityPosts } from '../utils/getSanityPosts';
+import { db, comments, reactions } from 'astro:db'
+import { getSanityPosts } from '../utils/getSanityPosts'
 
 type CommentActivity = {
-  type: 'comment';
-  name: string;
-  postId: string;
-  date: Date;
-  preview: string;
-};
+  type: 'comment'
+  name: string
+  postId: string
+  date: Date
+  preview: string
+}
 
 type ReactionActivity = {
-  type: 'reaction';
-  postId: string;
-  date: Date;
-  emoji: string;
-};
+  type: 'reaction'
+  postId: string
+  date: Date
+  emoji: string
+}
 
-type Activity = CommentActivity | ReactionActivity;
+type Activity = CommentActivity | ReactionActivity
 
-const posts = await getSanityPosts();
+const posts = await getSanityPosts()
 const postMap = Object.fromEntries(
-  posts
-    .filter((post: any) => post?._id && post?.slug?.current)
-    .map((post: any) => [post._id, post])
-);
+  posts.filter((post: any) => post?._id && post?.slug?.current).map((post: any) => [post._id, post])
+)
 
-const getFirstName = (name: string) => name.trim().split(/\s+/)[0] || name;
-
-
+const getFirstName = (name: string) => name.trim().split(/\s+/)[0] || name
 const recentComments = (await db.select().from(comments))
-  .filter(c => c.approved)
+  .filter((comment) => comment.approved)
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 5);
-
-
+  .slice(0, 5)
 const recentReactions = (await db.select().from(reactions))
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 5);
-
+  .slice(0, 5)
 
 const activities: Activity[] = [
-  ...recentComments.map(c => ({
+  ...recentComments.map((comment) => ({
     type: 'comment' as const,
-    name: getFirstName(c.name),
-    postId: c.postId,
-    date: c.createdAt,
-    preview: c.content.substring(0, 50) + (c.content.length > 50 ? '...' : '')
+    name: getFirstName(comment.name),
+    postId: comment.postId,
+    date: comment.createdAt,
+    preview: comment.content.substring(0, 50) + (comment.content.length > 50 ? '...' : ''),
   })),
-  ...recentReactions.map(r => ({
+  ...recentReactions.map((reaction) => ({
     type: 'reaction' as const,
-    postId: r.postId,
-    date: r.createdAt,
-    emoji: r.emoji
-  }))
+    postId: reaction.postId,
+    date: reaction.createdAt,
+    emoji: reaction.emoji,
+  })),
 ]
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  .slice(0, 8);
+  .slice(0, 8)
 ---
 
-<div class="activity-feed">
-  <h3>activity</h3>
-  <div class="activities">
-    {activities.length > 0 ? (
-      activities.map(activity => {
-        const post = postMap[activity.postId];
+{activities.length > 0 && (
+  <section class="activity-feed" aria-labelledby="activity-title">
+    <h2 id="activity-title">recent activity</h2>
+    <ul>
+      {activities.map((activity) => {
+        const post = postMap[activity.postId]
+        const postUrl = post?.slug?.current ? `/notes/${post.slug.current}` : undefined
         return (
-          <div class="activity-item  hover:bg-gray-800 mt-4">
-            {activity.type === 'comment' ? (
-              <>
-                <div class="activity-icon comment-icon">💬</div>
-                <div class="activity-content">
-                  <div class="activity-title">
-                    <span class="activity-name">{activity.type === 'comment' && activity.name}</span>
-                    <span class="activity-action">commented</span>
-                  </div>
-                  <p class="activity-preview">{activity.type === 'comment' && activity.preview}</p>
-                  {post?.slug?.current && (
-                    <a href={`/notes/${post.slug.current}`} class="activity-post">
-                      on "{post.title}"
-                    </a>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <div class="activity-icon reaction-icon">{activity.type === 'reaction' && activity.emoji}</div>
-                <div class="activity-content">
-                  <div class="activity-action ">reacted</div>
-                  {post?.slug?.current && (
-                    <a href={`/notes/${post.slug.current}`} class="activity-post">
-                      to "{post.title}"
-                    </a>
-                  )}
-                </div>
-              </>
-            )}
-            <div class="activity-time">
-              {new Date(activity.date).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric'
-              })}
-            </div>
-          </div>
-        );
-      })
-    ) : (
-      <div class="empty-activity">no activity yet</div>
-    )}
-  </div>
-</div>
+          <li>
+            <span class="activity-mark" aria-hidden="true">
+              {activity.type === 'comment' ? '—' : activity.emoji}
+            </span>
+            <span class="activity-copy">
+              {activity.type === 'comment' ? (
+                <>{activity.name} commented: “{activity.preview}”</>
+              ) : (
+                <>Someone reacted</>
+              )}
+              {postUrl && (
+                <> on <a href={postUrl}>{post.title}</a></>
+              )}
+            </span>
+            <time>
+              {new Date(activity.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </time>
+          </li>
+        )
+      })}
+    </ul>
+  </section>
+)}
 
 <style>
   .activity-feed {
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 2rem 0;
+    margin-bottom: 4rem;
   }
 
-  .activity-feed h3 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-color);
-    margin: 0 0 1.5rem 0;
+  h2 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 1rem;
     text-transform: lowercase;
   }
 
-  .activities {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  .activity-item {
-    display: flex;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: var(--bg-tertiary);
-    border-radius: 6px;
-    border-left: 2px solid transparent;
-    transition: all 0.2s ease;
+  li {
+    align-items: baseline;
+    display: grid;
+    gap: 0.65rem;
+    grid-template-columns: 1rem minmax(0, 1fr) auto;
+    padding: 0.28rem 0;
   }
 
-  .activity-item:hover {
-    background: var(--hover-bg);
-    border-left-color: var(--text-color);
-  }
-
-  .activity-icon {
-    font-size: 1.25rem;
-    min-width: 32px;
-    text-align: center;
-  }
-
-  .activity-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .activity-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--text-color);
-    margin-bottom: 0.25rem;
-  }
-
-  .activity-name {
-    font-weight: 500;
-    color: var(--text-color);
-  }
-
-  .activity-action {
-    color: var(--text-dim);
-    font-size: 0.75rem;
-  }
-
-  .activity-preview {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
+  .activity-mark {
     color: var(--text-muted);
-    margin: 0.25rem 0 0.5rem 0;
-    line-height: 1.4;
+    font-size: 0.66rem;
+    line-height: 1.55;
   }
 
-  .activity-post {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-    text-decoration: none;
-    transition: color 0.2s;
-    display: inline-block;
-  }
-
-  .activity-post:hover {
-    color: var(--text-color);
-  }
-
-  .activity-time {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
+  .activity-copy {
     color: var(--text-muted);
+    font-size: 0.68rem;
+    line-height: 1.65;
   }
 
-  .empty-activity {
-    text-align: center;
-    color: var(--text-dim);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    padding: 2rem 1rem;
+  .activity-copy a {
+    color: var(--text-color);
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .activity-copy a:hover,
+  .activity-copy a:focus-visible {
+    color: var(--accent);
+  }
+
+  time {
+    color: var(--text-muted);
+    font-size: 0.62rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 32rem) {
+    li {
+      grid-template-columns: 1rem minmax(0, 1fr);
+    }
+
+    time {
+      grid-column: 2;
+    }
   }
 </style>

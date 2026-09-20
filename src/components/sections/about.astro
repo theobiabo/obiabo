@@ -1,103 +1,42 @@
 ---
-  const { more  } = Astro.props
+const { more } = Astro.props
 
-  import { getSanityAbout } from '../../utils/getSanityAbout'
-  import { renderMarkdown } from '../../utils/markdownRenderer'
+import { getSanityAbout } from '../../utils/getSanityAbout'
+import { renderMarkdown } from '../../utils/markdownRenderer'
 
-  const about = await getSanityAbout()
-  const introHtml = renderMarkdown(about?.introMarkdown ?? '')
-
-  // const lastVisitedLocation = {
-  //   name: 'Porto-Novo, Benin',
-  //   mapUrl: 'https://www.openstreetmap.org/?mlat=6.4969&mlon=2.6289#map=12/6.4969/2.6289',
-  //   mapEmbedUrl: 'https://www.openstreetmap.org/export/embed.html?bbox=2.5489%2C6.4169%2C2.7089%2C6.5769&layer=mapnik&marker=6.4969%2C2.6289',
-  // }
+const about = await getSanityAbout()
+const introHtml = renderMarkdown(about?.introMarkdown ?? '')
 ---
 
-<section class="mb-12">
-    
-   
-    <article class="markdown-content ibm-plex-mono-medium text-sm ">
-      <Fragment set:html={introHtml} />
-    </article>
+<section class="about-intro" aria-label="Introduction">
+  <article class="markdown-content">
+    <Fragment set:html={introHtml} />
+  </article>
 
-    <br>
-
-    <br>
-
-    <!-- <section class="last-visited" aria-labelledby="last-visited-title">
-      <div class="last-visited__header">
-        <h2 id="last-visited-title">last visited</h2>
-        <a href={lastVisitedLocation.mapUrl} target="_blank" rel="noreferrer">
-          {lastVisitedLocation.name}
-        </a>
-      </div>
-
-      <iframe
-        title={`Map showing ${lastVisitedLocation.name}`}
-        src={lastVisitedLocation.mapEmbedUrl}
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      />
-    </section> -->
-
-    <br>
-
-    
-    
-    {
-      more && <a href="/about" class="text-default" >
-      Discover more about me
-    </a>
-    }
-  </section>
+  {more && <a class="more-link" href="/about">More about me <span aria-hidden="true">→</span></a>}
+</section>
 
 <style>
-  .last-visited {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
+  .about-intro {
+    margin-bottom: 4.5rem;
   }
 
-  .last-visited__header {
-    align-items: baseline;
-    display: flex;
-    gap: 0.75rem;
-    justify-content: space-between;
-    margin-bottom: 0.75rem;
+  .markdown-content {
+    font-size: 0.82rem;
+    line-height: 1.75;
   }
 
-  .last-visited h2 {
-    color: var(--text-color);
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin: 0;
-  }
-
-  .last-visited a {
+  .more-link {
     color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.4;
+    display: inline-block;
+    font-size: 0.72rem;
+    margin-top: 1.25rem;
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-underline-offset: 0.25rem;
   }
 
-  .last-visited iframe {
-    aspect-ratio: 16 / 9;
-    border: 0;
-    border-radius: 6px;
-    display: block;
-    filter: grayscale(1);
-    width: 100%;
-  }
-
-  @media (max-width: 520px) {
-    .last-visited__header {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
+  .more-link:hover,
+  .more-link:focus-visible {
+    color: var(--text-color);
   }
 </style>

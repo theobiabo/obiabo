@@ -1,99 +1,98 @@
 ---
-import { getSanityPosts } from '../utils/getSanityPosts';
+import { getSanityPosts } from '../utils/getSanityPosts'
 
-const allPosts = await getSanityPosts();
+const allPosts = await getSanityPosts()
 const recentPosts = allPosts
   .filter((post: any) => post?.slug?.current)
   .slice(0, 5)
-  .map((post: any) => ({
-    ...post,
-    postUrl: `/notes/${post.slug.current}`,
-  }));
+  .map((post: any) => ({ ...post, postUrl: `/notes/${post.slug.current}` }))
 
 const formatPostDate = (post: any) => {
-  const date = post.firstPublishedAt || post.publishedAt || post._createdAt;
-  const parsedDate = date ? new Date(date) : null;
+  const date = post.firstPublishedAt || post.publishedAt || post._createdAt
+  const parsedDate = date ? new Date(date) : null
 
   return parsedDate && !Number.isNaN(parsedDate.getTime())
-    ? parsedDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    : 'Unknown';
-};
+    ? parsedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : 'Unknown'
+}
 ---
 
-<div class="recent-posts">
-  <h3>recent thoughts</h3>
-  <div class="posts-list">
-    {recentPosts.map((post: any) => (
-      <a href={post.postUrl} class="post-link">
-        <div class="post-item">
-          <div class="post-title">{post.title}</div>
-          <div class="post-date">
-            {formatPostDate(post)}
-          </div>
-        </div>
-      </a>
-    ))}
-  </div>
-</div>
+{recentPosts.length > 0 && (
+  <section class="recent-posts" aria-labelledby="recent-posts-title">
+    <h2 id="recent-posts-title">recent notes</h2>
+    <ul>
+      {recentPosts.map((post: any) => (
+        <li>
+          <a href={post.postUrl}>
+            <span>{post.title}</span>
+            <time>{formatPostDate(post)}</time>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a class="all-notes" href="/notes">All notes <span aria-hidden="true">→</span></a>
+  </section>
+)}
 
 <style>
   .recent-posts {
-    background: var(--bg-secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 2rem 0;
+    margin-bottom: 4.5rem;
   }
 
-  .recent-posts h3 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-color);
-    margin: 0 0 1rem 0;
+  h2 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 1rem;
     text-transform: lowercase;
   }
 
-  .posts-list {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li a {
+    align-items: baseline;
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 0.3rem 0;
   }
 
-  .post-link {
-    text-decoration: none;
-    color: inherit;
+  li a > span {
+    font-size: 0.74rem;
+    line-height: 1.55;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2rem;
   }
 
-  .post-item {
-    padding: 0.75rem;
-    border-radius: 6px;
-    background: var(--bg-tertiary);
-    transition: all 0.2s ease;
-    border-left: 2px solid transparent;
+  li a:hover > span,
+  li a:focus-visible > span {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
 
-  .post-item:hover {
-    background: var(--hover-bg);
-    border-left-color: var(--text-color);
-    transform: translateX(4px);
+  time {
+    color: var(--text-muted);
+    flex: 0 0 auto;
+    font-size: 0.65rem;
+    line-height: 1.55;
   }
 
-  .post-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    font-weight: 500;
+  .all-notes {
+    color: var(--text-muted);
+    display: inline-block;
+    font-size: 0.68rem;
+    margin-top: 1rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .all-notes:hover,
+  .all-notes:focus-visible {
     color: var(--text-color);
-    margin-bottom: 0.25rem;
-    line-height: 1.4;
-  }
-
-  .post-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-dim);
   }
 </style>

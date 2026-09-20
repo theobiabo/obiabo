@@ -29,17 +29,12 @@ const projects = await getSanityProjects()
 
   </head>
   <body>
-
-	<Header/>
-    <div class="page-shell">
-
-
-     <About more={true}/>
-     <Project projects={projects}/>
-     <RecentPosts />
-     <ActivityFeed />
-
-
-    </div>
+    <Header />
+    <main class="page-shell">
+      <About more={true} />
+      <Project projects={projects} />
+      <RecentPosts />
+      <ActivityFeed />
+    </main>
   </body>
 </html>

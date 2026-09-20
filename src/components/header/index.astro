@@ -1,67 +1,43 @@
 ---
-  import Nav from './nav.astro'
-  import { getSanityContact } from '../../utils/getSanityContact'
-  import { defaultTheme, getSanityTheme } from '../../utils/getSanityTheme'
+import Nav from './nav.astro'
+import { getSanityContact } from '../../utils/getSanityContact'
+import { defaultTheme, getSanityTheme } from '../../utils/getSanityTheme'
 
-  const contact = await getSanityContact()
-  const sanityTheme = await getSanityTheme()
-  const personal_urls = contact?.links?.filter((item) => item.showInHeader) ?? []
+const contact = await getSanityContact()
+const sanityTheme = await getSanityTheme()
+const personalUrls = contact?.links?.filter((item) => item.showInHeader) ?? []
 
-  const isSafeFontUrl = (value?: string) =>
-    Boolean(value && /^https:\/\/fonts\.googleapis\.com\/css2\?/.test(value))
+const isSafeFontUrl = (value?: string) => Boolean(value && /^https:\/\/fonts\.googleapis\.com\/css2\?/.test(value))
+const isSafeFontFamily = (value?: string) => Boolean(value && /^[\w\s"',-]+$/.test(value))
+const isSafeColor = (value?: string) => Boolean(value && /^#[0-9a-f]{6}$/i.test(value))
 
-  const isSafeFontFamily = (value?: string) => Boolean(value && /^[\w\s"',-]+$/.test(value))
-  const isSafeColor = (value?: string) =>
-    Boolean(value && /^#[0-9a-f]{6}$/i.test(value))
-
-  const theme = {
-    fontStylesheetUrl: isSafeFontUrl(sanityTheme?.fontStylesheetUrl)
-      ? sanityTheme?.fontStylesheetUrl
-      : defaultTheme.fontStylesheetUrl,
-    monoFontFamily: isSafeFontFamily(sanityTheme?.monoFontFamily)
-      ? sanityTheme?.monoFontFamily
-      : defaultTheme.monoFontFamily,
-    serifFontFamily: isSafeFontFamily(sanityTheme?.serifFontFamily)
-      ? sanityTheme?.serifFontFamily
-      : defaultTheme.serifFontFamily,
-    primaryBackgroundColor: isSafeColor(sanityTheme?.primaryBackgroundColor)
-      ? sanityTheme?.primaryBackgroundColor
-      : defaultTheme.primaryBackgroundColor,
-    secondaryBackgroundColor: isSafeColor(sanityTheme?.secondaryBackgroundColor)
-      ? sanityTheme?.secondaryBackgroundColor
-      : defaultTheme.secondaryBackgroundColor,
-    primaryTextColor: isSafeColor(sanityTheme?.primaryTextColor)
-      ? sanityTheme?.primaryTextColor
-      : defaultTheme.primaryTextColor,
-    mutedTextColor: isSafeColor(sanityTheme?.mutedTextColor)
-      ? sanityTheme?.mutedTextColor
-      : defaultTheme.mutedTextColor,
-    borderColor: isSafeColor(sanityTheme?.borderColor)
-      ? sanityTheme?.borderColor
-      : defaultTheme.borderColor,
-    accentColor: isSafeColor(sanityTheme?.accentColor)
-      ? sanityTheme?.accentColor
-      : defaultTheme.accentColor,
-  }
-
+const theme = {
+  fontStylesheetUrl: isSafeFontUrl(sanityTheme?.fontStylesheetUrl) ? sanityTheme?.fontStylesheetUrl : defaultTheme.fontStylesheetUrl,
+  monoFontFamily: isSafeFontFamily(sanityTheme?.monoFontFamily) ? sanityTheme?.monoFontFamily : defaultTheme.monoFontFamily,
+  serifFontFamily: isSafeFontFamily(sanityTheme?.serifFontFamily) ? sanityTheme?.serifFontFamily : defaultTheme.serifFontFamily,
+  primaryBackgroundColor: isSafeColor(sanityTheme?.primaryBackgroundColor) ? sanityTheme?.primaryBackgroundColor : defaultTheme.primaryBackgroundColor,
+  secondaryBackgroundColor: isSafeColor(sanityTheme?.secondaryBackgroundColor) ? sanityTheme?.secondaryBackgroundColor : defaultTheme.secondaryBackgroundColor,
+  primaryTextColor: isSafeColor(sanityTheme?.primaryTextColor) ? sanityTheme?.primaryTextColor : defaultTheme.primaryTextColor,
+  mutedTextColor: isSafeColor(sanityTheme?.mutedTextColor) ? sanityTheme?.mutedTextColor : defaultTheme.mutedTextColor,
+  borderColor: isSafeColor(sanityTheme?.borderColor) ? sanityTheme?.borderColor : defaultTheme.borderColor,
+  accentColor: isSafeColor(sanityTheme?.accentColor) ? sanityTheme?.accentColor : defaultTheme.accentColor,
+}
 ---
 
-<div>
+<div class="site-header">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href={theme.fontStylesheetUrl} />
-  <style
-    define:vars={{
-      fontMono: theme.monoFontFamily,
-      fontSerif: theme.serifFontFamily,
-      bgPrimary: theme.primaryBackgroundColor,
-      bgSecondary: theme.secondaryBackgroundColor,
-      textColor: theme.primaryTextColor,
-      textMuted: theme.mutedTextColor,
-      borderColor: theme.borderColor,
-      accentColor: theme.accentColor,
-    }}
-  >
+  <style define:vars={{
+    fontMono: theme.monoFontFamily,
+    fontSerif: theme.serifFontFamily,
+    bgPrimary: theme.primaryBackgroundColor,
+    bgSecondary: theme.secondaryBackgroundColor,
+    textColor: theme.primaryTextColor,
+    textMuted: theme.mutedTextColor,
+    borderColor: theme.borderColor,
+    accentColor: theme.accentColor,
+  }}>
     :root {
       --font-mono: var(--fontMono);
       --font-serif: var(--fontSerif);
@@ -76,29 +52,102 @@
       --accent: var(--accentColor);
     }
   </style>
- 
-  <Nav/>
 
-  <header class="text-center mb-12 mt-12">
-    <img
-      src="https://avatars.githubusercontent.com/u/54102389?v=4"
-      alt="Profile picture"
-      width="80"
-      height="80"
-      class="rounded-lg mx-auto mb-4"
-    />
-
-
-    <h1 class="text-3xl font-bold mb-2">Emmanuel Obiabo</h1>
-
-    <div class="flex items-center flex-wrap gap-2 justify-center">
-      {
-        personal_urls.map ( items => (
-          <a class="text-default text-xs underline"
-             href={items.url} target="_blank" rel="noreferrer">{items.headerTitle ?? items.title}</a>
-        ))
-      }
-    </div>
-
+  <header>
+    <a class="identity" href="/" aria-label="Emmanuel Obiabo, home">
+      <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="Emmanuel Obiabo" width="52" height="52" />
+      <span>
+        <strong>Emmanuel Obiabo</strong>
+        <small>Software engineer</small>
+      </span>
+    </a>
+    <Nav />
   </header>
+
+  {personalUrls.length > 0 && (
+    <div class="social-links" aria-label="Social links">
+      {personalUrls.map((item) => (
+        <a href={item.url} target="_blank" rel="noreferrer">{item.headerTitle ?? item.title}</a>
+      ))}
+    </div>
+  )}
 </div>
+
+<style>
+  .site-header {
+    margin: 0 auto;
+    max-width: 42rem;
+    padding: 4rem 1rem 0;
+  }
+
+  header {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+
+  .identity {
+    align-items: center;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 0.75rem;
+  }
+
+  .identity img {
+    border-radius: 0.35rem;
+    display: block;
+  }
+
+  .identity span {
+    display: grid;
+  }
+
+  .identity strong {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .identity small {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0 0 4rem;
+  }
+
+  .social-links a {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    line-height: 1.4;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .social-links a:hover,
+  .social-links a:focus-visible {
+    color: var(--text-color);
+  }
+
+  @media (max-width: 40rem) {
+    .site-header {
+      padding-top: 2rem;
+    }
+
+    header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .social-links {
+      margin-left: 0;
+    }
+  }
+</style>

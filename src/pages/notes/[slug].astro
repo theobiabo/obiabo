@@ -163,8 +163,7 @@ const highlightCodeBlocks = async (blocks: PortableBlock[] = [], title?: string)
 const { title, description: desc, tags, firstPublishedAt, publishedAt, _createdAt, body, mainImage } = post;
 const highlightedBody = await highlightCodeBlocks(body || [], title);
 const description = desc || "Personal notes and thoughts.";
-const fallbackOgImage = `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`;
-const ogImage = mainImage?.asset?.url || fallbackOgImage;
+
 const publishedDate = firstPublishedAt || publishedAt || _createdAt;
 const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(publishedDate).getTime())
   ? new Date(publishedDate).toLocaleDateString("en-US", { dateStyle: "long" })
@@ -176,7 +175,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <SEO title={title} description={description} type="article" image={ogImage} appendSiteName={false} />
+  <SEO title={title} description={description} type="article" appendSiteName={false} />
   <meta property="article:published_time" content={publishedDate && !Number.isNaN(new Date(publishedDate).getTime()) ? new Date(publishedDate).toISOString() : ''} />
   <!-- @ts-ignore -->
   {tags && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
@@ -187,8 +186,8 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
 <Header title={title} />
 <main class="page-shell note-page">
-      <h1 class="text-xl md:text-xl  font-bold leading-tight tracking-normal text-default">{title}</h1>
-      {desc && <p class="text-md mt-4 mb-6 ">{desc}</p>}
+      <h1 class="note-title">{title}</h1>
+      {desc && <p class="note-description">{desc}</p>}
       {mainImage?.asset?.url && (
         <img
           src={mainImage.asset.url}
@@ -234,6 +233,20 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     margin-top: 1.5rem;
   }
 
+  .note-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .note-description {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.7;
+    margin: 0.75rem 0 1.5rem;
+  }
+
   .note-hero-image {
     width: 100%;
     height: auto;
@@ -250,7 +263,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
     margin-bottom: 2rem;
-    font-size: 0.875rem;
+    font-size: 0.68rem;
   }
 
   .post-meta-item {

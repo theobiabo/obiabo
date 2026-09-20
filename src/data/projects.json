@@ -25,7 +25,7 @@
   },
   {
     "name": "Glimpse ",
-    "description": "Glimpse is a lightweight Rust daemon that quietly monitors your system and sends real-time alerts to Telegram—covering CPU, memory, disk, and network usage.",
+    "description": "Glimpse is a lightweight Rust daemon that quietly monitors your system and sends real-time alerts to Telegram, covering CPU, memory, disk, and network usage.",
     "url": "https://github.com/yhoungdev/gimpse"
   },
 

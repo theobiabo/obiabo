@@ -228,7 +228,7 @@ const PortableTextRenderer: React.FC<{ value: any }> = ({ value }) => {
         <blockquote className="portable-quote">
           <p className="quote-text">{value.text}</p>
           {value.author && (
-            <footer className="quote-author">— {value.author}</footer>
+            <footer className="quote-author">{value.author}</footer>
           )}
         </blockquote>
       ),

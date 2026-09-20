@@ -85,11 +85,9 @@ allViews.forEach(v => {
 
 <Header title="Notes" />
 <main class="page-shell">
-  <header class="mb-8">
-    <h1 class="text-lg font-bold mb-4">
-      <span class="text-default  text-md text-500">Welcome to my corner of the internet!</span>
-    </h1>
-    <p class="text-sm leading-normal  mb-6">
+  <header class="notes-heading">
+    <h1>Welcome to my corner of the internet!</h1>
+    <p>
       This is where I share notes, thoughts, things I've tried and want to try, and personal experiences and learnings.
     </p>
     <!-- <p class="mb-8">
@@ -98,7 +96,7 @@ allViews.forEach(v => {
   </header>
 
   <section class="mb-12">
-    <form method="get" class="mb-8 flex flex-wrap items-center gap-3 text-sm">
+    <form method="get" class="notes-sort">
       <label for="sort" class="text-gray-500">Sort notes</label>
       <select id="sort" name="sort" class="rounded bg-transparent px-3 py-2" value={sort}>
         <option value="latest" selected={sort === "latest"}>Latest first</option>
@@ -114,19 +112,16 @@ allViews.forEach(v => {
         const formattedDate = formatPostDate(post);
 
         return (
-          <div class="mt-4">
+          <article class="note-item">
             <div>
-
-              <h3 class="text-md  font-medium mb-3">
-                <a href={`/notes/${postId}`} class="text-default hover:underline">
+              <h2>
+                <a href={`/notes/${postId}`}>
                   {post.title}
                 </a>
-              </h3>
-              {post.description && (
-                <p class="mb-4 text-sm ">{post.description}</p>
-              )}
+              </h2>
+              {post.description && <p>{post.description}</p>}
 
-              <div class="flex items-center gap-4 text-sm text-gray-500">
+              <div class="note-meta">
                 <span class="">
                   {formattedDate}
                 </span>
@@ -154,7 +149,7 @@ allViews.forEach(v => {
                 </span>
               </div> */}
             </div>
-          </div>
+          </article>
         );
       })}
     </div>
@@ -199,6 +194,74 @@ allViews.forEach(v => {
     <p class="text-gray-400">Stay cheesed up for this, drink some cup of water and do the calms</p>
   </footer>
 </main>
+
+<style>
+  .notes-heading {
+    margin-bottom: 2.5rem;
+  }
+
+  .notes-heading h1 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 0.5rem;
+  }
+
+  .notes-heading p {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  .notes-sort {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.68rem;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .note-item {
+    margin-top: 1.5rem;
+  }
+
+  .note-item h2 {
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.55;
+    margin: 0 0 0.45rem;
+  }
+
+  .note-item h2 a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2rem;
+  }
+
+  .note-item h2 a:hover,
+  .note-item h2 a:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .note-item p {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.65;
+    margin: 0 0 0.65rem;
+  }
+
+  .note-meta {
+    align-items: center;
+    color: var(--text-muted);
+    display: flex;
+    font-size: 0.64rem;
+    gap: 1rem;
+  }
+</style>
 
 </body>
 </html>

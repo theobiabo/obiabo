@@ -65,7 +65,7 @@ export function portableTextToHtml(blocks: any[]): string {
     if (block._type === 'quoteBlock') {
       const text = block.text || '';
       const author = block.author || '';
-      return `<blockquote><p>${text}</p>${author ? `<footer>— ${author}</footer>` : ''}</blockquote>`;
+      return `<blockquote><p>${text}</p>${author ? `<footer>${author}</footer>` : ''}</blockquote>`;
     }
     
     // Handle highlights

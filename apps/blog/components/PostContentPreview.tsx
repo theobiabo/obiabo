@@ -92,7 +92,7 @@ export function PostContentPreview(_props: StringInputProps) {
                 quoteBlock: ({value}: {value?: {text?: string; author?: string}}) => (
                   <blockquote>
                     {value?.text && <p>{value.text}</p>}
-                    {value?.author && <footer>— {value.author}</footer>}
+                    {value?.author && <footer>{value.author}</footer>}
                   </blockquote>
                 ),
                 highlight: ({value}: {value?: {text?: string}}) => <mark>{value?.text}</mark>,

@@ -244,7 +244,7 @@ export default defineType({
         prepare({text, author}) {
           return {
             title: 'Quote',
-            subtitle: author ? `— ${author}` : text?.substring(0, 50),
+            subtitle: author || text?.substring(0, 50),
           }
         },
       },

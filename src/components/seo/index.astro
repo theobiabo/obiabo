@@ -1,37 +1,76 @@
 ---
 type Props = {
-  title?: string;
-  description?: string;
-  type?: 'website' | 'article';
-  image?: string;
-  appendSiteName?: boolean;
-};
+  title?: string
+  description?: string
+  type?: 'website' | 'article' | 'profile'
+  image?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
+  appendSiteName?: boolean
+  canonicalUrl?: string
+  noindex?: boolean
+}
 
 const {
-  title = 'Emmanuel Obiabo',
-  description = 'Personal notes, open-source work, projects, and thoughts from Emmanuel Obiabo.',
+  title = 'Emmanuel Obiabo | Software engineer',
+  description = 'Portfolio of Emmanuel Obiabo, a software engineer building thoughtful digital products, open-source tools, and reliable web experiences.',
   type = 'website',
-  image = '/assets/photo.png',
+  image = '/assets/og-card.png',
+  imageAlt = 'Emmanuel Obiabo, software engineer, with a personal quote about making the world better through code',
+  imageWidth,
+  imageHeight,
   appendSiteName = true,
-} = Astro.props;
+  canonicalUrl,
+  noindex = false,
+} = Astro.props
 
-const siteTitle = appendSiteName && title !== 'Emmanuel Obiabo' ? `${title} | Emmanuel Obiabo` : title;
-const ogImage = new URL(image, Astro.url.origin).toString();
-const pageUrl = Astro.url.toString();
+const siteName = 'Emmanuel Obiabo'
+const baseUrl = Astro.site ?? new URL('https://obiabo.com')
+const siteTitle = appendSiteName && title !== siteName && !title.includes(siteName)
+  ? `${title} | ${siteName}`
+  : title
+const canonical = canonicalUrl
+  ? new URL(canonicalUrl, baseUrl)
+  : new URL(Astro.url.pathname, baseUrl)
+const ogImage = new URL(image, baseUrl)
+const isDefaultImage = image === '/assets/og-card.png'
+const resolvedImageWidth = imageWidth ?? (isDefaultImage ? 1200 : undefined)
+const resolvedImageHeight = imageHeight ?? (isDefaultImage ? 630 : undefined)
+const imageExtension = ogImage.pathname.split('.').pop()?.toLowerCase()
+const imageType = imageExtension === 'png'
+  ? 'image/png'
+  : imageExtension === 'webp'
+    ? 'image/webp'
+    : imageExtension === 'jpg' || imageExtension === 'jpeg'
+      ? 'image/jpeg'
+      : undefined
 ---
 
+<title>{siteTitle}</title>
 <meta name="description" content={description} />
-<meta name="author" content="Obiabo" />
+<meta name="author" content="Emmanuel Obiabo" />
+<meta name="creator" content="Emmanuel Obiabo" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+<link rel="canonical" href={canonical.toString()} />
+
 <meta property="og:title" content={siteTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content={type} />
-<meta property="og:url" content={pageUrl} />
-<meta property="og:image" content={ogImage} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content={title} />
+<meta property="og:url" content={canonical.toString()} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={ogImage.toString()} />
+<meta property="og:image:secure_url" content={ogImage.toString()} />
+{imageType && <meta property="og:image:type" content={imageType} />}
+{resolvedImageWidth && <meta property="og:image:width" content={String(resolvedImageWidth)} />}
+{resolvedImageHeight && <meta property="og:image:height" content={String(resolvedImageHeight)} />}
+<meta property="og:image:alt" content={imageAlt} />
+
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@obiabo_immanuel" />
+<meta name="twitter:creator" content="@obiabo_immanuel" />
 <meta name="twitter:title" content={siteTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-<title>{siteTitle}</title>
+<meta name="twitter:image" content={ogImage.toString()} />
+<meta name="twitter:image:alt" content={imageAlt} />

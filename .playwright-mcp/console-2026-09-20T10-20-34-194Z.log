@@ -1,5 +1,0 @@
-[    5502ms] Cannot use import statement outside a module
-[   40495ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://www.obiabo.dev/src/style/index.css:0
-[   40825ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://www.obiabo.dev/favicon.ico:0
-[   41588ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://www.obiabo.dev/api/webmentions?postId=e5bbe7ff-e8be-427f-a960-6116f9d15a99:0
-[   47216ms] Cannot use import statement outside a module

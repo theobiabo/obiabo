@@ -6,6 +6,7 @@ type Props = {
 }
 
 const { stories } = Astro.props
+const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
 ---
 
 {stories.length > 0 ? (
@@ -45,7 +46,7 @@ const { stories } = Astro.props
       </section>
     </dialog>
 
-    <script is:inline type="application/json" class="story-data" set:text={JSON.stringify(stories)}></script>
+    <script is:inline type="application/json" class="story-data" set:html={storyData}></script>
   </div>
 ) : (
   <span class="story-ring story-ring-empty">

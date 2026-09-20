@@ -1,0 +1,38 @@
+- generic [active] [ref=f3e1]:
+  - generic [ref=f3e2]:
+    - banner [ref=f3e3]:
+      - generic [ref=f3e4]:
+        - button "View gallery stories" [ref=f3e6] [cursor=pointer]
+        - link "Emmanuel Obiabo, home" [ref=f3e8] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f3e9]: Emmanuel Obiabo
+          - generic [ref=f3e10]: Software engineer
+      - group [ref=f3e11]:
+        - generic "Open navigation menu" [ref=f3e12] [cursor=pointer]
+    - generic "Social links" [ref=f3e16]:
+      - link "Github" [ref=f3e17] [cursor=pointer]:
+        - /url: https://github.com/theobiabo
+      - link "LinkedIn" [ref=f3e20] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+      - link "X (Formerly Twitter)" [ref=f3e23] [cursor=pointer]:
+        - /url: https://x.com/obiabo_immanuel
+  - main [ref=f3e26]:
+    - generic [ref=f3e27]:
+      - heading "Gallery" [level=1] [ref=f3e28]
+      - paragraph [ref=f3e29]: A collection of moments, places, and things worth keeping.
+    - region "Photo gallery" [ref=f3e30]:
+      - figure "The world is a beautiful place, so am i. Guess I need to thank my parents every day I wake up too, for bringing me to this great earth with beautiful genes, even when I'm 5'8." [ref=f3e31]:
+        - img "Thank God for the gift of life." [ref=f3e32]
+        - generic [ref=f3e33]:
+          - strong [ref=f3e34]: The world is a beautiful place, so am i.
+          - generic [ref=f3e35]: Guess I need to thank my parents every day I wake up too, for bringing me to this great earth with beautiful genes, even when I'm 5'8.
+      - figure "Sorry, but i can't help getting more low sole shoes. The world is ending, and I'm collecting shoes like they are infinity stones." [ref=f3e36]:
+        - img "Red Adidas spazials." [ref=f3e37]
+        - generic [ref=f3e38]:
+          - strong [ref=f3e39]: Sorry, but i can't help getting more low sole shoes.
+          - generic [ref=f3e40]: The world is ending, and I'm collecting shoes like they are infinity stones.
+  - generic [ref=f3e43]:
+    - button [ref=f3e44]
+    - button [ref=f3e50]
+    - button [ref=f3e54]
+    - button [ref=f3e62]

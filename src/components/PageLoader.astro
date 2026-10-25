@@ -1,4 +1,6 @@
 <div id="page-loader" data-state="loading" transition:persist="page-loader" aria-hidden="true">
+  <div class="loader-panel loader-panel-top"></div>
+  <div class="loader-panel loader-panel-bottom"></div>
   <span data-count>0</span>
 </div>
 
@@ -9,27 +11,64 @@
     z-index: 1000;
     display: grid;
     place-items: center;
-    background: var(--bg-primary);
-    opacity: 1;
     visibility: visible;
-    transition: opacity 180ms ease, visibility 180ms ease;
   }
 
   #page-loader[data-state='hidden'] {
-    opacity: 0;
     visibility: hidden;
     pointer-events: none;
   }
 
-  #page-loader span {
-    color: var(--accent);
+  .loader-panel {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 50.1%;
+    background: var(--bg-primary);
+    transition: transform 560ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .loader-panel-top {
+    top: 0;
+  }
+
+  .loader-panel-bottom {
+    bottom: 0;
+  }
+
+  #page-loader[data-state='dismissing'] .loader-panel-top,
+  #page-loader[data-state='hidden'] .loader-panel-top {
+    transform: translateY(-100%);
+  }
+
+  #page-loader[data-state='dismissing'] .loader-panel-bottom,
+  #page-loader[data-state='hidden'] .loader-panel-bottom {
+    transform: translateY(100%);
+  }
+
+  #page-loader [data-count] {
+    position: relative;
+    z-index: 1;
+    color: #fff;
     font-size: clamp(3rem, 10vw, 6rem);
     font-variant-numeric: tabular-nums;
     line-height: 1;
+    transition: opacity 140ms ease;
+  }
+
+  #page-loader[data-state='dismissing'] [data-count],
+  #page-loader[data-state='hidden'] [data-count] {
+    opacity: 0;
+  }
+
+  #page-loader.is-resetting .loader-panel,
+  #page-loader.is-resetting [data-count] {
+    transition: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #page-loader {
+    .loader-panel,
+    #page-loader [data-count] {
       transition: none;
     }
   }
@@ -46,7 +85,7 @@
     let startedAt = 0
     let finishingAt = 0
     let finishingFrom = 0
-    let phase: 'loading' | 'finishing' | 'hidden' = 'hidden'
+    let phase: 'loading' | 'finishing' | 'dismissing' | 'hidden' = 'hidden'
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     const showCount = (value: number) => {
@@ -63,17 +102,19 @@
       }
 
       if (phase === 'finishing') {
-        const duration = reduceMotion.matches ? 0 : Math.max(200, (100 - finishingFrom) * 5)
+        const duration = reduceMotion.matches ? 0 : Math.max(180, Math.min(360, (100 - finishingFrom) * 4))
         const fraction = duration === 0 ? 1 : Math.min(1, (now - finishingAt) / duration)
         showCount(Math.min(100, Math.floor(finishingFrom + (100 - finishingFrom) * fraction)))
 
         if (fraction < 1) {
           frame = requestAnimationFrame(tick)
         } else {
-          phase = 'hidden'
+          phase = 'dismissing'
+          loader.dataset.state = 'dismissing'
           hideTimer = window.setTimeout(() => {
+            phase = 'hidden'
             loader.dataset.state = 'hidden'
-          }, reduceMotion.matches ? 0 : 100)
+          }, reduceMotion.matches ? 0 : 580)
         }
       }
     }
@@ -84,7 +125,10 @@
       phase = 'loading'
       startedAt = performance.now()
       showCount(0)
+      loader.classList.add('is-resetting')
       loader.dataset.state = 'loading'
+      void loader.offsetHeight
+      loader.classList.remove('is-resetting')
       frame = requestAnimationFrame(tick)
     }
 

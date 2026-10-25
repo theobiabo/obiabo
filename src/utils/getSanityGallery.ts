@@ -5,6 +5,7 @@ export type SanityGalleryItem = {
   title: string
   alt: string
   note?: string
+  category: 'personal' | 'coffee' | 'other'
   imageUrl: string
   width?: number
   height?: number
@@ -17,11 +18,16 @@ export async function getSanityGallery(): Promise<SanityGalleryItem[]> {
     title,
     alt,
     note,
+    category,
     order,
     "imageUrl": image.asset->url,
     "width": image.asset->metadata.dimensions.width,
     "height": image.asset->metadata.dimensions.height
   }`
 
-  return await sanity.fetch(query)
+  const items = await sanity.fetch<Array<Omit<SanityGalleryItem, 'category'> & {category?: string}>>(query)
+  return items.map((item) => ({
+    ...item,
+    category: item.category === 'personal' || item.category === 'coffee' ? item.category : 'other',
+  }))
 }

@@ -16,8 +16,8 @@ const {
   title = 'Emmanuel Obiabo | Software engineer',
   description = 'The world is a beautiful place, I\'m making it better through code.',
   type = 'website',
-  image = '/assets/og-card.png',
-  imageAlt = 'Software engineer, with a personal quote about making the world better through code',
+  image = '/favicon.png',
+  imageAlt = 'Pixel portrait of Emmanuel Obiabo',
   imageWidth,
   imageHeight,
   appendSiteName = true,
@@ -26,7 +26,7 @@ const {
 } = Astro.props
 
 const siteName = 'Emmanuel Obiabo'
-const baseUrl = Astro.site ?? new URL('https://obiabo.com')
+const baseUrl = Astro.site ?? new URL('https://www.obiabo.dev')
 const siteTitle = appendSiteName && title !== siteName && !title.includes(siteName)
   ? `${title} | ${siteName}`
   : title
@@ -34,9 +34,9 @@ const canonical = canonicalUrl
   ? new URL(canonicalUrl, baseUrl)
   : new URL(Astro.url.pathname, baseUrl)
 const ogImage = new URL(image, baseUrl)
-const isDefaultImage = image === '/assets/og-card.png'
-const resolvedImageWidth = imageWidth ?? (isDefaultImage ? 1200 : undefined)
-const resolvedImageHeight = imageHeight ?? (isDefaultImage ? 630 : undefined)
+const isDefaultImage = image === '/favicon.png'
+const resolvedImageWidth = imageWidth ?? (isDefaultImage ? 460 : undefined)
+const resolvedImageHeight = imageHeight ?? (isDefaultImage ? 460 : undefined)
 const imageExtension = ogImage.pathname.split('.').pop()?.toLowerCase()
 const imageType = imageExtension === 'png'
   ? 'image/png'
@@ -48,6 +48,8 @@ const imageType = imageExtension === 'png'
 ---
 
 <title>{siteTitle}</title>
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
 <meta name="description" content={description} />
 <meta name="author" content="Emmanuel Obiabo" />
 <meta name="creator" content="Emmanuel Obiabo" />
@@ -67,7 +69,7 @@ const imageType = imageExtension === 'png'
 {resolvedImageHeight && <meta property="og:image:height" content={String(resolvedImageHeight)} />}
 <meta property="og:image:alt" content={imageAlt} />
 
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content={isDefaultImage ? 'summary' : 'summary_large_image'} />
 <meta name="twitter:site" content="@obiabo_immanuel" />
 <meta name="twitter:creator" content="@obiabo_immanuel" />
 <meta name="twitter:title" content={siteTitle} />

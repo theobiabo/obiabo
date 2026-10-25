@@ -13,7 +13,7 @@ const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
   <div class="story-viewer">
     <button class="story-trigger" type="button" aria-label="View gallery stories">
       <span class="story-ring">
-        <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="" width="52" height="52" />
+        <img src="/favicon.png" alt="" width="52" height="52" />
       </span>
     </button>
 
@@ -26,7 +26,7 @@ const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
 
         <div class="story-topbar">
           <div class="story-owner">
-            <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="" width="30" height="30" />
+            <img src="/favicon.png" alt="" width="30" height="30" />
             <span>Emmanuel Obiabo</span>
           </div>
           <button class="story-close" type="button" aria-label="Close stories">×</button>
@@ -50,32 +50,35 @@ const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
   </div>
 ) : (
   <span class="story-ring story-ring-empty">
-    <img src="https://avatars.githubusercontent.com/u/54102389?v=4" alt="Emmanuel Obiabo" width="52" height="52" />
+    <img src="/favicon.png" alt="Emmanuel Obiabo" width="52" height="52" />
   </span>
 )}
 
-<script is:inline>
-  document.querySelectorAll('.story-viewer:not([data-ready])').forEach((viewer) => {
+<script>
+type Story = { imageUrl: string; alt: string; title: string; note?: string }
+
+const initializeStoryViewers = () => {
+  document.querySelectorAll<HTMLElement>('.story-viewer:not([data-ready])').forEach((viewer) => {
     viewer.dataset.ready = 'true'
-    const trigger = viewer.querySelector('.story-trigger')
-    const dialog = viewer.querySelector('.story-dialog')
-    const close = viewer.querySelector('.story-close')
-    const previous = viewer.querySelector('.story-previous')
-    const next = viewer.querySelector('.story-next')
-    const image = viewer.querySelector('.story-image')
+    const trigger = viewer.querySelector<HTMLButtonElement>('.story-trigger')
+    const dialog = viewer.querySelector<HTMLDialogElement>('.story-dialog')
+    const close = viewer.querySelector<HTMLButtonElement>('.story-close')
+    const previous = viewer.querySelector<HTMLButtonElement>('.story-previous')
+    const next = viewer.querySelector<HTMLButtonElement>('.story-next')
+    const image = viewer.querySelector<HTMLImageElement>('.story-image')
     const captionTitle = viewer.querySelector('.story-caption strong')
     const captionNote = viewer.querySelector('.story-caption span')
     const loading = viewer.querySelector('.story-loading')
     const backdrop = viewer.querySelector('.story-backdrop')
     const data = viewer.querySelector('.story-data')
-    const progress = Array.from(viewer.querySelectorAll('.story-progress i'))
+    const progress = Array.from(viewer.querySelectorAll<HTMLElement>('.story-progress i'))
 
     if (!trigger || !dialog || !close || !previous || !next || !image || !captionTitle || !captionNote || !loading || !data) return
 
-    const stories = JSON.parse(data.textContent || '[]')
+    const stories = JSON.parse(data.textContent || '[]') as Story[]
     let index = 0
     let timer = 0
-    let lastFocused = null
+    let lastFocused: HTMLElement | null = null
 
     const stopTimer = () => window.clearTimeout(timer)
 
@@ -99,22 +102,24 @@ const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
       }, 5000)
     }
 
-    const showStory = (nextIndex) => {
+    const showStory = (nextIndex: number) => {
       index = (nextIndex + stories.length) % stories.length
       const story = stories[index]
       loading.classList.add('is-visible')
       image.classList.remove('is-visible')
-      image.onload = () => {
+      const showLoadedImage = () => {
         loading.classList.remove('is-visible')
         image.classList.add('is-visible')
       }
+      image.onload = showLoadedImage
+      image.onerror = () => loading.classList.remove('is-visible')
       image.src = story.imageUrl
       image.alt = story.alt
       captionTitle.textContent = story.title
       captionNote.textContent = story.note || ''
       setProgress()
       startTimer()
-      if (image.complete) image.onload()
+      if (image.complete && image.naturalWidth > 0) showLoadedImage()
     }
 
     const openStories = () => {
@@ -145,6 +150,10 @@ const storyData = JSON.stringify(stories).replace(/</g, '\\u003c')
       if (event.key === 'ArrowRight') showStory(index + 1)
     })
   })
+}
+
+initializeStoryViewers()
+document.addEventListener('astro:page-load', initializeStoryViewers)
 </script>
 
 <style>

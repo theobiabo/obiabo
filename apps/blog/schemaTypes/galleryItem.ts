@@ -32,6 +32,21 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Personal', value: 'personal'},
+          {title: 'Coffee', value: 'coffee'},
+          {title: 'Other', value: 'other'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'other',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'order',
       title: 'Order',
       type: 'number',

@@ -9,18 +9,25 @@ type Project = {
 type Props = {
   projects: Project[]
   title?: string
+  intro?: string
+  moreHref?: string
+  headingLevel?: 'h1' | 'h2'
 }
 
 const {
   projects,
   title = 'Projects',
+  intro,
+  moreHref,
+  headingLevel = 'h2',
 } = Astro.props
 ---
 
-{projects.length > 0 && (
-  <section class="projects" id="projects" aria-labelledby="projects-title">
-    <h2 id="projects-title">{title}</h2>
+<section class="projects" id="projects" aria-labelledby="projects-title">
+  {headingLevel === 'h1' ? <h1 id="projects-title">{title}</h1> : <h2 id="projects-title">{title}</h2>}
+  {intro && <p class="projects-intro">{intro}</p>}
 
+  {projects.length > 0 ? (
     <ul>
       {projects.map((project, index) => (
         <li>
@@ -47,8 +54,11 @@ const {
         </li>
       ))}
     </ul>
-  </section>
-)}
+  ) : (
+    <p class="projects-empty">No featured projects yet.</p>
+  )}
+  {moreHref && <a class="more-projects" href={moreHref}>Show more projects <span aria-hidden="true">→</span></a>}
+</section>
 
 <style>
   .projects {
@@ -56,12 +66,35 @@ const {
     scroll-margin-top: 2rem;
   }
 
+  h1,
   h2 {
     color: var(--accent);
     font-size: 0.9rem;
     font-weight: 400;
     line-height: 1.5;
     margin: 0 0 1.15rem;
+  }
+
+  .projects-intro,
+  .projects-empty {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.6;
+    margin: -0.7rem 0 1.5rem;
+  }
+
+  .more-projects {
+    color: var(--text-color);
+    display: inline-block;
+    font-size: 0.76rem;
+    margin-top: 0.2rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .more-projects:hover,
+  .more-projects:focus-visible {
+    color: var(--accent);
   }
 
   ul {

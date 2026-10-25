@@ -1,7 +1,7 @@
 ---
 const navItems = [
   { title: 'Home', path: '/' },
-  { title: 'Projects', path: '#projects' },
+  { title: 'Projects', path: '/projects' },
   { title: 'Gallery', path: '/gallery' },
   { title: 'About', path: '/about' },
   { title: 'Notes', path: '/notes' },
@@ -18,12 +18,10 @@ const navItems = [
   </summary>
   <nav aria-label="Primary navigation">
     {navItems.map((item) => {
-      const isProjects = item.title === 'Projects'
-      const href = isProjects && Astro.url.pathname !== '/' ? `/${item.path}` : item.path
       const isActive = Astro.url.pathname === item.path || (item.path === '/' && Astro.url.pathname === '/')
 
       return (
-        <a href={href} aria-current={isActive ? 'page' : undefined}>
+        <a href={item.path} aria-current={isActive ? 'page' : undefined}>
           {item.title}
         </a>
       )

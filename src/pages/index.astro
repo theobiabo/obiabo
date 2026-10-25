@@ -9,27 +9,7 @@ import { getSanityProjects } from '../utils/getSanityProjects'
 import { ClientRouter } from 'astro:transitions'
 import '../../src/style/index.css'
 
-const featuredWork = [
-  {
-    name: 'cNGN Rust SDK',
-    description: 'A typed Rust client for the cNGN stablecoin API.',
-    details: 'I developed this open-source SDK for cNGN, a stablecoin pegged 1:1 to the Nigerian naira. It uses AES-256-CBC request encryption and Ed25519 response decryption. The client covers wallet management, virtual account deposits, bank redemptions, and on-chain transfers.',
-    url: 'https://github.com/theobiabo/cNGN-rs',
-  },
-  {
-    name: 'Plunk Rust SDK',
-    description: 'Previously, I worked on this community Rust SDK for Plunk\'s email platform.',
-    details: 'A community Rust SDK for Plunk, published on crates.io.',
-    url: 'https://crates.io/crates/plunk',
-  },
-]
-
-const sanityProjects = await getSanityProjects()
-const featuredUrls = new Set(featuredWork.map((project) => project.url.replace(/\/$/, '').toLowerCase()))
-const projects = [
-  ...featuredWork,
-  ...sanityProjects.filter((project) => !featuredUrls.has(project.url.replace(/\/$/, '').toLowerCase())),
-]
+const featuredProjects = await getSanityProjects({ featuredOnly: true, limit: 5 })
 ---
 
 <!DOCTYPE html>
@@ -55,7 +35,7 @@ const projects = [
     <main class="page-shell">
       <About />
       <RecentPosts />
-      <Project projects={projects} />
+      <Project projects={featuredProjects} moreHref="/projects" />
       <ActivityFeed />
     </main>
   </body>

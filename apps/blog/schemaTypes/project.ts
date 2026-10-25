@@ -37,7 +37,8 @@ export default defineType({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',
-      initialValue: true,
+      description: 'Featured projects can appear on the homepage. The first five by order are shown.',
+      initialValue: false,
     }),
     defineField({
       name: 'order',

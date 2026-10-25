@@ -1,0 +1,50 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import Header from '../../components/header/index.astro'
+import Project from '../../components/project.astro'
+import SEO from '../../components/seo/index.astro'
+import { getSanityProjects } from '../../utils/getSanityProjects'
+import '../../style/index.css'
+
+const additionalProjects = [
+  {
+    name: 'cNGN Rust SDK',
+    description: 'A typed Rust client for the cNGN stablecoin API.',
+    details: 'I developed this open-source SDK for cNGN, a stablecoin pegged 1:1 to the Nigerian naira. It uses AES-256-CBC request encryption and Ed25519 response decryption. The client covers wallet management, virtual account deposits, bank redemptions, and on-chain transfers.',
+    url: 'https://github.com/theobiabo/cNGN-rs',
+  },
+  {
+    name: 'Plunk Rust SDK',
+    description: 'A community Rust SDK for Plunk\'s email platform.',
+    details: 'Previously, I worked on this community SDK for Plunk. It is published on crates.io.',
+    url: 'https://crates.io/crates/plunk',
+  },
+]
+
+const sanityProjects = await getSanityProjects()
+const sanityUrls = new Set(sanityProjects.map((project) => project.url.replace(/\/$/, '').toLowerCase()))
+const projects = [
+  ...additionalProjects.filter((project) => !sanityUrls.has(project.url.replace(/\/$/, '').toLowerCase())),
+  ...sanityProjects,
+]
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title="Projects" description="Projects and open-source work by Emmanuel Obiabo." />
+    <ClientRouter />
+  </head>
+  <body class="editorial-page">
+    <Header />
+    <main class="page-shell">
+      <Project
+        projects={projects}
+        headingLevel="h1"
+        intro="Things I've built and worked on. Select a project to read more."
+      />
+    </main>
+  </body>
+</html>

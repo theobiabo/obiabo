@@ -9,8 +9,13 @@ export type SanityProject = {
   order?: number;
 };
 
-export async function getSanityProjects(): Promise<SanityProject[]> {
-  const query = `*[_type == "project" && featured != false]|order(coalesce(order, 0) asc, name asc){
+type ProjectQueryOptions = {
+  featuredOnly?: boolean;
+  limit?: number;
+};
+
+export async function getSanityProjects({ featuredOnly = false, limit }: ProjectQueryOptions = {}): Promise<SanityProject[]> {
+  const query = `*[_type == "project"${featuredOnly ? ' && featured == true' : ''}]|order(coalesce(order, 0) asc, name asc){
     _id,
     name,
     description,
@@ -19,5 +24,6 @@ export async function getSanityProjects(): Promise<SanityProject[]> {
     order
   }`;
 
-  return await sanity.fetch(query);
+  const projects = await sanity.fetch<SanityProject[]>(query);
+  return limit === undefined ? projects : projects.slice(0, limit);
 }

@@ -1,5 +1,6 @@
 ---
 import Nav from './nav.astro'
+import PageLoader from '../PageLoader.astro'
 import StoryViewer from '../StoryViewer.astro'
 import { getSanityContact } from '../../utils/getSanityContact'
 import { getSanityGallery } from '../../utils/getSanityGallery'
@@ -42,6 +43,7 @@ const theme = {
 }
 ---
 
+<PageLoader />
 <div class="site-header">
   <style define:vars={{
     bgPrimary: theme.primaryBackgroundColor,

@@ -1,0 +1,105 @@
+<div id="page-loader" data-state="loading" transition:persist="page-loader" aria-hidden="true">
+  <span data-count>0</span>
+</div>
+
+<style>
+  #page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: var(--bg-primary);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 180ms ease, visibility 180ms ease;
+  }
+
+  #page-loader[data-state='hidden'] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  #page-loader span {
+    color: var(--accent);
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #page-loader {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const loader = document.querySelector<HTMLElement>('#page-loader')
+  const counter = loader?.querySelector<HTMLElement>('[data-count]')
+
+  if (loader && counter) {
+    let frame = 0
+    let hideTimer = 0
+    let progress = 0
+    let startedAt = 0
+    let finishingAt = 0
+    let finishingFrom = 0
+    let phase: 'loading' | 'finishing' | 'hidden' = 'hidden'
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+    const showCount = (value: number) => {
+      progress = value
+      counter.textContent = String(value)
+    }
+
+    const tick = (now: number) => {
+      if (phase === 'loading') {
+        const elapsed = now - startedAt
+        showCount(Math.min(95, Math.floor(95 * (1 - Math.exp(-elapsed / 900)))))
+        frame = requestAnimationFrame(tick)
+        return
+      }
+
+      if (phase === 'finishing') {
+        const duration = reduceMotion.matches ? 0 : Math.max(200, (100 - finishingFrom) * 5)
+        const fraction = duration === 0 ? 1 : Math.min(1, (now - finishingAt) / duration)
+        showCount(Math.min(100, Math.floor(finishingFrom + (100 - finishingFrom) * fraction)))
+
+        if (fraction < 1) {
+          frame = requestAnimationFrame(tick)
+        } else {
+          phase = 'hidden'
+          hideTimer = window.setTimeout(() => {
+            loader.dataset.state = 'hidden'
+          }, reduceMotion.matches ? 0 : 100)
+        }
+      }
+    }
+
+    const start = () => {
+      cancelAnimationFrame(frame)
+      clearTimeout(hideTimer)
+      phase = 'loading'
+      startedAt = performance.now()
+      showCount(0)
+      loader.dataset.state = 'loading'
+      frame = requestAnimationFrame(tick)
+    }
+
+    const finish = () => {
+      if (phase !== 'loading') return
+      cancelAnimationFrame(frame)
+      phase = 'finishing'
+      finishingFrom = progress
+      finishingAt = performance.now()
+      frame = requestAnimationFrame(tick)
+    }
+
+    document.addEventListener('astro:before-preparation', start)
+    document.addEventListener('astro:page-load', finish)
+    start()
+    if (document.readyState === 'complete') finish()
+  }
+</script>

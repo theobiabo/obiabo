@@ -1,8 +1,9 @@
 ---
-import introMarkdown from '../../data/intro.md?raw'
+import { getSanityAbout } from '../../utils/getSanityAbout'
 import { renderMarkdown } from '../../utils/markdownRenderer'
 
-const introHtml = renderMarkdown(introMarkdown)
+const about = await getSanityAbout()
+const introHtml = renderMarkdown(about?.introMarkdown ?? '')
 ---
 
 <section class="about-intro" aria-label="Introduction">

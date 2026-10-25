@@ -8,12 +8,12 @@ export type SanityAbout = {
 }
 
 export async function getSanityAbout(): Promise<SanityAbout | null> {
-  const query = `*[_type == "about"][0]{
+  const query = `*[_type == "about" && _id == "about"][0]{
     _id,
     title,
     introMarkdown,
     fullMarkdown
   }`
 
-  return await sanity.fetch(query)
+  return await sanity.withConfig({useCdn: false}).fetch(query)
 }

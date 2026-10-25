@@ -4,6 +4,7 @@ export type SanityProject = {
   _id: string;
   name: string;
   description: string;
+  details?: string;
   url: string;
   order?: number;
 };
@@ -13,6 +14,7 @@ export async function getSanityProjects(): Promise<SanityProject[]> {
     _id,
     name,
     description,
+    details,
     url,
     order
   }`;

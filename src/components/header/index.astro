@@ -11,6 +11,7 @@ const [contact, sanityTheme, galleryItems] = await Promise.all([
   getSanityGallery(),
 ])
 const stories = galleryItems.slice(0, 3)
+const isHome = Astro.url.pathname === '/'
 const personalUrls = (contact?.links?.filter((item) => item.showInHeader) ?? []).map((item) => {
   const value = `${item.title} ${item.headerTitle ?? ''} ${item.url}`.toLowerCase()
   const kind = value.includes('github')
@@ -26,30 +27,23 @@ const personalUrls = (contact?.links?.filter((item) => item.showInHeader) ?? [])
   return { ...item, kind }
 })
 
-const isSafeFontUrl = (value?: string) => Boolean(value && /^https:\/\/fonts\.googleapis\.com\/css2\?/.test(value))
-const isSafeFontFamily = (value?: string) => Boolean(value && /^[\w\s"',-]+$/.test(value))
 const isSafeColor = (value?: string) => Boolean(value && /^#[0-9a-f]{6}$/i.test(value))
+const configuredAccent = sanityTheme?.accentColor
 
 const theme = {
-  fontStylesheetUrl: isSafeFontUrl(sanityTheme?.fontStylesheetUrl) ? sanityTheme?.fontStylesheetUrl : defaultTheme.fontStylesheetUrl,
-  monoFontFamily: isSafeFontFamily(sanityTheme?.monoFontFamily) ? sanityTheme?.monoFontFamily : defaultTheme.monoFontFamily,
-  serifFontFamily: isSafeFontFamily(sanityTheme?.serifFontFamily) ? sanityTheme?.serifFontFamily : defaultTheme.serifFontFamily,
   primaryBackgroundColor: isSafeColor(sanityTheme?.primaryBackgroundColor) ? sanityTheme?.primaryBackgroundColor : defaultTheme.primaryBackgroundColor,
   secondaryBackgroundColor: isSafeColor(sanityTheme?.secondaryBackgroundColor) ? sanityTheme?.secondaryBackgroundColor : defaultTheme.secondaryBackgroundColor,
   primaryTextColor: isSafeColor(sanityTheme?.primaryTextColor) ? sanityTheme?.primaryTextColor : defaultTheme.primaryTextColor,
   mutedTextColor: isSafeColor(sanityTheme?.mutedTextColor) ? sanityTheme?.mutedTextColor : defaultTheme.mutedTextColor,
   borderColor: isSafeColor(sanityTheme?.borderColor) ? sanityTheme?.borderColor : defaultTheme.borderColor,
-  accentColor: isSafeColor(sanityTheme?.accentColor) ? sanityTheme?.accentColor : defaultTheme.accentColor,
+  accentColor: configuredAccent && isSafeColor(configuredAccent) && configuredAccent.toLowerCase() !== '#e53636'
+    ? configuredAccent
+    : defaultTheme.accentColor,
 }
 ---
 
 <div class="site-header">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href={theme.fontStylesheetUrl} />
   <style define:vars={{
-    fontMono: theme.monoFontFamily,
-    fontSerif: theme.serifFontFamily,
     bgPrimary: theme.primaryBackgroundColor,
     bgSecondary: theme.secondaryBackgroundColor,
     textColor: theme.primaryTextColor,
@@ -58,8 +52,6 @@ const theme = {
     accentColor: theme.accentColor,
   }}>
     :root {
-      --font-mono: var(--fontMono);
-      --font-serif: var(--fontSerif);
       --bg-primary: var(--bgPrimary);
       --bg-secondary: var(--bgSecondary);
       --bg-tertiary: var(--bgPrimary);
@@ -75,15 +67,17 @@ const theme = {
   <header>
     <div class="identity">
       <StoryViewer stories={stories} />
-      <a href="/" aria-label="Emmanuel Obiabo, home">
-        <strong>Emmanuel Obiabo</strong>
-        <small>Software engineer</small>
-      </a>
+      {!isHome && (
+        <a href="/" aria-label="Emmanuel Obiabo, home">
+          <strong>Emmanuel Obiabo</strong>
+          <small>Software engineer</small>
+        </a>
+      )}
     </div>
     <Nav />
   </header>
 
-  {personalUrls.length > 0 && (
+  {!isHome && personalUrls.length > 0 && (
     <div class="social-links" aria-label="Social links">
       {personalUrls.map((item) => (
         <a href={item.url} target="_blank" rel="noreferrer" aria-label={item.headerTitle ?? item.title} title={item.headerTitle ?? item.title}>

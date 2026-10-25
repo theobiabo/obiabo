@@ -61,6 +61,7 @@ const shareLinks = {
 </div>
 
 <script is:inline>
+  (() => {
   const getShareUrl = () => `${window.location.origin}${window.location.pathname}`;
 
   const getPlatformUrl = (platform, shareUrl, title) => {
@@ -102,6 +103,7 @@ const shareLinks = {
       });
     });
   });
+  })();
 </script>
 
 <style>

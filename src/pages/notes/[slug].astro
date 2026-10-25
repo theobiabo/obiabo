@@ -14,6 +14,7 @@ import Webmentions from '../../components/Webmentions.astro';
 import { codeToHtml } from 'shiki';
 import { calculateReadingTime } from '../../utils/readingTime';
 import { getSanityPostBySlug } from '../../utils/getSanityPostBySlug';
+import { ClientRouter } from 'astro:transitions';
 
 const { slug } = Astro.params;
 
@@ -179,7 +180,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
   <meta property="article:published_time" content={publishedDate && !Number.isNaN(new Date(publishedDate).getTime()) ? new Date(publishedDate).toISOString() : ''} />
   <!-- @ts-ignore -->
   {tags && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
-  <link rel="stylesheet" href="/src/style/index.css" />
+  <ClientRouter />
 
 </head>
 <body>

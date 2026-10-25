@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme CSS Variables - Dark mode is default */
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/departure-mono/DepartureMono-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Dark mode is the default across the public site. */
 :root {
-  --font-mono: "IBM Plex Mono", monospace;
+  color-scheme: dark;
+  --font-mono: "Departure Mono", monospace;
   --font-serif: "Instrument Serif", serif;
   --bg-primary: #141414;
   --bg-secondary: #1a1a1a;
@@ -14,7 +23,7 @@
   --text-dim: #666;
   --border-color: #333;
   --hover-bg: #1a1a1a;
-  --accent: oklch(57.7% 0.245 27.325);
+  --accent: #f94e19;
 }
 
 * {
@@ -28,6 +37,27 @@ body, html {
   background-color: var(--bg-primary);
   font-family: var(--font-mono);
   transition: background-color 0.3s ease;
+}
+
+body {
+  font-size: 0.82rem;
+}
+
+body.editorial-page {
+  min-height: 100dvh;
+}
+
+.editorial-page .site-header,
+.editorial-page .page-shell {
+  max-width: 39rem;
+}
+
+.editorial-page .site-header {
+  padding: 2.25rem 1.25rem 0;
+}
+
+.editorial-page .page-shell {
+  padding: 1.75rem 1.25rem 4rem;
 }
 
 .page-shell {

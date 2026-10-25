@@ -1,42 +1,44 @@
 ---
-const { more } = Astro.props
-
-import { getSanityAbout } from '../../utils/getSanityAbout'
+import introMarkdown from '../../data/intro.md?raw'
 import { renderMarkdown } from '../../utils/markdownRenderer'
 
-const about = await getSanityAbout()
-const introHtml = renderMarkdown(about?.introMarkdown ?? '')
+const introHtml = renderMarkdown(introMarkdown)
 ---
 
 <section class="about-intro" aria-label="Introduction">
-  <article class="markdown-content">
+  <article class="intro-prose">
     <Fragment set:html={introHtml} />
   </article>
-
-  {more && <a class="more-link" href="/about">More about me <span aria-hidden="true">→</span></a>}
 </section>
 
 <style>
   .about-intro {
-    margin-bottom: 4.5rem;
+    margin-bottom: 4rem;
   }
 
-  .markdown-content {
+  :global(.intro-prose p) {
     font-size: 0.82rem;
-    line-height: 1.75;
+    line-height: 1.65;
+    margin: 0;
   }
 
-  .more-link {
-    color: var(--text-muted);
-    display: inline-block;
-    font-size: 0.72rem;
-    margin-top: 1.25rem;
+  :global(.intro-prose p + p) {
+    margin-top: 1.5rem;
+  }
+
+  :global(.intro-prose a) {
     text-decoration: underline;
-    text-underline-offset: 0.25rem;
+    text-decoration-color: var(--text-muted);
+    text-underline-offset: 0.2rem;
   }
 
-  .more-link:hover,
-  .more-link:focus-visible {
-    color: var(--text-color);
+  :global(.intro-prose a:hover),
+  :global(.intro-prose a:focus-visible) {
+    text-decoration-color: currentColor;
+  }
+
+  :global(.intro-prose a:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
 </style>

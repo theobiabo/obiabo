@@ -11,6 +11,7 @@ const { postId } = Astro.props;
 </div>
 
 <script is:inline>
+  (() => {
   async function loadWebmentions(container) {
     const postId = container.dataset.postId;
     if (!postId) return;
@@ -60,6 +61,7 @@ const { postId } = Astro.props;
   document.querySelectorAll('.webmentions-container[data-post-id]').forEach((container) => {
     loadWebmentions(container);
   });
+  })();
 </script>
 
 <style>

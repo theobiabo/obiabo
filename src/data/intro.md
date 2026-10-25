@@ -1,7 +1,5 @@
-I'm a software engineer, currently embracing a nomadic lifestyle while building software and exploring new interests.
+Hey, I'm Emmanuel. I work mostly with TypeScript and Rust, contribute to open source, and write about topics that catch my interest, technical or otherwise. I enjoy understanding how systems behave under the hood. You can read [more](/about) about me.
 
-Recently, I've been focused on writing, researching, and shipping software, with a particular interest in **Rust** and **TypeScript**.
+My research interests include distributed systems, electric and autonomous vehicles, pets and animal behavior, brain-computer interfaces, and cryptocurrencies.
 
-I previously worked on the [Plunk Rust SDK](https://docs.useplunk.com/guides/rust-sdk), a community SDK for Plunk.
-
-*Open to new roles and collaborations. If you'd like to connect or work together, feel free to reach out on X: [@obiabo_immanuel](https://x.com/obiabo_immanuel).*
+You can find me on [GitHub](https://github.com/theobiabo), [LinkedIn](https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/), and [X](https://x.com/obiabo_immanuel), or [get in touch](/reach).

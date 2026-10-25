@@ -32,15 +32,18 @@ const navItems = [
 </details>
 
 <script>
-  const menus = document.querySelectorAll<HTMLDetailsElement>('.navigation')
-
-  menus.forEach((menu) => {
-    document.addEventListener('click', (event) => {
-      if (event.target instanceof Node && !menu.contains(event.target)) menu.removeAttribute('open')
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node)) return
+    document.querySelectorAll<HTMLDetailsElement>('.navigation[open]').forEach((menu) => {
+      if (!menu.contains(event.target as Node) || event.target instanceof HTMLAnchorElement) menu.removeAttribute('open')
     })
+  })
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') menu.removeAttribute('open')
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return
+    document.querySelectorAll<HTMLDetailsElement>('.navigation[open]').forEach((menu) => {
+      menu.removeAttribute('open')
+      menu.querySelector('summary')?.focus()
     })
   })
 </script>

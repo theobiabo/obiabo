@@ -8,6 +8,7 @@ import SEO from '../../components/seo/index.astro';
 import '../../style/index.css';
 import { getSanityPosts } from '../../utils/getSanityPosts';
 import { db, views } from 'astro:db';
+import { ClientRouter } from 'astro:transitions';
 
 type Post = {
   _id?: string;
@@ -79,7 +80,7 @@ allViews.forEach(v => {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <SEO title="Notes" description="Personal notes and thoughts on technology, programming, and life." />
-  <link rel="stylesheet" href="/src/style/index.css" />
+  <ClientRouter />
 </head>
 <body>
 

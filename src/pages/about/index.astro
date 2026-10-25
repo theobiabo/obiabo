@@ -4,6 +4,7 @@ import SEO from '../../components/seo/index.astro'
 import '../../style/index.css'
 import { getSanityAbout } from '../../utils/getSanityAbout'
 import { renderMarkdown } from '../../utils/markdownRenderer'
+import { ClientRouter } from 'astro:transitions'
 
 const about = await getSanityAbout()
 const aboutHtml = renderMarkdown(about?.fullMarkdown ?? '')
@@ -15,13 +16,21 @@ const aboutHtml = renderMarkdown(about?.fullMarkdown ?? '')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <SEO title="About" description="Learn more about Emmanuel Obiabo, his work, projects, and interests." />
+    <ClientRouter />
 </head>
-<body>
-    <section id="about" class="page-shell">
-        <Header/>
-        <article class="markdown-content ibm-plex-mono-medium text-sm">
+<body class="editorial-page">
+    <Header/>
+    <main id="about" class="page-shell">
+        <article class="markdown-content about-content">
             <Fragment set:html={aboutHtml} />
         </article>
-    </section>
+    </main>
 </body>
 </html>
+
+<style>
+    .about-content {
+        font-size: 0.82rem;
+        line-height: 1.65;
+    }
+</style>

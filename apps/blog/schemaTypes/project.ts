@@ -19,6 +19,13 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'details',
+      title: 'Project details',
+      type: 'text',
+      rows: 10,
+      description: 'Optional longer writeup shown when a visitor opens this project from Projects. Separate paragraphs with a blank line.',
+    }),
+    defineField({
       name: 'url',
       title: 'URL',
       type: 'url',

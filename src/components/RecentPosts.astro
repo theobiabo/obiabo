@@ -4,7 +4,7 @@ import { getSanityPosts } from '../utils/getSanityPosts'
 const allPosts = await getSanityPosts()
 const recentPosts = allPosts
   .filter((post: any) => post?.slug?.current)
-  .slice(0, 5)
+  .slice(0, 3)
   .map((post: any) => ({ ...post, postUrl: `/notes/${post.slug.current}` }))
 
 const formatPostDate = (post: any) => {
@@ -17,34 +17,46 @@ const formatPostDate = (post: any) => {
 }
 ---
 
-{recentPosts.length > 0 && (
-  <section class="recent-posts" aria-labelledby="recent-posts-title">
-    <h2 id="recent-posts-title">recent notes</h2>
+<section class="recent-posts" id="writing" aria-labelledby="recent-posts-title">
+  <h2 id="recent-posts-title">Writing</h2>
+  <p class="writing-intro">A few recent pieces on whatever catches my interest.</p>
+  {recentPosts.length > 0 && (
     <ul>
       {recentPosts.map((post: any) => (
         <li>
           <a href={post.postUrl}>
-            <span>{post.title}</span>
+            <span class="post-copy">
+              <span class="post-title">{post.title}</span>
+              {post.description && <span class="post-description">{post.description}</span>}
+            </span>
             <time>{formatPostDate(post)}</time>
           </a>
         </li>
       ))}
     </ul>
-    <a class="all-notes" href="/notes">All notes <span aria-hidden="true">→</span></a>
-  </section>
-)}
+  )}
+  <a class="all-notes" href="/notes">Browse all writing <span aria-hidden="true">→</span></a>
+</section>
 
 <style>
   .recent-posts {
-    margin-bottom: 4.5rem;
+    margin-bottom: 4rem;
+    scroll-margin-top: 2rem;
   }
 
   h2 {
-    font-size: 0.78rem;
-    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 400;
     line-height: 1.5;
-    margin: 0 0 1rem;
-    text-transform: lowercase;
+    margin: 0 0 0.35rem;
+  }
+
+  .writing-intro {
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
   }
 
   ul {
@@ -54,23 +66,35 @@ const formatPostDate = (post: any) => {
   }
 
   li a {
-    align-items: baseline;
+    align-items: start;
     display: flex;
     gap: 1rem;
     justify-content: space-between;
-    padding: 0.3rem 0;
+    padding: 0.45rem 0;
   }
 
-  li a > span {
-    font-size: 0.74rem;
+  .post-copy {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .post-title {
+    font-size: 0.82rem;
     line-height: 1.55;
     text-decoration: underline;
-    text-decoration-color: transparent;
+    text-decoration-color: var(--text-muted);
     text-underline-offset: 0.2rem;
   }
 
-  li a:hover > span,
-  li a:focus-visible > span {
+  .post-description {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+
+  li a:hover .post-title,
+  li a:focus-visible .post-title {
     color: var(--accent);
     text-decoration-color: currentColor;
   }
@@ -83,16 +107,23 @@ const formatPostDate = (post: any) => {
   }
 
   .all-notes {
-    color: var(--text-muted);
+    color: var(--text-color);
     display: inline-block;
-    font-size: 0.68rem;
-    margin-top: 1rem;
+    font-size: 0.76rem;
+    margin-top: 1.25rem;
     text-decoration: underline;
     text-underline-offset: 0.2rem;
   }
 
   .all-notes:hover,
   .all-notes:focus-visible {
-    color: var(--text-color);
+    color: var(--accent);
+  }
+
+  @media (max-width: 34rem) {
+    li a {
+      display: grid;
+      gap: 0.1rem;
+    }
   }
 </style>

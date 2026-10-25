@@ -2,37 +2,48 @@
 type Project = {
   name: string
   description: string
+  details?: string
   url: string
 }
 
 type Props = {
   projects: Project[]
   title?: string
-  description?: string
 }
 
 const {
   projects,
-  title = 'Selected work',
-  description = "I've worked on many private services and applications. These are some of the public ones.",
+  title = 'Projects',
 } = Astro.props
 ---
 
 {projects.length > 0 && (
   <section class="projects" id="projects" aria-labelledby="projects-title">
-    <div class="section-heading">
-      <h2 id="projects-title">{title}</h2>
-      <p>{description}</p>
-    </div>
+    <h2 id="projects-title">{title}</h2>
 
     <ul>
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <li>
-          <a href={project.url} target="_blank" rel="noreferrer">
+          <button type="button" class="project-trigger" data-project-dialog={`project-${index}`} aria-haspopup="dialog">
             <span class="project-name">{project.name}</span>
             <span class="project-description">{project.description}</span>
-            <span class="project-arrow" aria-hidden="true">↗</span>
-          </a>
+          </button>
+          <dialog id={`project-${index}`} class="project-dialog" aria-labelledby={`project-title-${index}`}>
+            <div class="dialog-heading">
+              <span class="dialog-kicker">Selected project / {String(index + 1).padStart(2, '0')}</span>
+              <form method="dialog">
+                <button type="submit" class="dialog-close" aria-label={`Close ${project.name} details`}>×</button>
+              </form>
+            </div>
+            <h3 id={`project-title-${index}`}>{project.name}</h3>
+            <div class="dialog-copy">
+              <p>{project.description}</p>
+              {project.details?.trim() && project.details.trim().split(/\n\s*\n/).map((paragraph) => <p>{paragraph.trim()}</p>)}
+            </div>
+            <a class="project-visit" href={project.url} target="_blank" rel="noopener noreferrer">
+              Visit project <span aria-hidden="true">↗</span>
+            </a>
+          </dialog>
         </li>
       ))}
     </ul>
@@ -41,28 +52,16 @@ const {
 
 <style>
   .projects {
-    margin-bottom: 4.5rem;
+    margin-bottom: 4rem;
     scroll-margin-top: 2rem;
   }
 
-  .section-heading {
-    margin-bottom: 1.25rem;
-  }
-
   h2 {
-    font-size: 0.78rem;
-    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 400;
     line-height: 1.5;
-    margin: 0 0 0.35rem;
-    text-transform: lowercase;
-  }
-
-  .section-heading p {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-    line-height: 1.6;
-    margin: 0;
-    max-width: 34rem;
+    margin: 0 0 1.15rem;
   }
 
   ul {
@@ -72,63 +71,139 @@ const {
   }
 
   li {
-    border-top: 1px solid var(--border-color);
+    margin-bottom: 1.45rem;
   }
 
-  li:last-child {
-    border-bottom: 1px solid var(--border-color);
+  .project-trigger {
+    appearance: none;
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    text-align: left;
+    width: 100%;
   }
 
-  li a {
-    align-items: baseline;
-    display: grid;
-    gap: 0.75rem;
-    grid-template-columns: minmax(7rem, 0.7fr) minmax(0, 1.8fr) auto;
-    padding: 0.85rem 0;
-  }
-
-  li a:hover .project-name,
-  li a:focus-visible .project-name,
-  li a:hover .project-arrow,
-  li a:focus-visible .project-arrow {
+  .project-trigger:hover .project-name,
+  .project-trigger:focus-visible .project-name {
     color: var(--accent);
+    text-decoration-color: currentColor;
   }
 
-  li a:focus-visible {
-    outline: 1px solid var(--accent);
-    outline-offset: 0.25rem;
+  .project-trigger:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 0.3rem;
   }
 
   .project-name {
-    font-size: 0.78rem;
-    font-weight: 600;
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
     line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: var(--text-muted);
+    text-underline-offset: 0.2rem;
   }
 
   .project-description {
-    color: var(--text-muted);
-    font-size: 0.7rem;
+    display: block;
+    font-size: 0.76rem;
     line-height: 1.6;
-  }
-
-  .project-arrow {
+    margin-top: 0.15rem;
     color: var(--text-muted);
-    font-size: 0.72rem;
   }
 
-  @media (max-width: 36rem) {
-    li a {
-      gap: 0.2rem 0.75rem;
-      grid-template-columns: 1fr auto;
-    }
+  .project-dialog {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    margin: auto;
+    max-height: min(80dvh, 42rem);
+    max-width: min(34rem, calc(100vw - 2rem));
+    padding: 1.5rem;
+    width: 100%;
+  }
 
-    .project-description {
-      grid-column: 1;
-    }
+  .project-dialog::backdrop {
+    background: rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(4px);
+  }
 
-    .project-arrow {
-      grid-column: 2;
-      grid-row: 1;
+  .dialog-heading {
+    align-items: start;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .dialog-kicker {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+  }
+
+  .dialog-close {
+    background: transparent;
+    border: 0;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .dialog-close:hover,
+  .dialog-close:focus-visible {
+    color: var(--text-color);
+  }
+
+  .project-dialog h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.45;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .dialog-copy p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin: 0 0 1rem;
+  }
+
+  .project-visit {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .project-visit:hover,
+  .project-visit:focus-visible {
+    color: var(--accent);
+  }
+
+  @media (max-width: 40rem) {
+    .project-dialog {
+      padding: 1.25rem;
     }
   }
 </style>
+
+<script>
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return
+
+    const trigger = event.target.closest<HTMLButtonElement>('[data-project-dialog]')
+    if (trigger) {
+      const dialog = document.getElementById(trigger.dataset.projectDialog ?? '')
+      if (dialog instanceof HTMLDialogElement) dialog.showModal()
+      return
+    }
+
+    if (event.target instanceof HTMLDialogElement && event.target.classList.contains('project-dialog')) {
+      event.target.close()
+    }
+  })
+</script>

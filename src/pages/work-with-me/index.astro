@@ -1,0 +1,100 @@
+---
+import Header from '../../components/header/index.astro'
+import SEO from '../../components/seo/index.astro'
+import { ClientRouter } from 'astro:transitions'
+import '../../style/index.css'
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title="Work with me" description="Work with Emmanuel Obiabo on web and mobile products, APIs, integrations, and developer tools." />
+    <ClientRouter />
+  </head>
+  <body class="editorial-page">
+    <Header />
+    <main class="page-shell work-content">
+      <h1>Work with me</h1>
+
+      <p>
+        I'm Emmanuel, a software engineer working across web and mobile products, APIs, and developer tools.
+        I mainly use TypeScript and Rust, and I like the point where a clean interface depends on solid systems underneath.
+      </p>
+
+      <p>
+        Recent GitHub work includes
+        <a href="https://github.com/KPpay-project/K-polygone-application/pull/197" target="_blank" rel="noreferrer">merchant gateway tools</a>,
+        <a href="https://github.com/ourpocket/infra/pull/25" target="_blank" rel="noreferrer">payment-provider APIs</a>,
+        <a href="https://github.com/tupui/soroban-versioning/pull/224" target="_blank" rel="noreferrer">Stellar identity tooling</a>,
+        and a <a href="https://github.com/theobiabo/cNGN-rs" target="_blank" rel="noreferrer">Rust SDK for cNGN</a>.
+      </p>
+
+      <h2>What I can help with</h2>
+      <ol>
+        <li>Building features end to end, from interface to API.</li>
+        <li>Designing integrations and SDKs that are clear to use.</li>
+        <li>Improving existing systems and developer workflows.</li>
+      </ol>
+
+      <p class="work-contact">
+        I'm open to full-time roles and focused contracts. Have a concrete problem? <a href="/reach">Get in touch</a>.
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  .work-content {
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  h1 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+  }
+
+  h2 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 2rem 0 0.75rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+  }
+
+  ol {
+    list-style: decimal;
+    margin: 0 0 2rem;
+    padding-left: 1.5rem;
+  }
+
+  li + li {
+    margin-top: 0.55rem;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .work-contact {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.25rem;
+  }
+</style>

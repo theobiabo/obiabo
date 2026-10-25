@@ -4,4 +4,4 @@ Sometimes I photograph things that catch my eye. You can see a few in my [galler
 
 My research interests include distributed systems, electric and autonomous vehicles, pets and animal behavior, brain-computer interfaces, and cryptocurrencies.
 
-I'm open to new opportunities and collaborations. You can find me on [GitHub](https://github.com/theobiabo), [LinkedIn](https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/), and [X](https://x.com/obiabo_immanuel), or [get in touch](/reach).
+I'm open to new [opportunities and collaborations](/work-with-me). You can find me on [GitHub](https://github.com/theobiabo), [LinkedIn](https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/), and [X](https://x.com/obiabo_immanuel), or [get in touch](/reach).

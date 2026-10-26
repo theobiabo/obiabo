@@ -49,7 +49,9 @@ const imageType = imageExtension === 'png'
 
 <title>{siteTitle}</title>
 <link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/icons/icon-192.png" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#141414" />
 <meta name="description" content={description} />
 <meta name="author" content="Emmanuel Obiabo" />
 <meta name="creator" content="Emmanuel Obiabo" />
@@ -76,3 +78,11 @@ const imageType = imageExtension === 'png'
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage.toString()} />
 <meta name="twitter:image:alt" content={imageAlt} />
+
+<script>
+  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      void navigator.serviceWorker.register('/sw.js', {scope: '/'}).catch(() => {})
+    }, {once: true})
+  }
+</script>

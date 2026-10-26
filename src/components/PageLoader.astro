@@ -1,4 +1,4 @@
-<div id="page-loader" data-state="loading" transition:persist="page-loader" aria-hidden="true">
+<div id="page-loader" data-state="hidden" transition:persist="page-loader" aria-hidden="true">
   <div class="loader-panel loader-panel-top"></div>
   <div class="loader-panel loader-panel-bottom"></div>
   <span data-count>0</span>
@@ -25,7 +25,7 @@
     left: 0;
     height: 50.1%;
     background: var(--bg-primary);
-    transition: transform 560ms cubic-bezier(0.76, 0, 0.24, 1);
+    transition: transform 420ms cubic-bezier(0.76, 0, 0.24, 1);
   }
 
   .loader-panel-top {
@@ -80,7 +80,9 @@
 
   if (loader && counter) {
     let frame = 0
+    let revealTimer = 0
     let hideTimer = 0
+    let navigation = 0
     let progress = 0
     let startedAt = 0
     let finishingAt = 0
@@ -95,14 +97,14 @@
 
     const tick = (now: number) => {
       if (phase === 'loading') {
-        const elapsed = now - startedAt
-        showCount(Math.min(95, Math.floor(95 * (1 - Math.exp(-elapsed / 900)))))
+        const elapsed = Math.max(0, now - startedAt)
+        showCount(Math.min(95, Math.floor(95 * (1 - Math.exp(-elapsed / 700)))))
         frame = requestAnimationFrame(tick)
         return
       }
 
       if (phase === 'finishing') {
-        const duration = reduceMotion.matches ? 0 : Math.max(180, Math.min(360, (100 - finishingFrom) * 4))
+        const duration = reduceMotion.matches ? 0 : 160
         const fraction = duration === 0 ? 1 : Math.min(1, (now - finishingAt) / duration)
         showCount(Math.min(100, Math.floor(finishingFrom + (100 - finishingFrom) * fraction)))
 
@@ -114,12 +116,12 @@
           hideTimer = window.setTimeout(() => {
             phase = 'hidden'
             loader.dataset.state = 'hidden'
-          }, reduceMotion.matches ? 0 : 580)
+          }, reduceMotion.matches ? 0 : 440)
         }
       }
     }
 
-    const start = () => {
+    const show = () => {
       cancelAnimationFrame(frame)
       clearTimeout(hideTimer)
       phase = 'loading'
@@ -132,7 +134,27 @@
       frame = requestAnimationFrame(tick)
     }
 
+    const schedule = () => {
+      const currentNavigation = ++navigation
+      clearTimeout(revealTimer)
+
+      if (phase === 'finishing' || phase === 'dismissing') {
+        cancelAnimationFrame(frame)
+        clearTimeout(hideTimer)
+        phase = 'hidden'
+        loader.dataset.state = 'hidden'
+      }
+
+      if (phase === 'loading') return
+
+      revealTimer = window.setTimeout(() => {
+        if (currentNavigation === navigation) show()
+      }, 160)
+    }
+
     const finish = () => {
+      navigation += 1
+      clearTimeout(revealTimer)
       if (phase !== 'loading') return
       cancelAnimationFrame(frame)
       phase = 'finishing'
@@ -141,9 +163,12 @@
       frame = requestAnimationFrame(tick)
     }
 
-    document.addEventListener('astro:before-preparation', start)
+    document.addEventListener('astro:before-preparation', schedule)
     document.addEventListener('astro:page-load', finish)
-    start()
-    if (document.readyState === 'complete') finish()
+
+    if (document.readyState !== 'complete') {
+      schedule()
+      window.addEventListener('load', finish, { once: true })
+    }
   }
 </script>

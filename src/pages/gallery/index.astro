@@ -7,9 +7,16 @@ import { ClientRouter } from 'astro:transitions'
 
 const galleryItems = await getSanityGallery()
 const categoryLabels = { personal: 'Personal', coffee: 'Coffee', other: 'Other' }
+const requestedCategory = Astro.url.searchParams.get('category')
+const selectedCategory = requestedCategory === 'personal' || requestedCategory === 'coffee' || requestedCategory === 'other'
+  ? requestedCategory
+  : 'all'
 const categoryFilters = Object.entries(categoryLabels)
   .map(([value, label]) => ({ value, label, count: galleryItems.filter((item) => item.category === value).length }))
   .filter(({ count }) => count > 0)
+const visibleItems = selectedCategory === 'all'
+  ? galleryItems
+  : galleryItems.filter((item) => item.category === selectedCategory)
 ---
 
 <!DOCTYPE html>
@@ -22,7 +29,7 @@ const categoryFilters = Object.entries(categoryLabels)
   </head>
   <body>
     <Header />
-    <main class="gallery-shell" data-gallery-root>
+    <main class="gallery-shell">
       <header class="gallery-heading">
         <h1>Gallery</h1>
         <p>A collection of moments, places, and things worth keeping.</p>
@@ -30,33 +37,37 @@ const categoryFilters = Object.entries(categoryLabels)
 
       {galleryItems.length > 0 ? (
         <>
-          <div class="gallery-filters" role="group" aria-label="Filter photos by category">
-            <button type="button" data-gallery-filter="all" aria-pressed="true">All <span>{galleryItems.length}</span></button>
+          <nav class="gallery-filters" aria-label="Filter photos by category">
+            <a href="/gallery" aria-current={selectedCategory === 'all' ? 'page' : undefined}>All <span>{galleryItems.length}</span></a>
             {categoryFilters.map(({ value, label, count }) => (
-              <button type="button" data-gallery-filter={value} aria-pressed="false">{label} <span>{count}</span></button>
+              <a href={`/gallery?category=${value}`} aria-current={selectedCategory === value ? 'page' : undefined}>{label} <span>{count}</span></a>
             ))}
-          </div>
-          <section class="gallery-grid" aria-label="Photo gallery">
-          {galleryItems.map((item) => (
-            <figure data-gallery-category={item.category}>
-              <img
-                src={item.imageUrl}
-                alt={item.alt}
-                width={item.width}
-                height={item.height}
-                loading="lazy"
-                decoding="async"
-              />
-              {(item.title || item.note) && (
-                <figcaption>
-                  <span class="gallery-category">{categoryLabels[item.category]}</span>
-                  <strong>{item.title}</strong>
-                  {item.note && <span>{item.note}</span>}
-                </figcaption>
-              )}
-            </figure>
-          ))}
-          </section>
+          </nav>
+          {visibleItems.length > 0 ? (
+            <section class="gallery-grid" aria-label="Photo gallery">
+              {visibleItems.map((item) => (
+                <figure>
+                  <img
+                    src={item.imageUrl}
+                    alt={item.alt}
+                    width={item.width}
+                    height={item.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {(item.title || item.note) && (
+                    <figcaption>
+                      <span class="gallery-category">{categoryLabels[item.category]}</span>
+                      <strong>{item.title}</strong>
+                      {item.note && <span>{item.note}</span>}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </section>
+          ) : (
+            <p class="empty-gallery">No photos in this category yet.</p>
+          )}
         </>
       ) : (
         <p class="empty-gallery">The gallery is being curated.</p>
@@ -64,30 +75,6 @@ const categoryFilters = Object.entries(categoryLabels)
     </main>
   </body>
 </html>
-
-<script>
-  const initializeGalleryFilters = () => {
-    const root = document.querySelector<HTMLElement>('[data-gallery-root]:not([data-ready])')
-    if (!root) return
-    root.dataset.ready = 'true'
-
-    const filters = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-gallery-filter]'))
-    const photos = Array.from(root.querySelectorAll<HTMLElement>('[data-gallery-category]'))
-
-    filters.forEach((filter) => {
-      filter.addEventListener('click', () => {
-        const category = filter.dataset.galleryFilter
-        filters.forEach((button) => button.setAttribute('aria-pressed', String(button === filter)))
-        photos.forEach((photo) => {
-          photo.hidden = category !== 'all' && photo.dataset.galleryCategory !== category
-        })
-      })
-    })
-  }
-
-  initializeGalleryFilters()
-  document.addEventListener('astro:page-load', initializeGalleryFilters)
-</script>
 
 <style>
   .gallery-shell {
@@ -122,22 +109,23 @@ const categoryFilters = Object.entries(categoryLabels)
     margin: 0 0 1.75rem;
   }
 
-  .gallery-filters button {
+  .gallery-filters a {
     background: transparent;
     border: 1px solid var(--border-color);
     color: var(--text-muted);
-    cursor: pointer;
+    display: inline-flex;
+    gap: 0.3rem;
     font-size: 0.68rem;
     padding: 0.3rem 0.65rem;
   }
 
-  .gallery-filters button:hover,
-  .gallery-filters button[aria-pressed='true'] {
+  .gallery-filters a:hover,
+  .gallery-filters a[aria-current='page'] {
     border-color: var(--accent);
     color: var(--text-color);
   }
 
-  .gallery-filters button:focus-visible {
+  .gallery-filters a:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
@@ -162,10 +150,6 @@ const categoryFilters = Object.entries(categoryLabels)
     display: inline-block;
     margin: 0 0 1.75rem;
     width: 100%;
-  }
-
-  figure[hidden] {
-    display: none;
   }
 
   img {

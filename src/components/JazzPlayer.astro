@@ -1,0 +1,101 @@
+<div class="site-jazz-player" data-site-jazz transition:persist="site-jazz-player" role="group" aria-label="Background jazz">
+  <span>Rainy Mood and Jazz <small>by Tripacer</small></span>
+  <button type="button" data-jazz-toggle aria-pressed="false">Play jazz</button>
+</div>
+
+<script>
+  const audio = new Audio('/audio/rainy-jazz.mp3')
+  audio.preload = 'none'
+  audio.loop = true
+  audio.volume = 0.3
+
+  let boundButton: HTMLButtonElement | null = null
+
+  const updateButton = () => {
+    if (!boundButton) return
+    boundButton.textContent = audio.paused ? 'Play jazz' : audio.muted ? 'Continue playing' : 'Mute jazz'
+    boundButton.setAttribute('aria-pressed', String(!audio.paused && !audio.muted))
+  }
+
+  const toggleAudio = async () => {
+    if (audio.paused) {
+      audio.muted = false
+      try {
+        await audio.play()
+      } catch {
+        updateButton()
+      }
+    } else {
+      audio.muted = !audio.muted
+    }
+    updateButton()
+  }
+
+  const setupPlayer = () => {
+    const player = document.querySelector<HTMLElement>('[data-site-jazz]')
+    const button = player?.querySelector<HTMLButtonElement>('[data-jazz-toggle]')
+    if (!player || !button) return
+
+    if (boundButton !== button) {
+      boundButton?.removeEventListener('click', toggleAudio)
+      boundButton = button
+      button.addEventListener('click', toggleAudio)
+    }
+
+    if (!player.contains(audio)) player.append(audio)
+    updateButton()
+  }
+
+  for (const name of ['play', 'pause', 'volumechange']) {
+    audio.addEventListener(name, updateButton)
+  }
+
+  document.addEventListener('astro:after-swap', setupPlayer)
+  document.addEventListener('astro:page-load', setupPlayer)
+  setupPlayer()
+</script>
+
+<style>
+  :global(body) {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
+  .site-jazz-player {
+    align-items: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: space-between;
+    left: 50%;
+    max-width: 39rem;
+    padding: 0.65rem 0.85rem;
+    position: fixed;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+    z-index: 40;
+  }
+
+  .site-jazz-player small {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+  }
+
+  .site-jazz-player button {
+    background: none;
+    border: 0;
+    color: var(--accent);
+    cursor: pointer;
+    font: inherit;
+    padding: 0.2rem 0;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .site-jazz-player button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+</style>

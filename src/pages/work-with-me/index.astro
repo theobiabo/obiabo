@@ -1,8 +1,12 @@
 ---
 import Header from '../../components/header/index.astro'
 import SEO from '../../components/seo/index.astro'
+import { getSanityWorkWithMePage } from '../../utils/getSanityWorkWithMePage'
 import { ClientRouter } from 'astro:transitions'
 import '../../style/index.css'
+
+const page = await getSanityWorkWithMePage()
+const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? page.contactPath : '/reach'
 ---
 
 <!DOCTYPE html>
@@ -10,29 +14,27 @@ import '../../style/index.css'
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <SEO title="Work with me" description="Build web and mobile apps, APIs, and developer tools with Emmanuel Obiabo." />
+    <SEO title="Work with me" description={page?.seoDescription ?? 'Work with Emmanuel Obiabo.'} />
     <ClientRouter />
   </head>
   <body class="editorial-page">
     <Header />
     <main class="page-shell work-content">
-      <h1>Bring me the tricky parts.</h1>
-
-      <p>
-        I'm Emmanuel. I build web and mobile apps, APIs, and developer tools with TypeScript and Rust.
-        I've worked on fintech, blockchain, and AI tools, and I'm open to roles in any field.
-      </p>
-
-      <h2>Things I like untangling</h2>
-      <ol>
-        <li>Features that need the screen and the API to agree.</li>
-        <li>APIs and SDKs other developers can use without guesswork.</li>
-        <li>Integrations with edge cases hiding in plain sight.</li>
-      </ol>
-
-      <p class="work-contact">
-        Have a problem worth digging into? <a href="/reach">Let's talk</a>.
-      </p>
+      {page ? (
+        <>
+          <h1>{page.heading}</h1>
+          <p>{page.intro}</p>
+          <h2>{page.topicsHeading}</h2>
+          <ol>
+            {page.topics?.map((topic) => <li>{topic}</li>)}
+          </ol>
+          <p class="work-contact">
+            {page.contactPrompt} <a href={contactPath}>{page.contactLinkLabel}</a>.
+          </p>
+        </>
+      ) : (
+        <p>Work with me content is unavailable.</p>
+      )}
     </main>
   </body>
 </html>

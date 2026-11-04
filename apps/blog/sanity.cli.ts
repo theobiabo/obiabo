@@ -1,16 +1,20 @@
 import {defineCliConfig} from 'sanity/cli'
 
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID
+const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
+const appId = process.env.SANITY_STUDIO_APP_ID
+
+if (!projectId) {
+  throw new Error('SANITY_STUDIO_PROJECT_ID is required. Run pnpm setup from the repository root.')
+}
+
 export default defineCliConfig({
   api: {
-    projectId: '0jlly5ep',
-    dataset: 'production'
+    projectId,
+    dataset,
   },
   deployment: {
-    /**
-     * Enable auto-updates for studios.
-     * Learn more at https://www.sanity.io/docs/cli#auto-updates
-     */
     autoUpdates: true,
-    appId: 'siyy6lnh8mctb4i1cwkaev97',
-  }
+    ...(appId ? {appId} : {}),
+  },
 })

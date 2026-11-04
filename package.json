@@ -4,6 +4,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "setup": "node scripts/setup.mjs",
     "dev": "astro dev --verbose",
     "start": "astro dev",
     "build": "astro check && astro build --remote",

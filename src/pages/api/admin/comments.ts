@@ -1,11 +1,11 @@
 import type { APIRoute } from "astro";
 import { db, eq, comments } from "astro:db";
 
-const ADMIN_SECRET = import.meta.env.ADMIN_SECRET || "admin123";
+const ADMIN_SECRET = import.meta.env.ADMIN_SECRET;
 
 function isAuthorized(request: Request): boolean {
   const authHeader = request.headers.get("Authorization");
-  if (!authHeader) return false;
+  if (!ADMIN_SECRET || !authHeader) return false;
 
   const token = authHeader.replace("Bearer ", "");
   return token === ADMIN_SECRET;

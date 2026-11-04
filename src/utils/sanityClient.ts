@@ -1,17 +1,25 @@
-import { createClient } from '@sanity/client';
+import {createClient} from '@sanity/client'
+
+const projectId = import.meta.env.SANITY_PROJECT_ID
+const dataset = import.meta.env.SANITY_DATASET || 'production'
+const apiVersion = import.meta.env.SANITY_API_VERSION || '2025-02-19'
+const token = import.meta.env.SANITY_API_TOKEN
+
+if (!projectId) {
+  throw new Error('SANITY_PROJECT_ID is required. Run pnpm setup to configure the application.')
+}
 
 export const sanity = createClient({
-  projectId: '0jlly5ep', // Your Sanity project ID
-  dataset: 'production', // Your dataset name
-  apiVersion: '2023-10-01', // Use a recent date for the API version
-  useCdn: true, // `false` if you want to ensure fresh data
-});
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: import.meta.env.PROD,
+})
 
-// Export sanityClient with write token for API routes
 export const sanityClient = createClient({
-  projectId: '0jlly5ep',
-  dataset: 'production',
-  apiVersion: '2023-10-01',
-  token: 'skpsPocTUMV8NRxmSfzNMOlYI4yFspkKUu0hgrQnBJhHHYg5afP153Upfp1eBDBBdPXekWIAQMUIwloOlKzKhwfxkoMGd8z88MJs5sWgyFhPJZrJRjaj7O8OdkAGliHXGTzOKdvNszjzxd7baPmQOmYQB5FMOENdfn5ZDSQPnEV7t32DLrun',
-  useCdn: false, // Disable CDN for write operations
-});
+  projectId,
+  dataset,
+  apiVersion,
+  token,
+  useCdn: false,
+})

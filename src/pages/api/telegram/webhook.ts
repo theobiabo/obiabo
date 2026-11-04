@@ -177,7 +177,7 @@ export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const setupKey = url.searchParams.get('setup');
   const statusKey = url.searchParams.get('status');
-  const adminSecret = getEnv('ADMIN_SECRET') || 'admin123';
+  const adminSecret = getEnv('ADMIN_SECRET');
 
   
   if (url.searchParams.get('health') === 'check') {
@@ -198,7 +198,7 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   
-  if (statusKey === adminSecret) {
+  if (adminSecret && statusKey === adminSecret) {
     if (!botToken) {
       return new Response(JSON.stringify({ 
         error: 'Bot token not configured',

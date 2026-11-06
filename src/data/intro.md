@@ -1,4 +1,4 @@
-Hey, I'm Emmanuel. I work mostly with TypeScript and Rust, contribute to open source, and write about topics that catch my interest, technical or otherwise. Much of my past open-source work has involved blockchain projects, especially in the Stellar ecosystem. I've used Linux for years and enjoy understanding how systems behave under the hood. You can read [more](/about) about me.
+Hey, I'm Emmanuel. I build software, contribute to open source, and write about topics that catch my interest, technical or otherwise. I can do anything I put my mind to, and I can get up to speed with whatever technology your team uses. Much of my past open-source work has involved blockchain projects, especially in the Stellar ecosystem. I've used Linux for years and enjoy understanding how systems behave under the hood. You can read [more](/about) about me.
 
 Sometimes I photograph things that catch my eye. You can see a few in my [gallery](/gallery).
 

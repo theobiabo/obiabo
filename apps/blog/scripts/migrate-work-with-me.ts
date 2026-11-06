@@ -1,5 +1,6 @@
 import {getCliClient} from 'sanity/cli'
 import {selectedWork} from './selected-work'
+import {workWithMeIntro} from './profile-copy'
 
 async function main() {
   const client = getCliClient({apiVersion: '2023-10-01'})
@@ -8,8 +9,7 @@ async function main() {
     _type: 'workWithMePage',
     heading: 'Bring me the tricky parts.',
     seoDescription: 'Build web and mobile apps, APIs, developer tools, and distributed systems with Emmanuel Obiabo.',
-    intro:
-      "I design and build web and mobile products, APIs, and SDKs with TypeScript and Rust, and I pick up new technologies when the work calls for them. I have experience in fintech, blockchain, developer tools, and AI. I'm open to roles in any field.",
+    intro: workWithMeIntro,
     topicsHeading: 'Things I like untangling',
     topics: [
       'Features where the interface, API, and background worker need to agree.',

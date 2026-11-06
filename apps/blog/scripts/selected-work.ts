@@ -4,7 +4,7 @@ export const selectedWork = [
     _type: 'workEntry',
     organization: 'Spendin',
     slug: {_type: 'slug', current: 'spendin'},
-    summary: 'I build and optimize Spendin’s backend for money movement, designing payment state and recovery paths that stay correct through retries, late callbacks, and upstream failures.',
+    summary: 'At Spendin, I work with the team on payment and purchase services, improving how the backend handles retries, late callbacks, and failures in external systems.',
     role: 'Software engineer',
     sections: [
       {
@@ -35,7 +35,7 @@ export const selectedWork = [
         _key: 'ongoing',
         _type: 'workSection',
         heading: 'Ongoing work',
-        body: 'I am still improving the backend as new payment flows arrive. I focus on keeping payment states clear, making failures easier to spot, and helping operations recover safely when part of the system is down.',
+        body: 'I keep improving the services I work on as new payment flows arrive. I focus on keeping payment states clear, making failures easier to spot, and helping operations recover safely when part of the system is down.',
       },
     ],
   },
@@ -44,14 +44,14 @@ export const selectedWork = [
     _type: 'workEntry',
     organization: 'Blue Orchid',
     slug: {_type: 'slug', current: 'blue-orchid'},
-    summary: 'I worked on security across an AI platform, from MCP sign-in and OAuth callbacks to pasted content, agent approvals, large requests, and vulnerable dependencies.',
+    summary: 'At Blue Orchid, I work on an AI platform built with TypeScript, Cloudflare Workers, D1, and R2. My security work covers MCP OAuth, rich-text input, agent approvals, and request limits.',
     role: 'Software engineer',
     sections: [
       {
         _key: 'context',
         _type: 'workSection',
         heading: 'The problem',
-        body: 'The product lets people connect accounts and use AI agents with outside tools. I focused on the points where a sign-in, a document, or a tool response could gain more access than it should.',
+        body: 'The API runs on Cloudflare Workers, uses D1 for state, and stores files in R2. People connect accounts and use AI agents with outside tools, so I focused on the points where a sign-in, a document, or a tool response could gain more access than it should.',
       },
       {
         _key: 'mcp-oauth',
@@ -63,7 +63,7 @@ export const selectedWork = [
         _key: 'oauth-state',
         _type: 'workSection',
         heading: 'OAuth callback safety',
-        body: 'An OAuth callback should not trust a value the browser can edit. I replaced unsigned callback state with a stored, one-time record, checked that it belonged to the right connection, and used it before exchanging the authorization code. This prevents replay without breaking valid sign-ins.',
+        body: 'An OAuth callback should not trust a value the browser can edit. I replaced unsigned callback state with a one-time record in D1, checked that it belonged to the right connection, and used it before exchanging the authorization code. This prevents replay without breaking valid sign-ins.',
       },
       {
         _key: 'editor',
@@ -81,7 +81,7 @@ export const selectedWork = [
         _key: 'requests',
         _type: 'workSection',
         heading: 'Large requests and webhooks',
-        body: 'I added size limits that stop oversized MCP, webhook, and API requests before they are parsed or handled. For larger capture data, I changed the reader to process it in chunks and reject excess data before anything is stored. The limit counts actual bytes, so an incorrect header cannot bypass it.',
+        body: 'I added size limits that stop oversized MCP, webhook, and API requests before they are parsed or handled. For larger capture data, I changed the reader to process it in chunks and reject excess data before anything reaches R2 or updates a checkpoint. The limit counts actual bytes, so an incorrect header cannot bypass it.',
       },
       {
         _key: 'dependencies',

@@ -4,7 +4,7 @@ export const selectedWork = [
     _type: 'workEntry',
     organization: 'Spendin',
     slug: {_type: 'slug', current: 'spendin'},
-    summary: 'Designed account-free checkout and resilient payment services, with guarded fulfilment, precise money handling, and API security controls.',
+    summary: 'I build and optimize Spendin’s backend for money movement, designing payment state and recovery paths that stay correct through retries, late callbacks, and upstream failures.',
     role: 'Software engineer',
     sections: [
       {
@@ -30,6 +30,12 @@ export const selectedWork = [
         _type: 'workSection',
         heading: 'Security and administration',
         body: 'I hardened client IP handling behind trusted proxies so forwarded headers could not bypass public rate limits. I added scheduled vulnerability scans and a blocking audit for production dependencies. In the admin API, I repaired transaction exports and tightened access guards on account-management routes.',
+      },
+      {
+        _key: 'ongoing',
+        _type: 'workSection',
+        heading: 'Ongoing work',
+        body: 'I continue to refine the backend as new payment flows arrive, with attention to state transitions, failure visibility, and safe recovery after partial outages.',
       },
     ],
   },

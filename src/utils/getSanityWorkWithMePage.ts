@@ -8,7 +8,14 @@ export type SanityWorkWithMePage = {
   topicsHeading: string
   topics: string[]
   selectedWorkHeading?: string
-  selectedWork?: {organization: string; summary: string}[]
+  selectedWork?: {
+    organization: string
+    slug?: {current: string}
+    summary: string
+    role?: string
+    heroImage?: {alt?: string; asset?: {url?: string}}
+    sections?: {heading: string; body: string}[]
+  }[]
   contactPrompt: string
   contactLinkLabel: string
   contactPath: string
@@ -23,7 +30,7 @@ export async function getSanityWorkWithMePage(): Promise<SanityWorkWithMePage | 
     topicsHeading,
     topics,
     selectedWorkHeading,
-    selectedWork[]{organization, summary},
+    selectedWork[]{organization, slug, summary, role, heroImage{alt, asset->{url}}, sections[]{heading, body}},
     contactPrompt,
     contactLinkLabel,
     contactPath

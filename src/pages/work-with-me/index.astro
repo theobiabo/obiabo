@@ -33,7 +33,9 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
               <h2>{page.selectedWorkHeading ?? 'Selected work'}</h2>
               <ul>
                 {page.selectedWork.map((item) => (
-                  <li><strong>{item.organization}</strong><span>{item.summary}</span></li>
+                  <li>
+                    {item.slug?.current ? <a href={`/work/${item.slug.current}`}><strong>{item.organization}</strong><span>{item.summary}</span><span class="work-arrow" aria-hidden="true">↗</span></a> : <><strong>{item.organization}</strong><span>{item.summary}</span></>}
+                  </li>
                 ))}
               </ul>
             </section>
@@ -95,9 +97,15 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
 
   .selected-work li {
     border-top: 1px solid var(--border-color);
+    padding: 0;
+  }
+
+  .selected-work li a {
     display: grid;
     gap: 0.25rem;
+    position: relative;
     padding: 0.8rem 0;
+    text-decoration: none;
   }
 
   .selected-work li strong {
@@ -106,6 +114,18 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
 
   .selected-work li span {
     color: var(--text-muted);
+  }
+
+  .selected-work li .work-arrow {
+    color: var(--text-color);
+    position: absolute;
+    right: 0;
+    top: 0.8rem;
+  }
+
+  .selected-work li a:hover strong,
+  .selected-work li a:focus-visible strong {
+    color: var(--accent);
   }
 
   a {

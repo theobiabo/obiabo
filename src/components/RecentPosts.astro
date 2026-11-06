@@ -52,7 +52,7 @@ const formatPostDate = (post: any) => {
     const track = button.closest('.recent-posts')?.querySelector<HTMLElement>('[data-writing-track]')
     const card = track?.querySelector<HTMLElement>('li')
     if (!track || !card) return
-    const distance = card.getBoundingClientRect().width + 16
+    const distance = track.clientWidth + 16
     track.scrollBy({left: button.hasAttribute('data-writing-next') ? distance : -distance, behavior: 'smooth'})
   })
 </script>
@@ -109,14 +109,18 @@ const formatPostDate = (post: any) => {
   ul {
     display: grid;
     gap: 1rem;
-    grid-auto-columns: minmax(15rem, 75%);
+    grid-auto-columns: calc((100% - 1rem) / 2);
     grid-auto-flow: column;
     list-style: none;
     margin: 0;
     overflow-x: auto;
     padding: 0;
     scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+  }
+
+  ul::-webkit-scrollbar {
+    display: none;
   }
 
   li {
@@ -181,12 +185,6 @@ const formatPostDate = (post: any) => {
   .all-notes:hover,
   .all-notes:focus-visible {
     color: var(--accent);
-  }
-
-  @media (max-width: 34rem) {
-    ul {
-      grid-auto-columns: minmax(12rem, 82%);
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,154 @@
+---
+import {ClientRouter} from 'astro:transitions'
+import Header from '../../components/header/index.astro'
+import SEO from '../../components/seo/index.astro'
+import {getSanityWorkWithMePage} from '../../utils/getSanityWorkWithMePage'
+import '../../style/index.css'
+
+const page = await getSanityWorkWithMePage()
+const work = page?.selectedWork?.find((item) => item.slug?.current === Astro.params.slug)
+const index = page?.selectedWork?.findIndex((item) => item.slug?.current === Astro.params.slug) ?? -1
+const next = page?.selectedWork?.slice(index + 1).find((item) => item.slug?.current)
+const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? page.contactPath : '/reach'
+
+if (!work) Astro.response.status = 404
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO title={work?.organization ?? 'Work not found'} description={work?.summary ?? 'This work page is unavailable.'} noindex={!work} />
+    <ClientRouter />
+  </head>
+  <body class="editorial-page">
+    <Header />
+    <main class="page-shell case-study">
+      {work ? (
+        <>
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/work-with-me">Work with me</a><span aria-hidden="true">/</span><span>{work.organization}</span></nav>
+          <header class="case-header">
+            <h1>{work.organization}</h1>
+            <p>{work.summary}</p>
+            {work.role && <span class="case-role">{work.role}</span>}
+          </header>
+          {work.heroImage?.asset?.url && <img class="hero-image" src={work.heroImage.asset.url} alt={work.heroImage.alt || work.organization} />}
+          {work.sections?.map((section) => (
+            <section class="case-section">
+              <h2>{section.heading}</h2>
+              <p>{section.body}</p>
+            </section>
+          ))}
+          {next && <a class="next-work" href={`/work/${next.slug?.current}`}><span>Next work</span><strong>{next.organization} ↗</strong></a>}
+          {page?.contactPrompt && <p class="case-contact">{page.contactPrompt} <a href={contactPath}>{page.contactLinkLabel}</a>.</p>}
+        </>
+      ) : <p>Work page not found. <a href="/work-with-me">View selected work</a>.</p>}
+    </main>
+  </body>
+</html>
+
+<style>
+  .case-study {
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .breadcrumb {
+    align-items: center;
+    color: var(--text-muted);
+    display: flex;
+    gap: 0.65rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  .case-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: clamp(1.35rem, 5vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1rem;
+  }
+
+  .case-header p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+
+  .case-role {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .hero-image {
+    height: auto;
+    margin: 2rem 0 0;
+    width: 100%;
+  }
+
+  .case-section {
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 0.75rem;
+  }
+
+  .case-section p {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  .next-work {
+    border-top: 1px solid var(--border-color);
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 3rem;
+    padding-top: 1rem;
+  }
+
+  .next-work span {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+  }
+
+  .next-work strong {
+    font-size: 0.9rem;
+  }
+
+  .case-contact {
+    border-top: 1px solid var(--border-color);
+    margin: 2rem 0 0;
+    padding-top: 1.25rem;
+  }
+
+  .case-contact a,
+  .case-study > p a {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--accent);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+</style>

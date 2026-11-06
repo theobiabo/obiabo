@@ -29,17 +29,13 @@ const personalUrls = (contact?.links?.filter((item) => item.showInHeader) ?? [])
 })
 
 const isSafeColor = (value?: string) => Boolean(value && /^#[0-9a-f]{6}$/i.test(value))
-const configuredAccent = sanityTheme?.accentColor
-
 const theme = {
   primaryBackgroundColor: isSafeColor(sanityTheme?.primaryBackgroundColor) ? sanityTheme?.primaryBackgroundColor : defaultTheme.primaryBackgroundColor,
   secondaryBackgroundColor: isSafeColor(sanityTheme?.secondaryBackgroundColor) ? sanityTheme?.secondaryBackgroundColor : defaultTheme.secondaryBackgroundColor,
   primaryTextColor: isSafeColor(sanityTheme?.primaryTextColor) ? sanityTheme?.primaryTextColor : defaultTheme.primaryTextColor,
   mutedTextColor: isSafeColor(sanityTheme?.mutedTextColor) ? sanityTheme?.mutedTextColor : defaultTheme.mutedTextColor,
   borderColor: isSafeColor(sanityTheme?.borderColor) ? sanityTheme?.borderColor : defaultTheme.borderColor,
-  accentColor: configuredAccent && isSafeColor(configuredAccent) && configuredAccent.toLowerCase() !== '#e53636'
-    ? configuredAccent
-    : defaultTheme.accentColor,
+  accentColor: defaultTheme.accentColor,
 }
 ---
 
@@ -91,7 +87,10 @@ const theme = {
       </div>
     </div>
     <div class="header-actions">
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode">Light</button>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></svg>
+      </button>
       <Nav />
     </div>
   </header>
@@ -120,13 +119,25 @@ const theme = {
   }
 
   .theme-toggle {
+    align-items: center;
     border: 1px solid var(--border-color);
-    border-radius: 1.25rem;
+    border-radius: 50%;
     color: var(--text-color);
     cursor: pointer;
-    font-size: 0.68rem;
+    display: inline-flex;
+    justify-content: center;
     min-height: 2.25rem;
-    padding: 0 0.65rem;
+    width: 2.25rem;
+  }
+
+  .theme-toggle svg {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  :global(html[data-theme='light']) .theme-toggle .icon-sun,
+  :global(html:not([data-theme='light'])) .theme-toggle .icon-moon {
+    display: none;
   }
 
   .theme-toggle:hover,
@@ -198,6 +209,24 @@ const theme = {
   @media (max-width: 40rem) {
     .site-header {
       padding-top: 2rem;
+    }
+  }
+
+  @media (max-width: 25rem) {
+    header {
+      gap: 0.5rem;
+    }
+
+    .identity {
+      gap: 0.5rem;
+    }
+
+    .identity strong {
+      font-size: 0.72rem;
+    }
+
+    .header-actions {
+      gap: 0.35rem;
     }
   }
 </style>

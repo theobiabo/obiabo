@@ -1,7 +1,7 @@
 <div id="page-loader" data-state="hidden" transition:persist="page-loader" aria-hidden="true">
   <div class="loader-panel loader-panel-top"></div>
   <div class="loader-panel loader-panel-bottom"></div>
-  <span data-count>0</span>
+  <img src="/favicon.png" alt="" width="96" height="96" />
 </div>
 
 <style>
@@ -46,29 +46,31 @@
     transform: translateY(100%);
   }
 
-  #page-loader [data-count] {
+  #page-loader img {
     position: relative;
     z-index: 1;
-    color: #fff;
-    font-size: clamp(3rem, 10vw, 6rem);
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    height: 6rem;
+    image-rendering: pixelated;
+    object-fit: cover;
     transition: opacity 140ms ease;
+    width: 6rem;
   }
 
-  #page-loader[data-state='dismissing'] [data-count],
-  #page-loader[data-state='hidden'] [data-count] {
+  #page-loader[data-state='dismissing'] img,
+  #page-loader[data-state='hidden'] img {
     opacity: 0;
   }
 
   #page-loader.is-resetting .loader-panel,
-  #page-loader.is-resetting [data-count] {
+  #page-loader.is-resetting img {
     transition: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .loader-panel,
-    #page-loader [data-count] {
+    #page-loader img {
       transition: none;
     }
   }
@@ -76,23 +78,13 @@
 
 <script>
   const loader = document.querySelector<HTMLElement>('#page-loader')
-  const counter = loader?.querySelector<HTMLElement>('[data-count]')
 
-  if (loader && counter) {
+  if (loader) {
     let revealTimer = 0
     let hideTimer = 0
     let navigation = 0
-    let progress = 0
     let pending = false
-    let target = ''
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const nativeFetch = window.fetch.bind(window)
-
-    const showCount = (value: number) => {
-      progress = Math.max(progress, Math.min(99, value))
-      if (value === 100) progress = 100
-      counter.textContent = String(progress)
-    }
 
     const hide = () => {
       loader.dataset.state = 'dismissing'
@@ -109,12 +101,9 @@
       loader.classList.remove('is-resetting')
     }
 
-    const schedule = (url = '') => {
+    const schedule = () => {
       const currentNavigation = ++navigation
       pending = true
-      target = url
-      progress = 0
-      counter.textContent = '0'
       clearTimeout(revealTimer)
       clearTimeout(hideTimer)
       loader.dataset.state = 'hidden'
@@ -126,48 +115,19 @@
     const finish = () => {
       if (!pending) return
       pending = false
-      target = ''
       clearTimeout(revealTimer)
       if (loader.dataset.state !== 'loading') return
-      showCount(100)
-      hideTimer = window.setTimeout(hide, reduceMotion.matches ? 0 : 120)
-    }
-
-    window.fetch = async (input, init) => {
-      const response = await nativeFetch(input, init)
-      const url = new URL(input instanceof Request ? input.url : String(input), location.href).href
-      const requestNavigation = navigation
-      const total = Number(response.headers.get('content-length'))
-
-      if (pending && url === target && total > 0 && response.body) {
-        const reader = response.clone().body!.getReader()
-        void (async () => {
-          let received = 0
-          try {
-            while (true) {
-              const {done, value} = await reader.read()
-              if (done) break
-              received += value.byteLength
-              if (requestNavigation === navigation && pending) {
-                showCount(Math.min(99, Math.floor(received / total * 100)))
-              }
-            }
-          } catch {
-            await reader.cancel().catch(() => {})
-          }
-        })()
-      }
-
-      return response
+      hide()
     }
 
     document.addEventListener('astro:before-preparation', (event) => {
-      schedule(event.to.href)
+      schedule()
+      const currentNavigation = navigation
       event.signal.addEventListener('abort', () => {
-        if (target !== event.to.href) return
+        if (currentNavigation !== navigation) return
         pending = false
         clearTimeout(revealTimer)
-        hide()
+        if (loader.dataset.state === 'loading') hide()
       }, {once: true})
     })
     document.addEventListener('astro:page-load', finish)

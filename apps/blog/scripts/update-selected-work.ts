@@ -1,26 +1,29 @@
 import {getCliClient} from 'sanity/cli'
+import {selectedWork} from './selected-work'
 
 async function main() {
   const client = getCliClient({apiVersion: '2023-10-01'})
-  const selectedWork = [
-    {
-      _key: 'spendin',
-      organization: 'Spendin',
-      summary: 'Built guest eSIM checkout, payment recovery, and provider circuit breakers so purchases can complete through failures.',
-    },
-    {
-      _key: 'blue-orchid',
-      organization: 'Blue Orchid',
-      summary: 'Strengthened OAuth, MCP, and credential flows for an AI work platform, with careful handling of untrusted input and approvals.',
-    },
-    {
-      _key: 'kppay',
-      organization: 'KPPAY',
-      summary: 'Built merchant gateway flows for API keys, payment integration, and developer documentation.',
-    },
-  ]
+  const document = await client.getDocument<{
+    selectedWorkHeading?: string
+    selectedWork?: typeof selectedWork
+  }>('workWithMePage')
+  const current = document?.selectedWork ?? []
+  const enriched = selectedWork.map((entry) => {
+    const existing = current.find((item) => item._key === entry._key)
+    return {
+      ...entry,
+      ...existing,
+      _type: 'workEntry',
+      slug: existing?.slug?.current ? existing.slug : entry.slug,
+      sections: existing?.sections?.length ? existing.sections : entry.sections,
+    }
+  })
+  const extra = current.filter((item) => !selectedWork.some((entry) => entry._key === item._key))
 
-  await client.patch('workWithMePage').set({selectedWorkHeading: 'Selected work', selectedWork}).commit()
+  await client.patch('workWithMePage').set({
+    selectedWorkHeading: document?.selectedWorkHeading ?? 'Selected work',
+    selectedWork: [...enriched, ...extra],
+  }).commit()
   console.log('Selected work updated in Sanity.')
 }
 

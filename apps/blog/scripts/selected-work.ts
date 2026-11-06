@@ -17,13 +17,13 @@ export const selectedWork = [
         _key: 'checkout',
         _type: 'workSection',
         heading: 'Checkout and fulfilment',
-        body: 'I built email-only guest checkout and purchase flows, including Paystack and Volume payment paths, callbacks, and installation links. Independent jobs revisit paid orders so a delayed provider response does not turn into a second purchase.',
+        body: 'I built email-only guest checkout and purchase flows, with payment callbacks and installation links. Independent jobs revisit paid orders so a delayed upstream response does not turn into a second purchase.',
       },
       {
         _key: 'reliability',
         _type: 'workSection',
         heading: 'Reliability and money handling',
-        body: 'I added separate circuit breakers for Neona, Paystack, and Zendit, with payout and eSIM failures handled according to their different recovery paths. I also tightened currency calculations and kept public pricing available during Redis outages.',
+        body: 'I added independent circuit breakers around payment, payout, and eSIM fulfilment integrations, with each failure type routed through its own recovery path. I also tightened currency calculations and kept public pricing available during cache outages.',
       },
       {
         _key: 'security',
@@ -57,7 +57,7 @@ export const selectedWork = [
         _key: 'input',
         _type: 'workSection',
         heading: 'Untrusted input',
-        body: 'I applied OWASP-aligned controls at entry points: sanitized pasted HTML in the editor, bounded webhook, MCP, REST, and upload bodies before parsing, and streamed larger capture bodies within limits. I restricted where stored WhatsApp credentials can be sent.',
+        body: 'I applied OWASP-aligned controls at entry points: sanitized pasted HTML in the editor, bounded webhook, MCP, REST, and upload bodies before parsing, and streamed larger capture bodies within limits. I restricted where stored messaging credentials can be sent.',
       },
       {
         _key: 'dependencies',
@@ -69,7 +69,7 @@ export const selectedWork = [
         _key: 'operations',
         _type: 'workSection',
         heading: 'VPS release path',
-        body: 'I kept the patched PDF dependency aligned with the VPS deployment command and its runtime requirements. For D1 operations, I pinned and audited the Wrangler toolchain before the step that receives Cloudflare credentials.',
+        body: 'I kept the patched PDF dependency aligned with the VPS deployment command and its runtime requirements. For database operations, I pinned and audited the deployment toolchain before the step that receives infrastructure credentials.',
       },
     ],
   },

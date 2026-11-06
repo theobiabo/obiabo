@@ -15,7 +15,8 @@ async function main() {
       ...existing,
       _type: 'workEntry',
       slug: existing?.slug?.current ? existing.slug : entry.slug,
-      sections: existing?.sections?.length ? existing.sections : entry.sections,
+      summary: entry.summary,
+      sections: entry.sections,
     }
   })
   const extra = current.filter((item) => !selectedWork.some((entry) => entry._key === item._key))

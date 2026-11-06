@@ -39,6 +39,23 @@ export default defineType({
       validation: (rule) => rule.required().min(1),
     }),
     defineField({
+      name: 'selectedWorkHeading',
+      title: 'Selected work heading',
+      type: 'string',
+    }),
+    defineField({
+      name: 'selectedWork',
+      title: 'Selected work',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({name: 'organization', title: 'Organization', type: 'string', validation: (rule) => rule.required()}),
+          defineField({name: 'summary', title: 'Summary', type: 'text', rows: 3, validation: (rule) => rule.required()}),
+        ],
+      }],
+    }),
+    defineField({
       name: 'contactPrompt',
       title: 'Contact prompt',
       type: 'string',

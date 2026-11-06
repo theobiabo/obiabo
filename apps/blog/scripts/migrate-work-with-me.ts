@@ -15,6 +15,24 @@ async function main() {
       'Payment SDKs with encrypted requests, typed errors, and clear retry signals.',
       'Distributed systems with queues, idempotency keys, and partial failures.',
     ],
+    selectedWorkHeading: 'Selected work',
+    selectedWork: [
+      {
+        _key: 'spendin',
+        organization: 'Spendin',
+        summary: 'Built guest eSIM checkout, payment recovery, and provider circuit breakers so purchases can complete through failures.',
+      },
+      {
+        _key: 'blue-orchid',
+        organization: 'Blue Orchid',
+        summary: 'Strengthened OAuth, MCP, and credential flows for an AI work platform, with careful handling of untrusted input and approvals.',
+      },
+      {
+        _key: 'kppay',
+        organization: 'KPPAY',
+        summary: 'Built merchant gateway flows for API keys, payment integration, and developer documentation.',
+      },
+    ],
     contactPrompt: 'Have a problem worth digging into?',
     contactLinkLabel: "Let's talk",
     contactPath: '/reach',

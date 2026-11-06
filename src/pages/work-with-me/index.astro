@@ -28,6 +28,16 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
           <ol>
             {page.topics?.map((topic) => <li>{topic}</li>)}
           </ol>
+          {page.selectedWork && page.selectedWork.length > 0 && (
+            <section class="selected-work" aria-label={page.selectedWorkHeading ?? 'Selected work'}>
+              <h2>{page.selectedWorkHeading ?? 'Selected work'}</h2>
+              <ul>
+                {page.selectedWork.map((item) => (
+                  <li><strong>{item.organization}</strong><span>{item.summary}</span></li>
+                ))}
+              </ul>
+            </section>
+          )}
           <p class="work-contact">
             {page.contactPrompt} <a href={contactPath}>{page.contactLinkLabel}</a>.
           </p>
@@ -71,6 +81,31 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
 
   li + li {
     margin-top: 0.55rem;
+  }
+
+  .selected-work {
+    margin-bottom: 2rem;
+  }
+
+  .selected-work ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .selected-work li {
+    border-top: 1px solid var(--border-color);
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.8rem 0;
+  }
+
+  .selected-work li strong {
+    font-weight: 700;
+  }
+
+  .selected-work li span {
+    color: var(--text-muted);
   }
 
   a {

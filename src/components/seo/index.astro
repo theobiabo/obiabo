@@ -52,6 +52,41 @@ const imageType = imageExtension === 'png'
 <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <meta name="theme-color" content="#141414" />
+<script is:inline>
+  try {
+    document.documentElement.dataset.theme = localStorage.getItem('obiabo-theme') === 'light' ? 'light' : 'dark'
+  } catch {
+    document.documentElement.dataset.theme = 'dark'
+  }
+  if (!window.__obiaboThemeBound) {
+  window.__obiaboThemeBound = true
+  document.addEventListener('astro:before-swap', (event) => {
+    event.newDocument.documentElement.dataset.theme = document.documentElement.dataset.theme || 'dark'
+  })
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest?.('[data-theme-toggle]')
+    if (!button) return
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'
+    document.documentElement.dataset.theme = next
+    try { localStorage.setItem('obiabo-theme', next) } catch {}
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'light' ? '#fbfaf7' : '#141414')
+    document.querySelectorAll('[data-theme-toggle]').forEach((toggle) => {
+      toggle.textContent = next === 'light' ? 'Dark' : 'Light'
+      toggle.setAttribute('aria-label', `Switch to ${next === 'light' ? 'dark' : 'light'} mode`)
+      toggle.setAttribute('title', `Switch to ${next === 'light' ? 'dark' : 'light'} mode`)
+    })
+  })
+  document.addEventListener('astro:page-load', () => {
+    const isLight = document.documentElement.dataset.theme === 'light'
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isLight ? '#fbfaf7' : '#141414')
+    document.querySelectorAll('[data-theme-toggle]').forEach((toggle) => {
+      toggle.textContent = isLight ? 'Dark' : 'Light'
+      toggle.setAttribute('aria-label', `Switch to ${isLight ? 'dark' : 'light'} mode`)
+      toggle.setAttribute('title', `Switch to ${isLight ? 'dark' : 'light'} mode`)
+    })
+  })
+  }
+</script>
 <meta name="description" content={description} />
 <meta name="author" content="Emmanuel Obiabo" />
 <meta name="creator" content="Emmanuel Obiabo" />

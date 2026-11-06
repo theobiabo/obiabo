@@ -10,6 +10,7 @@ export async function getSanityPosts() {
     publishedAt,
     slug,
     tags,
+    mainImage {alt, asset->{url}},
     body
   }`;
   return await sanity.fetch(query);

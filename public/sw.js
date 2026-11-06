@@ -1,6 +1,6 @@
 const CACHE_PREFIX = 'obiabo-'
-const STATIC_CACHE = `${CACHE_PREFIX}static-v1`
-const PAGE_CACHE = `${CACHE_PREFIX}pages-v1`
+const STATIC_CACHE = `${CACHE_PREFIX}static-v2`
+const PAGE_CACHE = `${CACHE_PREFIX}pages-v2`
 const IMAGE_CACHE = `${CACHE_PREFIX}images-v1`
 
 const STATIC_ASSETS = [
@@ -9,7 +9,10 @@ const STATIC_ASSETS = [
   '/favicon.png',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
-  '/fonts/departure-mono/DepartureMono-Regular.woff2',
+  '/fonts/space-mono/space-mono-latin-400-normal.woff2',
+  '/fonts/space-mono/space-mono-latin-700-normal.woff2',
+  '/fonts/space-mono/space-mono-latin-400-italic.woff2',
+  '/fonts/space-mono/space-mono-latin-700-italic.woff2',
   '/audio/rainy-jazz.mp3',
 ]
 

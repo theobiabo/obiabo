@@ -45,26 +45,17 @@ const theme = {
 
 <PageLoader />
 <div class="site-header">
-  <style define:vars={{
-    bgPrimary: theme.primaryBackgroundColor,
-    bgSecondary: theme.secondaryBackgroundColor,
-    textColor: theme.primaryTextColor,
-    textMuted: theme.mutedTextColor,
-    borderColor: theme.borderColor,
-    accentColor: theme.accentColor,
-  }}>
-    :root {
-      --bg-primary: var(--bgPrimary);
-      --bg-secondary: var(--bgSecondary);
-      --bg-tertiary: var(--bgPrimary);
-      --hover-bg: var(--bgSecondary);
-      --text-color: var(--textColor);
-      --text-muted: var(--textMuted);
-      --text-dim: var(--textMuted);
-      --border-color: var(--borderColor);
-      --accent: var(--accentColor);
-    }
-  </style>
+  <style is:inline set:html={`:root:not([data-theme='light']) {
+    --bg-primary: ${theme.primaryBackgroundColor};
+    --bg-secondary: ${theme.secondaryBackgroundColor};
+    --bg-tertiary: ${theme.primaryBackgroundColor};
+    --hover-bg: ${theme.secondaryBackgroundColor};
+    --text-color: ${theme.primaryTextColor};
+    --text-muted: ${theme.mutedTextColor};
+    --text-dim: ${theme.mutedTextColor};
+    --border-color: ${theme.borderColor};
+    --accent: ${theme.accentColor};
+  }`} />
 
   <header>
     <div class="identity">
@@ -99,7 +90,10 @@ const theme = {
         )}
       </div>
     </div>
-    <Nav />
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode">Light</button>
+      <Nav />
+    </div>
   </header>
 </div>
 <JazzPlayer />
@@ -116,6 +110,29 @@ const theme = {
     display: flex;
     gap: 2rem;
     justify-content: space-between;
+  }
+
+  .header-actions {
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.5rem;
+  }
+
+  .theme-toggle {
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.68rem;
+    min-height: 2.25rem;
+    padding: 0 0.65rem;
+  }
+
+  .theme-toggle:hover,
+  .theme-toggle:focus-visible {
+    background: var(--bg-secondary);
+    outline-color: var(--accent);
   }
 
   .identity {

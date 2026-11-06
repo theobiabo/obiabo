@@ -79,91 +79,97 @@
   const counter = loader?.querySelector<HTMLElement>('[data-count]')
 
   if (loader && counter) {
-    let frame = 0
     let revealTimer = 0
     let hideTimer = 0
     let navigation = 0
     let progress = 0
-    let startedAt = 0
-    let finishingAt = 0
-    let finishingFrom = 0
-    let phase: 'loading' | 'finishing' | 'dismissing' | 'hidden' = 'hidden'
+    let pending = false
+    let target = ''
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const nativeFetch = window.fetch.bind(window)
 
     const showCount = (value: number) => {
-      progress = value
-      counter.textContent = String(value)
+      progress = Math.max(progress, Math.min(99, value))
+      if (value === 100) progress = 100
+      counter.textContent = String(progress)
     }
 
-    const tick = (now: number) => {
-      if (phase === 'loading') {
-        const elapsed = Math.max(0, now - startedAt)
-        showCount(Math.min(95, Math.floor(95 * (1 - Math.exp(-elapsed / 700)))))
-        frame = requestAnimationFrame(tick)
-        return
-      }
-
-      if (phase === 'finishing') {
-        const duration = reduceMotion.matches ? 0 : 160
-        const fraction = duration === 0 ? 1 : Math.min(1, (now - finishingAt) / duration)
-        showCount(Math.min(100, Math.floor(finishingFrom + (100 - finishingFrom) * fraction)))
-
-        if (fraction < 1) {
-          frame = requestAnimationFrame(tick)
-        } else {
-          phase = 'dismissing'
-          loader.dataset.state = 'dismissing'
-          hideTimer = window.setTimeout(() => {
-            phase = 'hidden'
-            loader.dataset.state = 'hidden'
-          }, reduceMotion.matches ? 0 : 440)
-        }
-      }
+    const hide = () => {
+      loader.dataset.state = 'dismissing'
+      hideTimer = window.setTimeout(() => {
+        loader.dataset.state = 'hidden'
+      }, reduceMotion.matches ? 0 : 440)
     }
 
     const show = () => {
-      cancelAnimationFrame(frame)
       clearTimeout(hideTimer)
-      phase = 'loading'
-      startedAt = performance.now()
-      showCount(0)
       loader.classList.add('is-resetting')
       loader.dataset.state = 'loading'
       void loader.offsetHeight
       loader.classList.remove('is-resetting')
-      frame = requestAnimationFrame(tick)
     }
 
-    const schedule = () => {
+    const schedule = (url = '') => {
       const currentNavigation = ++navigation
+      pending = true
+      target = url
+      progress = 0
+      counter.textContent = '0'
       clearTimeout(revealTimer)
-
-      if (phase === 'finishing' || phase === 'dismissing') {
-        cancelAnimationFrame(frame)
-        clearTimeout(hideTimer)
-        phase = 'hidden'
-        loader.dataset.state = 'hidden'
-      }
-
-      if (phase === 'loading') return
-
+      clearTimeout(hideTimer)
+      loader.dataset.state = 'hidden'
       revealTimer = window.setTimeout(() => {
-        if (currentNavigation === navigation) show()
-      }, 160)
+        if (pending && currentNavigation === navigation) show()
+      }, 150)
     }
 
     const finish = () => {
-      navigation += 1
+      if (!pending) return
+      pending = false
+      target = ''
       clearTimeout(revealTimer)
-      if (phase !== 'loading') return
-      cancelAnimationFrame(frame)
-      phase = 'finishing'
-      finishingFrom = progress
-      finishingAt = performance.now()
-      frame = requestAnimationFrame(tick)
+      if (loader.dataset.state !== 'loading') return
+      showCount(100)
+      hideTimer = window.setTimeout(hide, reduceMotion.matches ? 0 : 120)
     }
 
-    document.addEventListener('astro:before-preparation', schedule)
+    window.fetch = async (input, init) => {
+      const response = await nativeFetch(input, init)
+      const url = new URL(input instanceof Request ? input.url : String(input), location.href).href
+      const requestNavigation = navigation
+      const total = Number(response.headers.get('content-length'))
+
+      if (pending && url === target && total > 0 && response.body) {
+        const reader = response.clone().body!.getReader()
+        void (async () => {
+          let received = 0
+          try {
+            while (true) {
+              const {done, value} = await reader.read()
+              if (done) break
+              received += value.byteLength
+              if (requestNavigation === navigation && pending) {
+                showCount(Math.min(99, Math.floor(received / total * 100)))
+              }
+            }
+          } catch {
+            await reader.cancel().catch(() => {})
+          }
+        })()
+      }
+
+      return response
+    }
+
+    document.addEventListener('astro:before-preparation', (event) => {
+      schedule(event.to.href)
+      event.signal.addEventListener('abort', () => {
+        if (target !== event.to.href) return
+        pending = false
+        clearTimeout(revealTimer)
+        hide()
+      }, {once: true})
+    })
     document.addEventListener('astro:page-load', finish)
 
     if (document.readyState !== 'complete') {

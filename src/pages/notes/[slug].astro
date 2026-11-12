@@ -9,7 +9,6 @@ import BlogReactions from '../../components/BlogReactions';
 import BlogComments from '../../components/BlogComments';
 import ViewCounter from '../../components/ViewCounter';
 import ShareButtons from '../../components/ShareButtons.astro';
-import TableOfContents from '../../components/TableOfContents.astro';
 import Webmentions from '../../components/Webmentions.astro';
 import { codeToHtml } from 'shiki';
 import { calculateReadingTime } from '../../utils/readingTime';
@@ -187,15 +186,17 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
 <Header title={title} />
 <main class="page-shell note-page">
-      <h1 class="note-title">{title}</h1>
-      {desc && <p class="note-description">{desc}</p>}
       {mainImage?.asset?.url && (
         <img
           src={mainImage.asset.url}
           alt={mainImage.alt || title}
-          class="note-hero-image"
+          class="note-lead-image"
+          width="80"
+          height="80"
         />
       )}
+      <h1 class="note-title">{title}</h1>
+      {desc && <p class="note-description">{desc}</p>}
       <div class="post-meta">
         <span class="post-meta-item ">Published on <b>{formattedPublishedDate}</b></span>
         <span class="post-meta-item ">{calculateReadingTime(body)} min read</span>
@@ -203,10 +204,6 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
           <ViewCounter client:load postId={slug} />
         </span>
       </div>
-
-      {highlightedBody && highlightedBody.length > 0 && (
-        <TableOfContents blocks={highlightedBody} />
-      )}
 
       <article class="prose prose-md max-w-none">
         <PortableTextRenderer client:load value={highlightedBody} />
@@ -231,31 +228,33 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
 <style>
   .note-page {
-    margin-top: 1.5rem;
+    margin-top: clamp(1.5rem, 5vw, 5rem);
+  }
+
+  .note-lead-image {
+    display: block;
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 1.25rem;
+    object-fit: cover;
+    border-radius: 0.25rem;
   }
 
   .note-title {
-    font-size: 1rem;
+    font-size: clamp(2rem, 3vw, 2.5rem);
     font-weight: 700;
-    line-height: 1.45;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
     margin: 0;
+    overflow-wrap: break-word;
+    text-wrap: balance;
   }
 
   .note-description {
     color: var(--text-muted);
     font-size: 0.76rem;
     line-height: 1.7;
-    margin: 0.75rem 0 1.5rem;
-  }
-
-  .note-hero-image {
-    width: 100%;
-    height: auto;
-    max-height: 24rem;
-    object-fit: cover;
-    border-radius: 0.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    margin: 1rem 0 0;
   }
 
   .post-meta {
@@ -263,7 +262,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
-    margin-bottom: 2rem;
+    margin: 1rem 0 2.5rem;
     font-size: 0.68rem;
   }
 
@@ -281,12 +280,6 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
   }
 
   @media (max-width: 640px) {
-    .note-hero-image {
-      max-height: none;
-      object-fit: contain;
-      box-shadow: none;
-    }
-
     .post-meta {
       align-items: flex-start;
       flex-direction: column;

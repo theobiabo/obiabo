@@ -413,3 +413,23 @@
   color: #9bb3e0;
   border-bottom-color: rgba(155, 179, 224, 0.5);
 }
+
+:global(html[data-theme='light']) .portableText p,
+:global(html[data-theme='light']) .portableText li,
+:global(html[data-theme='light']) .portableText h1,
+:global(html[data-theme='light']) .portableText h2,
+:global(html[data-theme='light']) .portableText h3,
+:global(html[data-theme='light']) .portableText h4,
+:global(html[data-theme='light']) .portableText .portable-h1,
+:global(html[data-theme='light']) .portableText .portable-h2,
+:global(html[data-theme='light']) .portableText .portable-h3,
+:global(html[data-theme='light']) .portableText .portable-h4 {
+  color: var(--text-color);
+}
+
+:global(html[data-theme='light']) .portableText a,
+:global(html[data-theme='light']) .portableText .portable-link,
+:global(html[data-theme='light']) .portableText .portable-internal-link {
+  color: var(--text-color);
+  border-bottom-color: var(--accent);
+}

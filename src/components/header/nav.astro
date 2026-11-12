@@ -9,38 +9,46 @@ const navItems = [
   { title: 'Work with me', path: '/work-with-me' },
   { title: 'Contact', path: '/reach' },
 ]
+
+const activePath = Astro.url.pathname
+const isActive = (path: string) => activePath === path || (path === '/projects' && activePath.startsWith('/work/')) || (path !== '/' && activePath.startsWith(`${path}/`))
 ---
 
-<details class="navigation">
-  <summary aria-label="Open navigation menu">
+<details class="mobile-navigation">
+  <summary aria-label="Navigation menu">
     <span></span>
     <span></span>
     <span></span>
   </summary>
   <nav aria-label="Primary navigation">
     {navItems.map((item) => {
-      const isActive = Astro.url.pathname === item.path || (item.path === '/' && Astro.url.pathname === '/')
-
       return (
-        <a href={item.path} aria-current={isActive ? 'page' : undefined}>
+        <a href={item.path} aria-current={isActive(item.path) ? 'page' : undefined}>
           {item.title}
         </a>
       )
     })}
   </nav>
 </details>
+<nav class="desktop-navigation" aria-label="Primary navigation">
+  {navItems.map((item) => (
+    <a href={item.path} aria-current={isActive(item.path) ? 'page' : undefined}>
+      {item.title}
+    </a>
+  ))}
+</nav>
 
 <script>
   document.addEventListener('click', (event) => {
     if (!(event.target instanceof Node)) return
-    document.querySelectorAll<HTMLDetailsElement>('.navigation[open]').forEach((menu) => {
+    document.querySelectorAll<HTMLDetailsElement>('.mobile-navigation[open]').forEach((menu) => {
       if (!menu.contains(event.target as Node) || event.target instanceof HTMLAnchorElement) menu.removeAttribute('open')
     })
   })
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return
-    document.querySelectorAll<HTMLDetailsElement>('.navigation[open]').forEach((menu) => {
+    document.querySelectorAll<HTMLDetailsElement>('.mobile-navigation[open]').forEach((menu) => {
       menu.removeAttribute('open')
       menu.querySelector('summary')?.focus()
     })
@@ -48,8 +56,12 @@ const navItems = [
 </script>
 
 <style>
-  .navigation {
+  .mobile-navigation {
     position: relative;
+  }
+
+  .desktop-navigation {
+    display: none;
   }
 
   summary {
@@ -103,7 +115,7 @@ const navItems = [
     transform: translateY(-0.28rem) rotate(-45deg);
   }
 
-  nav {
+  .mobile-navigation nav {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     display: grid;
@@ -115,7 +127,7 @@ const navItems = [
     z-index: 10;
   }
 
-  a {
+  .mobile-navigation a {
     color: var(--text-muted);
     font-size: 0.72rem;
     line-height: 1.5;
@@ -123,15 +135,74 @@ const navItems = [
     text-decoration: none;
   }
 
-  a:hover,
-  a:focus-visible,
-  a[aria-current='page'] {
+  .mobile-navigation a:hover,
+  .mobile-navigation a:focus-visible,
+  .mobile-navigation a[aria-current='page'] {
     background: var(--bg-primary) !important;
     color: var(--text-color);
   }
 
-  a:focus-visible {
+  .mobile-navigation a:focus-visible {
     outline: 1px solid var(--accent);
     outline-offset: -1px;
+  }
+
+  @media (min-width: 75rem) {
+    .mobile-navigation {
+      display: none;
+    }
+
+    .desktop-navigation {
+      display: flex;
+      flex-direction: column;
+      inset-block: 7rem 1.5rem;
+      inset-inline-start: clamp(1rem, 4vw, 3rem);
+      overflow-y: auto;
+      position: fixed;
+      width: 12rem;
+      z-index: 10;
+    }
+
+    .desktop-navigation a {
+      align-items: center;
+      color: var(--text-muted);
+      display: flex;
+      font-size: 0.72rem;
+      font-weight: 400;
+      line-height: 1.5;
+      min-height: 2.25rem;
+      padding-inline: 0.5rem;
+      text-decoration: none;
+      transition: color 140ms ease;
+    }
+
+    .desktop-navigation a:last-child {
+      margin-top: auto;
+    }
+
+    .desktop-navigation a:hover,
+    .desktop-navigation a:focus-visible,
+    .desktop-navigation a[aria-current='page'] {
+      color: var(--text-color);
+    }
+
+    .desktop-navigation a[aria-current='page'] {
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-underline-offset: 0.35rem;
+    }
+
+    .desktop-navigation a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 0.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    summary,
+    summary span,
+    .desktop-navigation a {
+      transition: none;
+    }
   }
 </style>

@@ -79,17 +79,17 @@ allViews.forEach(v => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <SEO title="Notes" description="Personal notes and thoughts on technology, programming, and life." />
+  <SEO title="Blog" description="Writing about software, systems, and whatever else catches my interest." />
   <ClientRouter />
 </head>
 <body>
 
-<Header title="Notes" />
+<Header title="Blog" />
 <main class="page-shell">
   <header class="notes-heading">
-    <h1>Welcome to my corner of the internet!</h1>
+    <h1>Blog</h1>
     <p>
-      This is where I share notes, thoughts, things I've tried and want to try, and personal experiences and learnings.
+      Writing about software, systems, and whatever else catches my interest.
     </p>
     <!-- <p class="mb-8">
       Feel free to explore and learn something along the way.
@@ -98,7 +98,7 @@ allViews.forEach(v => {
 
   <section class="mb-12">
     <form method="get" class="notes-sort">
-      <label for="sort" class="text-gray-500">Sort notes</label>
+      <label for="sort" class="text-gray-500">Sort posts</label>
       <select id="sort" name="sort" class="rounded bg-transparent px-3 py-2" value={sort}>
         <option value="latest" selected={sort === "latest"}>Latest first</option>
         <option value="oldest" selected={sort === "oldest"}>Oldest first</option>
@@ -156,7 +156,7 @@ allViews.forEach(v => {
     </div>
 
     {totalPages > 1 && (
-      <nav class="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Notes pagination">
+      <nav class="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Blog pagination">
         <div class="text-gray-500">
           Page {currentPage} of {totalPages}
         </div>

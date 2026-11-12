@@ -2,8 +2,6 @@
 import Header from '../components/header/index.astro'
 import Project from '../components/project.astro'
 import About from '../components/sections/about.astro'
-import RecentPosts from '../components/RecentPosts.astro'
-import ActivityFeed from '../components/ActivityFeed.astro'
 import SEO from '../components/seo/index.astro'
 import { getSanityProjects } from '../utils/getSanityProjects'
 import { ClientRouter } from 'astro:transitions'
@@ -33,9 +31,7 @@ const featuredProjects = await getSanityProjects({ featuredOnly: true, limit: 5 
     <Header />
     <main class="page-shell">
       <About />
-      <RecentPosts />
       <Project projects={featuredProjects} moreHref="/projects" />
-      <ActivityFeed />
     </main>
   </body>
 </html>

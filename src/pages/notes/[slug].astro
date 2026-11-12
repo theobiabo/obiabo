@@ -191,8 +191,8 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
           src={mainImage.asset.url}
           alt={mainImage.alt || title}
           class="note-lead-image"
-          width="80"
-          height="80"
+          loading="eager"
+          decoding="async"
         />
       )}
       <h1 class="note-title">{title}</h1>
@@ -222,7 +222,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
       <BlogComments client:load postId={post._id} />
 
       <div class="mt-12 pt-8 ">
-        <a href="/notes" class="text-default hover:underline">← Back to Notes</a>
+        <a href="/notes" class="text-default hover:underline">← Back to Blog</a>
       </div>
 </main>
 
@@ -233,11 +233,12 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
 
   .note-lead-image {
     display: block;
-    width: 5rem;
-    height: 5rem;
-    margin-bottom: 1.25rem;
-    object-fit: cover;
-    border-radius: 0.25rem;
+    width: 100%;
+    height: auto;
+    max-height: 28rem;
+    margin-bottom: 2rem;
+    object-fit: contain;
+    border-radius: 0.5rem;
   }
 
   .note-title {

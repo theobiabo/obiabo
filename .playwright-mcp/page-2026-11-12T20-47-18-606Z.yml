@@ -1,0 +1,111 @@
+- generic [active] [ref=f12e1]:
+  - banner [ref=f12e3]:
+    - generic [ref=f12e4]:
+      - button "View gallery stories" [ref=f12e6] [cursor=pointer]
+      - generic [ref=f12e8]:
+        - link "Emmanuel Obiabo, home" [ref=f12e9] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f12e10]: Emmanuel Obiabo
+          - generic [ref=f12e11]: Software engineer
+        - generic "Social links" [ref=f12e12]:
+          - link "Github" [ref=f12e13] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f12e16] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f12e19] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f12e22]:
+      - button "Switch to light mode" [ref=f12e23] [cursor=pointer]
+      - navigation "Primary navigation" [ref=f12e27]:
+        - link "Home" [ref=f12e28] [cursor=pointer]:
+          - /url: /
+        - link "Projects" [ref=f12e29] [cursor=pointer]:
+          - /url: /projects
+        - link "Gallery" [ref=f12e30] [cursor=pointer]:
+          - /url: /gallery
+        - link "About" [ref=f12e31] [cursor=pointer]:
+          - /url: /about
+        - link "Blog" [ref=f12e32] [cursor=pointer]:
+          - /url: /notes
+        - link "Contributions" [ref=f12e33] [cursor=pointer]:
+          - /url: /open-source-contributions
+        - link "Work with me" [ref=f12e34] [cursor=pointer]:
+          - /url: /work-with-me
+        - link "Contact" [ref=f12e35] [cursor=pointer]:
+          - /url: /reach
+  - group "Background jazz" [ref=f12e36]:
+    - generic [ref=f12e37]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f12e38] [cursor=pointer]
+  - main [ref=f12e39]:
+    - region "Introduction" [ref=f12e40]:
+      - article [ref=f12e41]:
+        - paragraph [ref=f12e42]: Hi, I'm Emmanuel, a software engineer interested in how complex systems are designed, built, and kept reliable.
+        - paragraph [ref=f12e43]: "Before moving into software, I repaired mobile phones. The work taught me to approach problems from first principles: identify the failure, understand the system around it, test an explanation, and keep working until the device functions again. That way of thinking still shapes how I write software today."
+        - paragraph [ref=f12e44]:
+          - text: I currently work mostly with
+          - strong [ref=f12e45]: Rust
+          - text: and
+          - strong [ref=f12e46]: TypeScript
+          - text: . Depending on the problem, I move between backend engineering, API design, developer tooling, infrastructure, and product decisions. I contribute to open source, work comfortably in Linux environments, and learn unfamiliar technologies by understanding the ideas beneath their abstractions.
+        - paragraph [ref=f12e47]:
+          - text: I spend much of my time studying
+          - strong [ref=f12e48]: distributed systems, databases, compilers, operating systems, networking, concurrency, and performance
+          - text: ". I am especially interested in the decisions that make software dependable: how data moves through a system, where failures emerge, which guarantees matter, and what should remain simple."
+        - paragraph [ref=f12e49]:
+          - text: Outside software, I read and write about electric and autonomous vehicles, brain-computer interfaces, cryptocurrencies, and animal behavior. I also photograph ordinary moments and places that catch my attention. A selection is available in my
+          - link "gallery" [ref=f12e50] [cursor=pointer]:
+            - /url: /gallery
+          - text: .
+        - paragraph [ref=f12e51]:
+          - text: I'm open to thoughtful engineering work, technical collaborations, and open-source projects. Read
+          - link "more about me" [ref=f12e52] [cursor=pointer]:
+            - /url: /about
+          - text: or explore
+          - link "ways to work with me" [ref=f12e53] [cursor=pointer]:
+            - /url: /work-with-me
+          - text: .
+        - paragraph [ref=f12e54]:
+          - text: Find me on
+          - link "GitHub" [ref=f12e55] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - text: ","
+          - link "LinkedIn" [ref=f12e56] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - text: ","
+          - link "X" [ref=f12e57] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+          - text: ", or"
+          - link "send me a message" [ref=f12e58] [cursor=pointer]:
+            - /url: /reach
+          - text: .
+    - region "Projects" [ref=f12e59]:
+      - heading "Projects" [level=2] [ref=f12e60]
+      - list [ref=f12e61]:
+        - listitem [ref=f12e62]:
+          - button "Uptions Automate Prediction Market Strategies Easily" [ref=f12e63] [cursor=pointer]:
+            - generic [ref=f12e64]: Uptions
+            - generic [ref=f12e65]: Automate Prediction Market Strategies Easily
+        - listitem [ref=f12e66]:
+          - button "Bana Protocol Peer-Assisted Local Memory (PALM)" [ref=f12e67] [cursor=pointer]:
+            - generic [ref=f12e68]: Bana Protocol
+            - generic [ref=f12e69]: Peer-Assisted Local Memory (PALM)
+        - listitem [ref=f12e70]:
+          - button "OurPocket Ourpocket Infrastructure is a backend API that lets B2B platforms manage wallets across multiple payment and crypto providers with one simple, secure integration." [ref=f12e71] [cursor=pointer]:
+            - generic [ref=f12e72]: OurPocket
+            - generic [ref=f12e73]: Ourpocket Infrastructure is a backend API that lets B2B platforms manage wallets across multiple payment and crypto providers with one simple, secure integration.
+        - listitem [ref=f12e74]:
+          - button "Potato Squeezy Support your favorite GitHub contributors with crypto! Show love to open-source developers through fast, secure, and hassle-free crypto tipping." [ref=f12e75] [cursor=pointer]:
+            - generic [ref=f12e76]: Potato Squeezy
+            - generic [ref=f12e77]: Support your favorite GitHub contributors with crypto! Show love to open-source developers through fast, secure, and hassle-free crypto tipping.
+        - listitem [ref=f12e78]:
+          - button "https://kppay.fr/ Send money globally, receive payments, deposit and request funds, invest and exchange across multiple currencies with low fees, speed and safety." [ref=f12e79] [cursor=pointer]:
+            - generic [ref=f12e80]: https://kppay.fr/
+            - generic [ref=f12e81]: Send money globally, receive payments, deposit and request funds, invest and exchange across multiple currencies with low fees, speed and safety.
+      - link "Show more projects" [ref=f12e82] [cursor=pointer]:
+        - /url: /projects
+        - text: Show more projects →
+  - generic [ref=f12e85]:
+    - button "Menu" [ref=f12e86]
+    - button "Inspect" [ref=f12e92]
+    - button "Audit" [ref=f12e96]
+    - button "Settings" [ref=f12e101]

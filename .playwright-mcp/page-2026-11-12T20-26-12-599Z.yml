@@ -1,0 +1,155 @@
+- generic [active] [ref=f7e1]:
+  - banner [ref=f7e4]:
+    - generic [ref=f7e5]:
+      - button "View gallery stories" [ref=f7e7] [cursor=pointer]
+      - generic [ref=f7e9]:
+        - link "Emmanuel Obiabo, home" [ref=f7e10] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f7e11]: Emmanuel Obiabo
+          - generic [ref=f7e12]: Software engineer
+        - generic "Social links" [ref=f7e13]:
+          - link "Github" [ref=f7e14] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f7e17] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f7e20] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f7e23]:
+      - button "Switch to light mode" [ref=f7e24] [cursor=pointer]
+      - navigation "Primary navigation" [ref=f7e28]:
+        - link "Home" [ref=f7e29] [cursor=pointer]:
+          - /url: /
+        - link "Projects" [ref=f7e30] [cursor=pointer]:
+          - /url: /projects
+        - link "Gallery" [ref=f7e31] [cursor=pointer]:
+          - /url: /gallery
+        - link "About" [ref=f7e32] [cursor=pointer]:
+          - /url: /about
+        - link "Blog" [ref=f7e33] [cursor=pointer]:
+          - /url: /notes
+        - link "Contributions" [ref=f7e34] [cursor=pointer]:
+          - /url: /open-source-contributions
+        - link "Work with me" [ref=f7e35] [cursor=pointer]:
+          - /url: /work-with-me
+        - link "Contact" [ref=f7e36] [cursor=pointer]:
+          - /url: /reach
+  - group "Background jazz" [ref=f7e37]:
+    - generic [ref=f7e38]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f7e39] [cursor=pointer]
+  - main [ref=f7e40]:
+    - heading "Can Humanity Ever Defeat Death?" [level=1] [ref=f7e41]
+    - img "Can Humanity Ever Defeat Death?" [ref=f7e42]
+    - generic [ref=f7e43]:
+      - generic [ref=f7e44]:
+        - text: Published on
+        - generic [ref=f7e45]: June 21, 2026
+      - generic [ref=f7e46]: • 5 min read
+      - generic [ref=f7e47]:
+        - text: •
+        - generic [ref=f7e48]: 2 views
+    - article [ref=f7e54]:
+      - generic [ref=f7e56]:
+        - paragraph [ref=f7e57]:
+          - emphasis [ref=f7e58]: Death Is the permanent stopping of all the vital bodily activities
+          - text: "(such as the beating of the heart and working of the brain) : the end of life."
+        - paragraph
+        - paragraph [ref=f7e59]: Death is believed to be inevitable, and with the way technology is going now, it might come to a point where humans might be able to beat death scientifically. Can this be achieved? Or is it just a bollock?
+        - paragraph
+        - paragraph [ref=f7e60]:
+          - strong [ref=f7e61]: Okay, stay with me…
+        - paragraph
+        - paragraph [ref=f7e62]:
+          - text: Just recently, humans were able to edit DNA (deoxyribonucleic acid) using a bioengineering tool called
+          - link "CRISPR" [ref=f7e63] [cursor=pointer]:
+            - /url: https://fr.wikipedia.org/wiki/CRISPR
+          - text: (CRISPR-Cas9). This technology is a revolutionary gene editing system that allows for precise, targeted modifications of DNA in living organisms.
+        - paragraph [ref=f7e64]:
+          - text: And yes, this is a very great achievement, which means technically we would be able to cure some cancers, sickle cell, and other diseases. As we speak scientist are still conducting research on amazing things.
+          - strong [ref=f7e65]: Would Humanity be able to entirely defeat death?
+          - text: Okay, this is a tough one, because even if we can defeat natural causes of death, there are still many other causes of death, one might die from drowning, accidents, natural disasters like earthquakes, and other things, so if you ask me, my answer is NOPE. Science and technology are rapidly pushing biologically limit via bioengineering, regenerative medicine, and other things. With this, we can be able to extend life span, slow ageing, and maybe redefine what it means to die.And even if science and technology were able to achieve biological immortality, they can’t escape the hypothetical death of the universe, which is called “
+          - strong [ref=f7e66]: heat death of the universe,”
+          - text: also known as the Big Chill/Big Freeze (In a way, you can see the naming is like a reverse of Big Bang, hahaha).
+        - generic [ref=f7e67]:
+          - generic [ref=f7e68]:
+            - generic [ref=f7e69]: TEXT
+            - button "COPY" [ref=f7e70] [cursor=pointer]
+          - code [ref=f7e73]:
+            - generic [ref=f7e74]: The heat death of the universe is a possible ending where the universe runs out of usable energy over an unimaginably long time, as all stars burn out, no new stars form, and everything spreads out and gets colder and darker, so that in the end the universe isn’t destroyed but becomes a thin, almost completely inactive place where nothing much can ever happen again
+        - paragraph [ref=f7e75]:
+          - code [ref=f7e76]
+          - text: You might be wondering how this hypothesis came about. It stemmed from the
+          - link "second law of thermodynamics" [ref=f7e77] [cursor=pointer]:
+            - /url: https://en.wikipedia.org/wiki/Second_law_of_thermodynamics
+          - text: . (I won't write more on this, but you can check the highlighted text)
+        - paragraph [ref=f7e78]:
+          - code [ref=f7e79]
+        - paragraph [ref=f7e80]:
+          - strong [ref=f7e81]: Can/would there ever be a life without death?
+          - code [ref=f7e82]
+        - paragraph [ref=f7e83]: I do not believe there would be a life without death, but who cares about my wee tiff?
+        - paragraph [ref=f7e84]: And if eventually that is attainable, then humans will be buzzin and some others would be chuffed, and that comes with a price; the rich can now live long and never die, and maybe accumulate more wealth like vampires, hahahah.
+        - paragraph [ref=f7e85]:
+          - text: Then there would be me writing letters to Bonnie Lass in different places, and the word would no longer be “Maybe we can spend 80years together”, it would be “We can spend forever together, as death is a joke and now finito)And for what it is, I’m not sure we can attain that, so this is a myth.
+          - strong [ref=f7e86]: Don’t Die
+        - paragraph [ref=f7e87]:
+          - text: If you see the image above, it is a photo of a tech entrepreneur and VC called
+          - link [ref=f7e88] [cursor=pointer]:
+            - /url: https://en.wikipedia.org/wiki/Bryan_Johnson
+            - strong [ref=f7e89]: Bryan Johnson
+          - text: with his Son.
+          - code [ref=f7e90]: Bryan Johnson’s ultimate goal is to "make death an option" and achieve human immortality by 2039. He aims to reverse human biological aging, using data-driven, algorithmic methods to align the human body with modern technological and scientific advancements.
+          - text: And it is summarised by his philosophy called
+          - strong [ref=f7e91]: “Don't Die”,
+          - text: which you can see up there.
+        - paragraph
+        - paragraph [ref=f7e92]: I came across Bryan Johnson some years ago, and was like, “What is the problem of humanity?” hahahah. Bryan Johnson has been putting in the work, Millions of dollars and has been on some diets and testing nearly everything he eats. At this point, Messr Bryan might have turned himself into a lab rat, but what can one say? Free will is free will. Bryan Johnson has even participated in a multi-generational blood plasma exchange with his son and his father, to slow ageing, or so. If death became optional and humans could live forever, Earth would eventually become too crowded for us to all live here. At some point, we would either have to strictly control births (because putting on a rubber would no longer be enough), expand into space, or face conflicts over limited resources.
+        - paragraph [ref=f7e93]:
+          - emphasis [ref=f7e94]: Can death become obsolete? Maybe. Can humanity prove it? Not today.Because Humanity has conquered diseases, crossed oceans, split atoms, and reached the Moon.
+        - paragraph [ref=f7e95]:
+          - emphasis [ref=f7e96]: Yet despite all our achievements, every person who has ever lived has lost the same battle.
+        - paragraph [ref=f7e97]:
+          - emphasis [ref=f7e98]: Death remains undefeated.
+          - strong [ref=f7e99]: "NB:"
+          - text: These are just my own thoughts and opinions, so dinnae take them as facts.
+        - paragraph [ref=f7e100]
+        - paragraph
+        - paragraph [ref=f7e101]:
+          - code [ref=f7e102]
+        - paragraph [ref=f7e103]
+    - generic [ref=f7e104]:
+      - generic [ref=f7e105]: share
+      - generic [ref=f7e106]:
+        - link "𝕏" [ref=f7e107] [cursor=pointer]:
+          - /url: https://twitter.com/intent/tweet?text=Can%20Humanity%20Ever%20Defeat%20Death%3F&url=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fcan-human-defeat-death
+        - link "in" [ref=f7e108] [cursor=pointer]:
+          - /url: https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fcan-human-defeat-death
+        - link "f" [ref=f7e109] [cursor=pointer]:
+          - /url: https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fcan-human-defeat-death
+        - button "✓" [ref=f7e110] [cursor=pointer]
+    - generic [ref=f7e112]:
+      - heading "Reactions" [level=3] [ref=f7e113]
+      - generic [ref=f7e114]:
+        - button "Like reaction" [ref=f7e115] [cursor=pointer]:
+          - generic [ref=f7e116]: 👍
+        - button "Love reaction" [ref=f7e117] [cursor=pointer]:
+          - generic [ref=f7e118]: ❤️
+        - button "Fire reaction" [ref=f7e119] [cursor=pointer]:
+          - generic [ref=f7e120]: 🔥
+        - button "Celebrate reaction" [ref=f7e121] [cursor=pointer]:
+          - generic [ref=f7e122]: 🎉
+        - button "Thinking reaction" [ref=f7e123] [cursor=pointer]:
+          - generic [ref=f7e124]: 🤔
+        - button "Insightful reaction" [ref=f7e125] [cursor=pointer]:
+          - generic [ref=f7e126]: 💡
+    - generic [ref=f7e128]:
+      - generic [ref=f7e129]:
+        - heading "Comments" [level=3] [ref=f7e130]
+        - button "Leave a comment" [ref=f7e131] [cursor=pointer]
+      - paragraph [ref=f7e132]: No comments yet. Be the first to share your thoughts!
+    - link "← Back to Blog" [ref=f7e134] [cursor=pointer]:
+      - /url: /notes
+  - generic [ref=f7e137]:
+    - button "Menu" [ref=f7e138]
+    - button "Inspect" [ref=f7e144]
+    - button "Audit" [ref=f7e148]
+    - button "Settings" [ref=f7e153]

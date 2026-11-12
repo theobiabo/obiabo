@@ -1,0 +1,102 @@
+- generic [active] [ref=f18e1]:
+  - banner [ref=f18e3]:
+    - generic [ref=f18e4]:
+      - button "View gallery stories" [ref=f18e6] [cursor=pointer]
+      - generic [ref=f18e8]:
+        - link "Emmanuel Obiabo, home" [ref=f18e9] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f18e10]: Emmanuel Obiabo
+          - generic [ref=f18e11]: Software engineer
+        - generic "Social links" [ref=f18e12]:
+          - link "Github" [ref=f18e13] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f18e16] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f18e19] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f18e22]:
+      - button "Switch to light mode" [ref=f18e23] [cursor=pointer]
+      - navigation "Primary navigation" [ref=f18e27]:
+        - link "Home" [ref=f18e28] [cursor=pointer]:
+          - /url: /
+        - link "Projects" [ref=f18e29] [cursor=pointer]:
+          - /url: /projects
+        - link "Gallery" [ref=f18e30] [cursor=pointer]:
+          - /url: /gallery
+        - link "About" [ref=f18e31] [cursor=pointer]:
+          - /url: /about
+        - link "Blog" [ref=f18e32] [cursor=pointer]:
+          - /url: /notes
+        - link "Contributions" [ref=f18e33] [cursor=pointer]:
+          - /url: /open-source-contributions
+        - link "Work with me" [ref=f18e34] [cursor=pointer]:
+          - /url: /work-with-me
+        - link "Contact" [ref=f18e35] [cursor=pointer]:
+          - /url: /reach
+  - group "Background jazz" [ref=f18e36]:
+    - generic [ref=f18e37]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f18e38] [cursor=pointer]
+  - main [ref=f18e39]:
+    - region "Introduction" [ref=f18e40]:
+      - article [ref=f18e41]:
+        - paragraph [ref=f18e42]: Hi, I'm Emmanuel, a software engineer interested in how reliable systems are designed and built.
+        - paragraph [ref=f18e43]: Before software, I repaired mobile phones. Diagnosing faults taught me to work from first principles, understand how each part of a system behaves, and keep testing until I find the cause of a problem.
+        - paragraph [ref=f18e44]:
+          - text: I currently work mostly with
+          - strong [ref=f18e45]: Rust
+          - text: and
+          - strong [ref=f18e46]: TypeScript
+          - text: ", contribute to open source, and move between backend engineering, APIs, developer tooling, infrastructure, and product decisions. I spend much of my time studying"
+          - strong [ref=f18e47]: distributed systems, databases, compilers, operating systems, networking, concurrency, and performance
+          - text: .
+        - paragraph [ref=f18e48]:
+          - text: Outside software, I read, write, and photograph things that catch my attention. Explore my
+          - link "gallery" [ref=f18e49] [cursor=pointer]:
+            - /url: /gallery
+          - text: ", read"
+          - link "more about me" [ref=f18e50] [cursor=pointer]:
+            - /url: /about
+          - text: ", or find me on"
+          - link "GitHub" [ref=f18e51] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - text: ","
+          - link "LinkedIn" [ref=f18e52] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - text: ", and"
+          - link "X" [ref=f18e53] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+          - text: . I'm open to thoughtful engineering work and collaborations, so you can also
+          - link "send me a message" [ref=f18e54] [cursor=pointer]:
+            - /url: /reach
+          - text: .
+    - region "Projects" [ref=f18e55]:
+      - heading "Projects" [level=2] [ref=f18e56]
+      - list [ref=f18e57]:
+        - listitem [ref=f18e58]:
+          - button "Uptions Automate Prediction Market Strategies Easily" [ref=f18e59] [cursor=pointer]:
+            - generic [ref=f18e60]: Uptions
+            - generic [ref=f18e61]: Automate Prediction Market Strategies Easily
+        - listitem [ref=f18e62]:
+          - button "Bana Protocol Peer-Assisted Local Memory (PALM)" [ref=f18e63] [cursor=pointer]:
+            - generic [ref=f18e64]: Bana Protocol
+            - generic [ref=f18e65]: Peer-Assisted Local Memory (PALM)
+        - listitem [ref=f18e66]:
+          - button "OurPocket Ourpocket Infrastructure is a backend API that lets B2B platforms manage wallets across multiple payment and crypto providers with one simple, secure integration." [ref=f18e67] [cursor=pointer]:
+            - generic [ref=f18e68]: OurPocket
+            - generic [ref=f18e69]: Ourpocket Infrastructure is a backend API that lets B2B platforms manage wallets across multiple payment and crypto providers with one simple, secure integration.
+        - listitem [ref=f18e70]:
+          - button "Potato Squeezy Support your favorite GitHub contributors with crypto! Show love to open-source developers through fast, secure, and hassle-free crypto tipping." [ref=f18e71] [cursor=pointer]:
+            - generic [ref=f18e72]: Potato Squeezy
+            - generic [ref=f18e73]: Support your favorite GitHub contributors with crypto! Show love to open-source developers through fast, secure, and hassle-free crypto tipping.
+        - listitem [ref=f18e74]:
+          - button "https://kppay.fr/ Send money globally, receive payments, deposit and request funds, invest and exchange across multiple currencies with low fees, speed and safety." [ref=f18e75] [cursor=pointer]:
+            - generic [ref=f18e76]: https://kppay.fr/
+            - generic [ref=f18e77]: Send money globally, receive payments, deposit and request funds, invest and exchange across multiple currencies with low fees, speed and safety.
+      - link "Show more projects" [ref=f18e78] [cursor=pointer]:
+        - /url: /projects
+        - text: Show more projects →
+  - generic [ref=f18e81]:
+    - button "Menu" [ref=f18e82]
+    - button "Inspect" [ref=f18e88]
+    - button "Audit" [ref=f18e92]
+    - button "Settings" [ref=f18e97]

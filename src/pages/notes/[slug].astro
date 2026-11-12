@@ -195,7 +195,7 @@ const formattedPublishedDate = publishedDate && !Number.isNaN(new Date(published
           decoding="async"
         />
       )}
-      <h1 class="note-title">{title}</h1>
+      <h1 class="lg:text-3xl md:text-2xl">{title}</h1>
       {desc && <p class="note-description">{desc}</p>}
       <div class="post-meta">
         <span class="post-meta-item ">Published on <b>{formattedPublishedDate}</b></span>

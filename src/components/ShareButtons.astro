@@ -26,7 +26,8 @@ const shareLinks = {
       target="_blank"
       rel="noopener noreferrer"
       class="share-btn twitter"
-      title="Share on Twitter"
+      aria-label="Share on X"
+      title="Share on X"
     >
       𝕏
     </a>
@@ -36,6 +37,7 @@ const shareLinks = {
       target="_blank"
       rel="noopener noreferrer"
       class="share-btn linkedin"
+      aria-label="Share on LinkedIn"
       title="Share on LinkedIn"
     >
       in
@@ -46,13 +48,16 @@ const shareLinks = {
       target="_blank"
       rel="noopener noreferrer"
       class="share-btn facebook"
+      aria-label="Share on Facebook"
       title="Share on Facebook"
     >
       f
     </a>
     <button
+      type="button"
       class="share-btn copy"
-      title="Copy link"
+      aria-label="Copy article link"
+      title="Copy article link"
       data-copy-url={url}
     >
       ✓

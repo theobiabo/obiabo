@@ -1,0 +1,77 @@
+- generic [active] [ref=f142e136]:
+  - generic [aria-hidden]:
+    - generic: Loading
+  - banner [ref=f142e138]:
+    - generic [ref=f142e139]:
+      - button "View gallery stories" [ref=f142e141] [cursor=pointer]
+      - generic [ref=f142e143]:
+        - link "Emmanuel Obiabo, home" [ref=f142e144] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f142e145]: Emmanuel Obiabo
+          - generic [ref=f142e146]: Software engineer
+        - generic "Social links" [ref=f142e147]:
+          - link "Github" [ref=f142e148] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f142e151] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f142e154] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f142e157]:
+      - button "Switch to dark mode" [ref=f142e158] [cursor=pointer]
+      - group [ref=f142e161]:
+        - generic "Navigation menu" [ref=f142e162] [cursor=pointer]
+  - group "Background jazz" [ref=f142e31]:
+    - generic [ref=f142e32]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f142e33] [cursor=pointer]
+  - main [ref=f142e166]:
+    - heading "What on Earth is a Monorepo" [level=1] [ref=f142e167]
+    - img "What on Earth is a Monorepo" [ref=f142e169]
+    - paragraph [ref=f142e170]: What on earth is even Monorepo, and why does people have different opinions about it.
+    - generic "Article details" [ref=f142e171]:
+      - generic [ref=f142e172]:
+        - text: Published on
+        - time [ref=f142e173]: September 24, 2026
+      - generic [ref=f142e174]: 1 min read
+      - generic [ref=f142e175]: 2 views
+    - article [ref=f142e182]:
+      - generic [ref=f142e184]:
+        - paragraph [ref=f142e185]: Monorepo was like the opening topic on X (formerly Twitter) this week, and i see people making poor judgment of it (which I'm not surprised), you can't expect everyone to like every tech, but might it be an issue from their end at the same time? Okay, that i don't know, but let's get the party started.
+        - figure [ref=f142e186]
+    - generic [ref=f142e187]:
+      - generic [ref=f142e188]: share
+      - generic [ref=f142e189]:
+        - link "𝕏" [ref=f142e190] [cursor=pointer]:
+          - /url: https://twitter.com/intent/tweet?text=What%20on%20Earth%20is%20a%20Monorepo&url=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fmonorepo
+        - link "in" [ref=f142e191] [cursor=pointer]:
+          - /url: https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fmonorepo
+        - link "f" [ref=f142e192] [cursor=pointer]:
+          - /url: https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4321%2Fnotes%2Fmonorepo
+        - button "✓" [ref=f142e193] [cursor=pointer]
+    - generic [ref=f142e195]:
+      - heading "Reactions" [level=3] [ref=f142e196]
+      - generic [ref=f142e197]:
+        - button "Like reaction" [ref=f142e198] [cursor=pointer]:
+          - generic [ref=f142e199]: 👍
+        - button "Love reaction" [ref=f142e200] [cursor=pointer]:
+          - generic [ref=f142e201]: ❤️
+        - button "Fire reaction" [ref=f142e202] [cursor=pointer]:
+          - generic [ref=f142e203]: 🔥
+        - button "Celebrate reaction" [ref=f142e204] [cursor=pointer]:
+          - generic [ref=f142e205]: 🎉
+        - button "Thinking reaction" [ref=f142e206] [cursor=pointer]:
+          - generic [ref=f142e207]: 🤔
+        - button "Insightful reaction" [ref=f142e208] [cursor=pointer]:
+          - generic [ref=f142e209]: 💡
+    - generic [ref=f142e211]:
+      - generic [ref=f142e212]:
+        - heading "Comments" [level=3] [ref=f142e213]
+        - button "Leave a comment" [ref=f142e214] [cursor=pointer]
+      - paragraph [ref=f142e215]: No comments yet. Be the first to share your thoughts!
+    - link "← Back to Blog" [ref=f142e217] [cursor=pointer]:
+      - /url: /notes
+  - generic [ref=f142e112]:
+    - button "Menu" [ref=f142e113]
+    - button "Inspect" [ref=f142e119]
+    - button "Audit" [ref=f142e123]
+    - button "Settings" [ref=f142e128]
+  - generic [ref=f142e220]: What on Earth is a Monorepo

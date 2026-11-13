@@ -16,8 +16,8 @@ const {
   title = 'Emmanuel Obiabo | Software engineer',
   description = 'The world is a beautiful place, I\'m making it better through code.',
   type = 'website',
-  image = '/favicon.png',
-  imageAlt = 'Pixel portrait of Emmanuel Obiabo',
+  image = '/assets/og-card.png',
+  imageAlt = 'Emmanuel Obiabo, software engineer',
   imageWidth,
   imageHeight,
   appendSiteName = true,
@@ -26,17 +26,20 @@ const {
 } = Astro.props
 
 const siteName = 'Emmanuel Obiabo'
-const baseUrl = Astro.site ?? new URL(import.meta.env.SITE_URL || 'http://localhost:4321')
+const defaultImage = '/assets/og-card.png'
+const configuredSiteUrl = import.meta.env.SITE_URL?.trim()
+const baseUrl = Astro.site ?? new URL(configuredSiteUrl || Astro.url.origin)
 const siteTitle = appendSiteName && title !== siteName && !title.includes(siteName)
   ? `${title} | ${siteName}`
   : title
 const canonical = canonicalUrl
   ? new URL(canonicalUrl, baseUrl)
   : new URL(Astro.url.pathname, baseUrl)
-const ogImage = new URL(image, baseUrl)
-const isDefaultImage = image === '/favicon.png'
-const resolvedImageWidth = imageWidth ?? (isDefaultImage ? 460 : undefined)
-const resolvedImageHeight = imageHeight ?? (isDefaultImage ? 460 : undefined)
+const resolvedImage = image?.trim() || defaultImage
+const ogImage = new URL(resolvedImage, baseUrl)
+const isDefaultImage = resolvedImage === defaultImage
+const resolvedImageWidth = imageWidth ?? (isDefaultImage ? 1200 : undefined)
+const resolvedImageHeight = imageHeight ?? (isDefaultImage ? 630 : undefined)
 const imageExtension = ogImage.pathname.split('.').pop()?.toLowerCase()
 const imageType = imageExtension === 'png'
   ? 'image/png'
@@ -104,7 +107,7 @@ const imageType = imageExtension === 'png'
 {resolvedImageHeight && <meta property="og:image:height" content={String(resolvedImageHeight)} />}
 <meta property="og:image:alt" content={imageAlt} />
 
-<meta name="twitter:card" content={isDefaultImage ? 'summary' : 'summary_large_image'} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:site" content="@obiabo_immanuel" />
 <meta name="twitter:creator" content="@obiabo_immanuel" />
 <meta name="twitter:title" content={siteTitle} />

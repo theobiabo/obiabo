@@ -19,131 +19,60 @@ const contactPath = page?.contactPath && /^\/(?!\/)/.test(page.contactPath) ? pa
   </head>
   <body class="editorial-page">
     <Header />
-    <main class="page-shell work-content">
+    <main class="page-shell text-[0.82rem] font-normal leading-[1.65]">
       {page ? (
-        <>
-          <h1>{page.heading}</h1>
-          <p>{page.intro}</p>
-          <h2>{page.topicsHeading}</h2>
-          <ol>
-            {page.topics?.map((topic) => <li>{topic}</li>)}
+        <Fragment>
+          <h1 class="mb-6 text-base font-normal leading-6">{page.heading}</h1>
+          <p class="mb-5 font-normal">{page.intro}</p>
+
+          <h2 class="mb-3 mt-8 text-[0.82rem] font-normal leading-6">{page.topicsHeading}</h2>
+          <ol class="mb-8 list-decimal space-y-2 pl-6 font-normal">
+            {page.topics?.map((topic) => <li class="font-normal">{topic}</li>)}
           </ol>
+
           {page.selectedWork && page.selectedWork.length > 0 && (
-            <section class="selected-work" aria-label={page.selectedWorkHeading ?? 'Selected work'}>
-              <h2>{page.selectedWorkHeading ?? 'Selected work'}</h2>
-              <ul>
+            <section class="mb-8" aria-label={page.selectedWorkHeading ?? 'Selected work'}>
+              <h2 class="mb-3 mt-8 text-[0.82rem] font-normal leading-6">
+                {page.selectedWorkHeading ?? 'Selected work'}
+              </h2>
+              <ul class="m-0 list-none p-0">
                 {page.selectedWork.map((item) => (
-                  <li>
-                    {item.slug?.current ? <a href={`/work/${item.slug.current}`}><strong>{item.organization}</strong><span>{item.summary}</span><span class="work-arrow" aria-hidden="true">↗</span></a> : <><strong>{item.organization}</strong><span>{item.summary}</span></>}
+                  <li class="border-t border-[var(--border-color)] font-normal">
+                    {item.slug?.current ? (
+                      <a
+                        href={`/work/${item.slug.current}`}
+                        class="group grid gap-1 py-3 font-normal no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+                      >
+                        <span class="font-normal text-[var(--text-color)] group-hover:text-[var(--accent)]">
+                          {item.organization}
+                        </span>
+                        <span class="font-normal text-[var(--text-muted)]">{item.summary}</span>
+                      </a>
+                    ) : (
+                      <div class="grid gap-1 py-3 font-normal">
+                        <span class="font-normal text-[var(--text-color)]">{item.organization}</span>
+                        <span class="font-normal text-[var(--text-muted)]">{item.summary}</span>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
             </section>
           )}
-          <p class="work-contact">
-            {page.contactPrompt} <a href={contactPath}>{page.contactLinkLabel}</a>.
+
+          <p class="border-t border-[var(--border-color)] pt-5 font-normal">
+            {page.contactPrompt}{' '}
+            <a
+              href={contactPath}
+              class="font-normal underline underline-offset-[0.2rem] outline-none hover:text-[var(--accent)] focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+            >
+              {page.contactLinkLabel}
+            </a>.
           </p>
-        </>
+        </Fragment>
       ) : (
-        <p>Work with me content is unavailable.</p>
+        <p class="font-normal">Work with me content is unavailable.</p>
       )}
     </main>
   </body>
 </html>
-
-<style>
-  .work-content {
-    font-size: 0.82rem;
-    line-height: 1.65;
-  }
-
-  h1 {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.5;
-    margin: 0 0 1.5rem;
-  }
-
-  h2 {
-    font-size: 0.82rem;
-    font-weight: 600;
-    line-height: 1.5;
-    margin: 2rem 0 0.75rem;
-  }
-
-  p {
-    margin: 0 0 1.25rem;
-  }
-
-  ol {
-    list-style: decimal;
-    margin: 0 0 2rem;
-    padding-left: 1.5rem;
-  }
-
-  li + li {
-    margin-top: 0.55rem;
-  }
-
-  .selected-work {
-    margin-bottom: 2rem;
-  }
-
-  .selected-work ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .selected-work li {
-    border-top: 1px solid var(--border-color);
-    padding: 0;
-  }
-
-  .selected-work li a {
-    display: grid;
-    gap: 0.25rem;
-    position: relative;
-    padding: 0.8rem 0;
-    text-decoration: none;
-  }
-
-  .selected-work li strong {
-    font-weight: 700;
-  }
-
-  .selected-work li span {
-    color: var(--text-muted);
-  }
-
-  .selected-work li .work-arrow {
-    color: var(--text-color);
-    position: absolute;
-    right: 0;
-    top: 0.8rem;
-  }
-
-  .selected-work li a:hover strong,
-  .selected-work li a:focus-visible strong {
-    color: var(--accent);
-  }
-
-  a {
-    text-decoration: underline;
-    text-underline-offset: 0.2rem;
-  }
-
-  a:hover {
-    color: var(--accent);
-  }
-
-  a:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-
-  .work-contact {
-    border-top: 1px solid var(--border-color);
-    padding-top: 1.25rem;
-  }
-</style>

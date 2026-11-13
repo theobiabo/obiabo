@@ -1,0 +1,61 @@
+- generic [active] [ref=f55e1]:
+  - generic [aria-hidden]:
+    - generic: Loading
+  - banner [ref=f55e3]:
+    - generic [ref=f55e4]:
+      - button "View gallery stories" [ref=f55e6] [cursor=pointer]
+      - generic [ref=f55e8]:
+        - link "Emmanuel Obiabo, home" [ref=f55e9] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f55e10]: Emmanuel Obiabo
+          - generic [ref=f55e11]: Software engineer
+        - generic "Social links" [ref=f55e12]:
+          - link "Github" [ref=f55e13] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f55e16] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f55e19] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f55e22]:
+      - button "Switch to dark mode" [ref=f55e23] [cursor=pointer]
+      - group [ref=f55e26]:
+        - generic "Navigation menu" [ref=f55e27] [cursor=pointer]
+  - group "Background jazz" [ref=f55e31]:
+    - generic [ref=f55e32]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f55e33] [cursor=pointer]
+  - main [ref=f55e34]:
+    - heading "Bring me the tricky parts." [level=1] [ref=f55e35]
+    - paragraph [ref=f55e36]: I design and build web and mobile products, APIs, and SDKs. I can get up to speed with any technology your team uses. I have experience in fintech, blockchain, developer tools, and AI, and I'm open to roles in any field.
+    - heading "Things I like untangling" [level=2] [ref=f55e37]
+    - list [ref=f55e38]:
+      - listitem [ref=f55e39]: Features where the interface, API, and background worker need to agree.
+      - listitem [ref=f55e40]: Payment SDKs with encrypted requests, typed errors, and clear retry signals.
+      - listitem [ref=f55e41]: Distributed systems with queues, idempotency keys, and partial failures.
+    - region "Selected work" [ref=f55e42]:
+      - heading "Selected work" [level=2] [ref=f55e43]
+      - list [ref=f55e44]:
+        - listitem [ref=f55e45]:
+          - link "Spendin At Spendin, I work with the team on payment and purchase services, improving how the backend handles retries, late callbacks, and failures in external systems." [ref=f55e46] [cursor=pointer]:
+            - /url: /work/spendin
+            - generic [ref=f55e47]: Spendin
+            - generic [ref=f55e48]: At Spendin, I work with the team on payment and purchase services, improving how the backend handles retries, late callbacks, and failures in external systems.
+        - listitem [ref=f55e49]:
+          - link "Blue Orchid At Blue Orchid, I work on an AI platform built with TypeScript, Cloudflare Workers, D1, and R2. My security work covers MCP OAuth, rich-text input, agent approvals, and request limits." [ref=f55e50] [cursor=pointer]:
+            - /url: /work/blue-orchid
+            - generic [ref=f55e51]: Blue Orchid
+            - generic [ref=f55e52]: At Blue Orchid, I work on an AI platform built with TypeScript, Cloudflare Workers, D1, and R2. My security work covers MCP OAuth, rich-text input, agent approvals, and request limits.
+        - listitem [ref=f55e53]:
+          - link "KPPAY I brought the user, merchant, and admin apps into one monorepo and built the developer portal and SDKs that make the payment gateway easier to use." [ref=f55e54] [cursor=pointer]:
+            - /url: /work/kppay
+            - generic [ref=f55e55]: KPPAY
+            - generic [ref=f55e56]: I brought the user, merchant, and admin apps into one monorepo and built the developer portal and SDKs that make the payment gateway easier to use.
+    - paragraph [ref=f55e57]:
+      - text: Have a problem worth digging into?
+      - link "Let's talk" [ref=f55e58] [cursor=pointer]:
+        - /url: /reach
+      - text: .
+  - generic [ref=f55e61]:
+    - button "Menu" [ref=f55e62]
+    - button "Inspect" [ref=f55e68]
+    - button "Audit" [ref=f55e72]
+    - button "Settings" [ref=f55e77]

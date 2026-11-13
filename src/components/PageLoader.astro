@@ -1,149 +1,69 @@
-<!-- <div id="page-loader" data-state="hidden" transition:persist="page-loader" aria-hidden="true">
-  <div class="loader-panel loader-panel-top"></div>
-  <div class="loader-panel loader-panel-bottom"></div>
-  <img src="/favicon.png" alt="" width="96" height="96" />
-</div> -->
-
-<style>
-  #page-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: grid;
-    place-items: center;
-    pointer-events: none;
-    visibility: visible;
-  }
-
-  #page-loader[data-state='hidden'] {
-    visibility: hidden;
-  }
-
-  .loader-panel {
-    position: absolute;
-    right: 0;
-    left: 0;
-    height: 50.1%;
-    background: var(--bg-primary);
-    transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
-  }
-
-  .loader-panel-top {
-    top: 0;
-  }
-
-  .loader-panel-bottom {
-    bottom: 0;
-  }
-
-  #page-loader[data-state='dismissing'] .loader-panel-top,
-  #page-loader[data-state='hidden'] .loader-panel-top {
-    transform: translateY(-100%);
-  }
-
-  #page-loader[data-state='dismissing'] .loader-panel-bottom,
-  #page-loader[data-state='hidden'] .loader-panel-bottom {
-    transform: translateY(100%);
-  }
-
-  #page-loader img {
-    position: relative;
-    z-index: 1;
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    height: 6rem;
-    image-rendering: pixelated;
-    object-fit: cover;
-    transition: opacity 140ms ease;
-    width: 6rem;
-  }
-
-  #page-loader[data-state='dismissing'] img,
-  #page-loader[data-state='hidden'] img {
-    opacity: 0;
-  }
-
-  #page-loader.is-resetting .loader-panel,
-  #page-loader.is-resetting img {
-    transition: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .loader-panel,
-    #page-loader img {
-      transition: none;
-    }
-  }
-</style>
+<div
+  id="page-loader"
+  data-state="hidden"
+  transition:persist="page-loader"
+  aria-hidden="true"
+  class="pointer-events-none fixed right-3 top-3 z-50 flex -translate-y-1.5 items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] px-2.5 py-2 opacity-0 shadow-lg transition-[opacity,transform] duration-200 ease-out sm:right-5 sm:top-5"
+>
+  <img
+    src="/favicon.png"
+    alt=""
+    width="24"
+    height="24"
+    class="h-6 w-6 rounded-full object-cover [image-rendering:pixelated]"
+  />
+  <span class="text-[0.65rem] font-medium leading-none text-[var(--text-muted)]">Loading</span>
+  <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--accent)] motion-reduce:animate-none"></span>
+</div>
 
 <script>
-  type LoaderWindow = Window & { __pageLoaderCleanup?: () => void }
+  type LoaderWindow = Window & {__pageLoaderCleanup?: () => void}
+
   const loaderWindow = window as LoaderWindow
   loaderWindow.__pageLoaderCleanup?.()
 
   let revealTimer = 0
-  let hideTimer = 0
   let safetyTimer = 0
   let navigation = 0
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   const getLoader = () => document.querySelector<HTMLElement>('#page-loader')
 
-  const finish = (currentNavigation = navigation) => {
-    if (currentNavigation !== navigation) return
-    clearTimeout(revealTimer)
-    clearTimeout(safetyTimer)
-
+  const setVisible = (visible: boolean) => {
     const loader = getLoader()
-    if (!loader || loader.dataset.state === 'dismissing') return
-    if (loader.dataset.state !== 'loading') {
-      loader.dataset.state = 'hidden'
-      return
-    }
+    if (!loader) return
+    loader.dataset.state = visible ? 'loading' : 'hidden'
+    loader.classList.toggle('opacity-0', !visible)
+    loader.classList.toggle('-translate-y-1.5', !visible)
+    loader.classList.toggle('opacity-100', visible)
+    loader.classList.toggle('translate-y-0', visible)
+  }
 
-    loader.dataset.state = 'dismissing'
-    clearTimeout(hideTimer)
-    hideTimer = window.setTimeout(() => {
-      if (currentNavigation === navigation) loader.dataset.state = 'hidden'
-    }, reduceMotion.matches ? 0 : 300)
+  const hide = (currentNavigation = navigation) => {
+    if (currentNavigation !== navigation) return
+    window.clearTimeout(revealTimer)
+    window.clearTimeout(safetyTimer)
+    setVisible(false)
   }
 
   const onBeforePreparation = (event: DocumentEventMap['astro:before-preparation']) => {
     const currentNavigation = ++navigation
-    clearTimeout(revealTimer)
-    clearTimeout(hideTimer)
-    clearTimeout(safetyTimer)
-    getLoader()?.setAttribute('data-state', 'hidden')
+    window.clearTimeout(revealTimer)
+    window.clearTimeout(safetyTimer)
+    setVisible(false)
 
     revealTimer = window.setTimeout(() => {
       if (currentNavigation !== navigation) return
-      const loader = getLoader()
-      if (!loader) return
-      loader.classList.add('is-resetting')
-      loader.dataset.state = 'loading'
-      void loader.offsetHeight
-      loader.classList.remove('is-resetting')
-    }, 150)
-    safetyTimer = window.setTimeout(() => finish(currentNavigation), 12000)
+      setVisible(true)
+    }, 250)
 
-    event.signal.addEventListener('abort', () => finish(currentNavigation), {once: true})
-
-    const originalLoader = event.loader
-    event.loader = async () => {
-      let completed = false
-      try {
-        await originalLoader()
-        completed = true
-      } finally {
-        if (!completed || event.defaultPrevented || event.signal.aborted) finish(currentNavigation)
-      }
-    }
+    safetyTimer = window.setTimeout(() => hide(currentNavigation), 10000)
+    event.signal.addEventListener('abort', () => hide(currentNavigation), {once: true})
 
     queueMicrotask(() => {
-      if (event.defaultPrevented) finish(currentNavigation)
+      if (event.defaultPrevented) hide(currentNavigation)
     })
   }
 
-  const onLoaded = () => finish()
+  const onLoaded = () => hide()
 
   document.addEventListener('astro:before-preparation', onBeforePreparation)
   document.addEventListener('astro:after-swap', onLoaded)
@@ -153,9 +73,8 @@
     document.removeEventListener('astro:before-preparation', onBeforePreparation)
     document.removeEventListener('astro:after-swap', onLoaded)
     document.removeEventListener('astro:page-load', onLoaded)
-    clearTimeout(revealTimer)
-    clearTimeout(hideTimer)
-    clearTimeout(safetyTimer)
-    getLoader()?.setAttribute('data-state', 'hidden')
+    window.clearTimeout(revealTimer)
+    window.clearTimeout(safetyTimer)
+    setVisible(false)
   }
 </script>

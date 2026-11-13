@@ -30,7 +30,7 @@ const isActive = (path: string) => activePath === path || (path === '/projects' 
     })}
   </nav>
 </details>
-<nav class="desktop-navigation" aria-label="Primary navigation">
+<nav class="desktop-navigation " aria-label="Primary navigation">
   {navItems.map((item) => (
     <a href={item.path} aria-current={isActive(item.path) ? 'page' : undefined}>
       {item.title}
@@ -167,7 +167,7 @@ const isActive = (path: string) => activePath === path || (path === '/projects' 
       align-items: center;
       color: var(--text-muted);
       display: flex;
-      font-size: 0.72rem;
+      font-size: 0.9rem;
       font-weight: 400;
       line-height: 1.5;
       min-height: 2.25rem;

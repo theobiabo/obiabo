@@ -1,0 +1,100 @@
+- generic [active] [ref=f28e1]:
+  - generic [aria-hidden]:
+    - generic: Loading
+  - banner [ref=f28e3]:
+    - generic [ref=f28e4]:
+      - button "View gallery stories" [ref=f28e6] [cursor=pointer]
+      - generic [ref=f28e8]:
+        - link "Emmanuel Obiabo, home" [ref=f28e9] [cursor=pointer]:
+          - /url: /
+          - strong [ref=f28e10]: Emmanuel Obiabo
+          - generic [ref=f28e11]: Software engineer
+        - generic "Social links" [ref=f28e12]:
+          - link "Github" [ref=f28e13] [cursor=pointer]:
+            - /url: https://github.com/theobiabo
+          - link "LinkedIn" [ref=f28e16] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/emmanuel-obiabo-5a66371aa/
+          - link "X (Formerly Twitter)" [ref=f28e19] [cursor=pointer]:
+            - /url: https://x.com/obiabo_immanuel
+    - generic [ref=f28e22]:
+      - button "Switch to dark mode" [ref=f28e23] [cursor=pointer]
+      - group [ref=f28e26]:
+        - generic "Navigation menu" [ref=f28e27] [cursor=pointer]
+  - group "Background jazz" [ref=f28e31]:
+    - generic [ref=f28e32]: Rainy Mood and Jazz by Tripacer
+    - button "Play jazz" [ref=f28e33] [cursor=pointer]
+  - main [ref=f28e34]:
+    - generic [ref=f28e35]:
+      - heading "Blog" [level=1] [ref=f28e36]
+      - paragraph [ref=f28e37]: Writing about software, systems, and ideas I am exploring.
+    - region "Posts" [ref=f28e38]:
+      - heading "Posts" [level=2] [ref=f28e39]
+      - generic [ref=f28e40]:
+        - generic [ref=f28e41]: Sort posts
+        - combobox "Sort posts" [ref=f28e42]:
+          - option "Latest first" [selected]
+          - option "Oldest first"
+        - button "Apply" [ref=f28e43] [cursor=pointer]
+      - generic [ref=f28e44]:
+        - article [ref=f28e45]:
+          - heading [level=3] [ref=f28e46]:
+            - link "What on Earth is a Monorepo" [ref=f28e47] [cursor=pointer]:
+              - /url: /notes/monorepo
+          - paragraph [ref=f28e48]: What on earth is even Monorepo, and why does people have different opinions about it.
+          - generic [ref=f28e49]:
+            - time [ref=f28e50]: September 24, 2026
+            - generic "1 view" [ref=f28e51]:
+              - generic [aria-hidden] [ref=f28e55]: "1"
+        - article [ref=f28e56]:
+          - heading [level=3] [ref=f28e57]:
+            - link "What Even Is Spaghettification?" [ref=f28e58] [cursor=pointer]:
+              - /url: /notes/what-even-is-spaghettification
+          - paragraph [ref=f28e59]: Gravity can turn you into a cosmic noodle.
+          - generic [ref=f28e60]:
+            - time [ref=f28e61]: June 23, 2026
+            - generic "0 views" [ref=f28e62]:
+              - generic [aria-hidden] [ref=f28e66]: "0"
+        - article [ref=f28e67]:
+          - heading [level=3] [ref=f28e68]:
+            - link "Can Humanity Ever Defeat Death?" [ref=f28e69] [cursor=pointer]:
+              - /url: /notes/can-human-defeat-death
+          - paragraph [ref=f28e70]: Can science make dying optional or obsolete?
+          - generic [ref=f28e71]:
+            - time [ref=f28e72]: June 21, 2026
+            - generic "2 views" [ref=f28e73]:
+              - generic [aria-hidden] [ref=f28e77]: "2"
+        - article [ref=f28e78]:
+          - heading [level=3] [ref=f28e79]:
+            - link "Apple Music Is Trash" [ref=f28e80] [cursor=pointer]:
+              - /url: /notes/apple-music-is-trash
+          - paragraph [ref=f28e81]: The only reason i open it is to play Noah Kahan, but functionalities says doom
+          - generic [ref=f28e82]:
+            - time [ref=f28e83]: May 26, 2026
+            - generic "1 view" [ref=f28e84]:
+              - generic [aria-hidden] [ref=f28e88]: "1"
+        - article [ref=f28e89]:
+          - heading [level=3] [ref=f28e90]:
+            - link "Why would an IDE need screen and audio permission?" [ref=f28e91] [cursor=pointer]:
+              - /url: /notes/why-would-an-ide-need-screen-and-audio-permission
+          - paragraph [ref=f28e92]: Is it because of the "For Non-commercial use thingy"? Or for AI Agents?
+          - generic [ref=f28e93]:
+            - time [ref=f28e94]: May 26, 2026
+            - generic "0 views" [ref=f28e95]:
+              - generic [aria-hidden] [ref=f28e99]: "0"
+      - navigation "Blog pagination" [ref=f28e100]:
+        - paragraph [ref=f28e101]: Page 1 of 3
+        - generic [ref=f28e102]:
+          - generic [ref=f28e103]: ← Previous
+          - generic [ref=f28e104]: "1"
+          - link "2" [ref=f28e105] [cursor=pointer]:
+            - /url: /notes?page=2
+          - link "3" [ref=f28e106] [cursor=pointer]:
+            - /url: /notes?page=3
+          - link "Next →" [ref=f28e107] [cursor=pointer]:
+            - /url: /notes?page=2
+    - paragraph [ref=f28e109]: Notes on software, systems, and ongoing research.
+  - generic [ref=f28e112]:
+    - button "Menu" [ref=f28e113]
+    - button "Inspect" [ref=f28e119]
+    - button "Audit" [ref=f28e123]
+    - button "Settings" [ref=f28e131]
